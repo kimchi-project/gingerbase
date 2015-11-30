@@ -1,22 +1,23 @@
-Wok (Webserver Originated from Kimchi)
-======================================
+Ginger Base Plugin
+==============
+
+Ginger Base is an open source base host management plugin for Wok
+(Webserver Originated from Kimchi), that provides an intuitive web panel with
+common tools for configuring and managing the Linux systems.
 
 Wok is a cherrypy-based web framework with HTML5 support that is extended by
 plugins which expose functionality through REST APIs.
 
-Examples of such plugins are Kimchi (Virtualization Management) and Ginger
-(System Administration). Wok comes with a sample plugin for education purposes.
-
-Wok runs through wokd daemon.
-
+The current features of Base Host Management of Linux system include:
+    + Shutdown, Restart, Connect
+    + Basic Information
+    + System Statistics
+    + Software Updates
+    + Repository Management
+    + Debug Reports (SoS Reports)
 
 Browser Support
 ===============
-
-Wok and its plugins can run in any web browser that supports HTML5. The
-Kimchi community (responsible for Wok project) makes an effort to
-test it with the latest versions of Chrome and Firefox browsers, but the
-following list can be used as reference to browser support.
 
 Desktop Browser Support:
 -----------------------
@@ -28,18 +29,17 @@ Desktop Browser Support:
 
 Mobile Browser Support:
 -----------------------
-* **Safari iOS:** Current version
-* **Android Browser** Current version
-
+* **Safari iOS:** Current-1 version
+* **Android Browser** Current-1 version
 
 Hypervisor Distro Support
 =========================
 
-Wok might run on any GNU/Linux distribution that meets the conditions
+Ginger Base and Wok might run on any GNU/Linux distribution that meets the conditions
 described on the 'Getting Started' section below.
 
-The Kimchi community (responsible for Wok project) makes an effort to
-test it with the latest versions of Fedora, RHEL, OpenSUSE, and Ubuntu.
+The Ginger community makes an effort to test it with the latest versions of
+Fedora, RHEL, OpenSuSe, and Ubuntu.
 
 Getting Started
 ===============
@@ -47,23 +47,15 @@ Getting Started
 Install Dependencies
 --------------------
 
-**For Fedora and RHEL:**
+**For fedora and RHEL:**
 
-     $ sudo yum install gcc make autoconf automake gettext git \
-                        python-cherrypy python-cheetah python-imaging\
-                        PyPAM m2crypto python-jsonschema rpm-build \
-                        python-psutil python-ldap python-lxml \
-                        libxslt nginx openssl python-devel python-pip \
-                        gcc-c++ open-sans-fonts fontawesome-fonts
-
-     $ sudo pip install cython libsass
-
+     $ sudo yum install wok gettext-devel git \
+                        python-psutil sos python-lxml \
+                        libxslt pyparted \
+                        python-websockify python-configobj
 
      # If using RHEL, install the following additional packages:
      $ sudo yum install python-unittest2 python-ordereddict
-
-    Packages version requirement:
-        python-psutil >= 0.6.0
 
     # These dependencies are only required if you want to run the tests:
     $ sudo yum install pyflakes python-pep8 python-requests
@@ -76,16 +68,13 @@ for more information on how to configure your system to access this repository.
 And for RHEL7 systems, you also need to subscribe to the "RHEL Server Optional"
 channel at RHN Classic or Red Hat Satellite.
 
-**For Ubuntu (Debian-based):**
+**For debian:**
 
-    $ sudo apt-get install gcc make autoconf automake gettext git pkgconf \
-                           python-cherrypy3 python-cheetah python-imaging \
-                           python-pam python-m2crypto python-jsonschema \
-                           python-psutil python-ldap python-lxml nginx \
-                           xsltproc openssl python-dev python-pip \
-                           g++ fonts-font-awesome texlive-fonts-extra
-
-    $ sudo pip install cython libsass
+    $ sudo apt-get install wok gettext \
+                           python-configobj \
+                           python-psutil sosreport \
+                           python-lxml xsltproc \
+                           python-parted websockify
 
     Packages version requirement:
         python-jsonschema >= 1.3.0
@@ -96,15 +85,10 @@ channel at RHN Classic or Red Hat Satellite.
 
 **For openSUSE:**
 
-    $ sudo zypper install gcc make autoconf automake gettext-tools git \
-                          python-CherryPy python-Cheetah python-pam \
-                          python-imaging python-M2Crypto python-jsonschema \
-                          rpm-build python-psutil python-ldap python-lxml \
-                          libxslt-tools python-xml nginx openssl python-devel \
-                          python-pip gcc-c++ google-opensans-fonts \
-                          fontawesome-fonts
-
-    $ sudo pip install cython libsass
+    $ sudo zypper install wok gettext-tools \
+                          python-psutil python-lxml \
+                          libxslt-tools python-xml python-parted \
+                          python-configobj python-websockify
 
     Packages version requirement:
         python-psutil >= 0.6.0
@@ -112,83 +96,66 @@ channel at RHN Classic or Red Hat Satellite.
     # These dependencies are only required if you want to run the tests:
     $ sudo zypper install python-pyflakes python-pep8 python-requests
 
+*Note for openSUSE users*: Some of the above packages are located in different
+openSUSE repositories. See
+[this FAQ](http://download.opensuse.org/repositories/home:GRNET:synnefo/) for
+python-parted; And
+[this FAQ](http://en.opensuse.org/SDB:Add_package_repositories) for more
+information on how configure your system to access this repository.
 
 Build and Install
 -----------------
 
+    Wok:
     $ ./autogen.sh --system
+
     $ make
     $ sudo make install   # Optional if running from the source tree
 
+    Ginger Base:
+    $ cd plugins/gingerbasae
+
+    $ ./autogen.sh --system
+
+    $ make
+    $ sudo make install   # Optional if running from the source tree
 
 Run
 ---
 
-    $ sudo wokd --host=0.0.0.0
+    $ systemctl start wokd
 
-If you cannot access Wok, take a look at these 2 points:
+Test
+----
 
-1. Firewall:
-Wok uses by default the ports 8000, 8001 and 64667. To allow incoming connections:
+    $ cd plugins/gingerbase
+    $ make check-local # check for i18n and formatting errors
+    $ sudo make check
 
-    For system using firewalld, do:
+After all tests are executed, a summary will be displayed containing any
+ errors/failures which might have occurred.
 
-        $ sudo firewall-cmd --add-port=8000/tcp --permanent
-        $ sudo firewall-cmd --add-port=8001/tcp --permanent
-        $ sudo firewall-cmd --add-port=64667/tcp --permanent
-        $ sudo firewall-cmd --reload
+Usage
+-----
 
-    For openSUSE systems, do:
+Connect your browser to https://localhost:8001.
+Once logged in you could see host tab which provides the gingerbase functionality.
 
-        $ sudo /sbin/SuSEfirewall2 open EXT TCP 8000
-        $ sudo /sbin/SuSEfirewall2 open EXT TCP 8001
-        $ sudo /sbin/SuSEfirewall2 open EXT TCP 64667
+Wok uses PAM to authenticate users so you can log in with the same username
+and password that you would use to log in to the machine itself.
 
-    For system using iptables, do:
+![Ginger Base Host Screen](docs/gingerbase-host-tab.png)
 
-        $ sudo iptables -A INPUT -p tcp --dport 8000 -j ACCEPT
-        $ sudo iptables -A INPUT -p tcp --dport 8001 -j ACCEPT
-        $ sudo iptables -A INPUT -p tcp --dport 64667 -j ACCEPT
+Ginger Base Host tab provides the base host functionality like system information,
+ system statistics, software updates, repositories and debug reports functionality.
 
-    Don't forget to correctly save the rules.
-
-2. SELinux:
-Allow httpd_t context for Wok web server:
-
-        $ sudo semanage permissive -a httpd_t
-
-
-Wok Plugins
------------
-
-Wok provides a Sample plugin to education purposes that can be used to create
-new plugins. Also, by default, Wok is linked to Kimchi (Virtualization
- Management) and Ginger (System Administration) repositories as git submodules.
-
-To clone Kimchi source code, execute:
-
-    $ cd src/wok/plugins/kimchi
-    $ git submodule init
-    $ git submodule update
-
-To clone Ginger source code, execute:
-
-    $ cd src/wok/plugins/ginger
-    $ git submodule init
-    $ git submodule update
-
-To automatically clone all plugins linked with Wok, use the following git
-command when cloning Wok project:
-
-    $ git clone --recursive https://github.com/kimchi-project/wok.git
-
+Also Ginger Base provides shutdown, re-start and connect options.
 
 Participating
 -------------
 
-All patches are sent through our mailing list hosted by oVirt.  More
-information can be found at:
+All patches are sent through our mailing list.  More information can be found at:
 
-https://github.com/kimchi-project/kimchi/wiki/Communications
+https://github.com/kimchi-project/ginger/wiki/Communications
 
-Patches should be sent using git-send-email to kimchi-devel@ovirt.org.
+Patches should be sent using git-send-email to ginger-dev-list@googlegroups.com

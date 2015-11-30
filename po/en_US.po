@@ -1,95 +1,283 @@
-# English translations for kimchi package.
-# Copyright (C) 2013 ORGANIZATION
+# English translations for gingerbase package.
+# i18n portable object for gingerbase.
+# Copyright (C) IBM, Corp. 2013-2015
+#
+# Code derived from Project Kimchi
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
 # Adam Litke <agl@us.ibm.com>, 2013.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: kimchi 0.1\n"
+"Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-01 16:40-0300\n"
+"POT-Creation-Date: 2015-11-12 12:01-0200\n"
 "PO-Revision-Date: 2013-07-11 17:32-0400\n"
 "Last-Translator: Crístian Viana <vianac@linux.vnet.ibm.com>\n"
 "Language-Team: English\n"
+"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en_US\n"
 "Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, python-format
-msgid "Delete is not allowed for %(resource)s"
+msgid "Unknown parameter %(value)s"
 msgstr ""
 
 #, python-format
-msgid "%(resource)s does not implement update method"
+msgid "Debug report %(name)s does not exist"
+msgstr ""
+
+msgid "Debug report tool not found in system"
 msgstr ""
 
 #, python-format
-msgid "Create is not allowed for %(resource)s"
-msgstr ""
-
-msgid "Unable to parse JSON request"
-msgstr ""
-
-msgid "This API only supports JSON"
+msgid "Unable to create debug report %(name)s. Details: %(err)s."
 msgstr ""
 
 #, python-format
-msgid "Parameters does not match requirement in schema: %(err)s"
-msgstr ""
-
-msgid "You don't have permission to perform this operation."
-msgstr ""
-
-msgid "Datastore is not initiated in the model object."
+msgid "Can not find any debug report with the given name %(name)s"
 msgstr ""
 
 #, python-format
-msgid "Unable to start task due error: %(err)s"
+msgid "Unable to generate debug report %(name)s. Details: %(err)s"
+msgstr ""
+
+msgid "You should give a name for the debug report file."
+msgstr ""
+
+msgid ""
+"Debug report name must be a string. Only letters, digits, underscore ('_') "
+"and hyphen ('-') are allowed."
 msgstr ""
 
 #, python-format
-msgid "Authentication failed for user '%(username)s'. [Error code: %(code)s]"
+msgid ""
+"The debug report with specified name \"%(name)s\" already exists. Please use "
+"another one."
 msgstr ""
 
-msgid "You are not authorized to access Kimchi"
+msgid "Unable to shutdown host machine as there are running virtual machines"
 msgstr ""
 
-#, python-format
-msgid "Specify %(item)s to login into Kimchi"
+msgid "Unable to reboot host machine as there are running virtual machines"
 msgstr ""
 
-#, python-format
-msgid "Invalid LDAP configuration: %(item)s : %(value)s"
+msgid ""
+"When specifying CPU topology, each element must be an integer greater than "
+"zero."
 msgstr ""
 
-#, python-format
-msgid "Unable to find %(item)s in datastore"
-msgstr ""
-
-#, python-format
-msgid "Timeout while running command '%(cmd)s' after %(seconds)s seconds"
+msgid "No packages marked for update"
 msgstr ""
 
 #, python-format
-msgid "Invalid data value '%(value)s'"
+msgid "Package %(name)s is not marked to be updated."
 msgstr ""
 
 #, python-format
-msgid "Invalid data unit '%(unit)s'"
+msgid "Error while getting packages marked to be updated. Details: %(err)s"
 msgstr ""
 
-msgid "ERROR CODE"
+msgid "There is no compatible package manager for this system."
 msgstr ""
 
-msgid "REASON"
+msgid "There is a package manager instance running in the system."
 msgstr ""
 
-msgid "STACK"
+msgid "YUM Repository ID must be one word only string."
 msgstr ""
 
-msgid "Go to Homepage"
+msgid "Repository URL must be an http://, ftp:// or file:// URL."
+msgstr ""
+
+msgid ""
+"Repository configuration is a dictionary with specific values according to "
+"repository type."
+msgstr ""
+
+msgid "Distribution to DEB repository must be a string"
+msgstr ""
+
+msgid "Components to DEB repository must be listed in a array"
+msgstr ""
+
+msgid "Components to DEB repository must be a string"
+msgstr ""
+
+msgid "Mirror list to repository must be a string"
+msgstr ""
+
+msgid "YUM Repository name must be string."
+msgstr ""
+
+msgid "GPG check must be a boolean value."
+msgstr ""
+
+msgid "GPG key must be a URL pointing to the ASCII-armored file."
+msgstr ""
+
+#, python-format
+msgid "Could not update repository %(repo_id)s."
+msgstr ""
+
+#, python-format
+msgid "Repository %(repo_id)s does not exist."
+msgstr ""
+
+msgid ""
+"Specify repository base URL,  mirror list or metalink in order to create or "
+"update a YUM repository."
+msgstr ""
+
+msgid "Repository management tool was not recognized for your system."
+msgstr ""
+
+#, python-format
+msgid "Repository %(repo_id)s is already enabled."
+msgstr ""
+
+#, python-format
+msgid "Repository %(repo_id)s is already disabled."
+msgstr ""
+
+#, python-format
+msgid "Could not remove repository %(repo_id)s."
+msgstr ""
+
+#, python-format
+msgid "Could not write repository configuration file %(repo_file)s"
+msgstr ""
+
+msgid "Specify repository distribution in order to create a DEB repository."
+msgstr ""
+
+#, python-format
+msgid "Could not enable repository %(repo_id)s."
+msgstr ""
+
+#, python-format
+msgid "Could not disable repository %(repo_id)s."
+msgstr ""
+
+msgid "YUM Repository ID already exists"
+msgstr ""
+
+msgid "YUM Repository name must be a string"
+msgstr ""
+
+#, python-format
+msgid "Unable to list repositories. Details: '%(err)s'"
+msgstr ""
+
+#, python-format
+msgid "Unable to retrieve repository information. Details: '%(err)s'"
+msgstr ""
+
+#, python-format
+msgid "Unable to add repository. Details: '%(err)s'"
+msgstr ""
+
+#, python-format
+msgid "Unable to remove repository. Details: '%(err)s'"
+msgstr ""
+
+#, python-format
+msgid ""
+"Configuration items: '%(items)s' are not supported by repository manager"
+msgstr ""
+
+msgid "Repository metalink must be an http://, ftp:// or file:// URL."
+msgstr ""
+
+msgid "Cannot specify mirrorlist and metalink at the same time."
+msgstr ""
+
+msgid "The number of vCPUs is too large for this system."
+msgstr ""
+
+msgid "Invalid vCPU/topology combination."
+msgstr ""
+
+msgid "This host (or current configuration) does not allow CPU topology."
+msgstr ""
+
+msgid ""
+"This host (or current configuration) does not allow to fetch lscpu details."
+msgstr ""
+
+msgid ""
+"This host (or current configuration) does not provide Socket(s) information."
+msgstr ""
+
+msgid ""
+"This host (or current configuration) does not provide Core(s) per socket "
+"information."
+msgstr ""
+
+msgid ""
+"This host (or current configuration) does not provide Thread(s) per core "
+"information."
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Shut down"
+msgstr ""
+
+msgid "Connect"
+msgstr ""
+
+msgid "CPU"
+msgstr ""
+
+msgid "Memory"
+msgstr ""
+
+msgid "Disk I/O"
+msgstr ""
+
+msgid "Network I/O"
+msgstr ""
+
+msgid "Basic Information"
+msgstr ""
+
+msgid "OS Distro"
+msgstr ""
+
+msgid "OS Version"
+msgstr ""
+
+msgid "OS Code Name"
+msgstr ""
+
+msgid "Processor"
+msgstr ""
+
+msgid "CPU(s)"
+msgstr ""
+
+msgid "Software Updates"
+msgstr ""
+
+msgid "Update Progress"
 msgstr ""
 
 msgid "The username or password you entered is incorrect. Please try again."
@@ -181,18 +369,6 @@ msgstr ""
 msgid "Detailed message:"
 msgstr ""
 
-msgid "No ISO found"
-msgstr ""
-
-msgid "This is not a valid ISO file."
-msgstr ""
-
-msgid "This may take a long time. Do you want to continue?"
-msgstr ""
-
-msgid "This will permanently delete the template. Would you like to continue?"
-msgstr ""
-
 msgid "Unable to shut down system as there are some virtual machines running!"
 msgstr ""
 
@@ -267,9 +443,6 @@ msgid "Enable"
 msgstr ""
 
 msgid "Disable"
-msgstr ""
-
-msgid "Software Updates"
 msgstr ""
 
 msgid "Package Name"
@@ -422,133 +595,79 @@ msgstr ""
 msgid "Affected devices:"
 msgstr ""
 
-msgid "The VLAN id must be between 1 and 4094."
-msgstr ""
-
-msgid "unavailable"
-msgstr ""
-
-msgid ""
-"This action will interrupt network connectivity for any virtual machine that "
-"depend on this network."
-msgstr ""
-
-msgid "Create a network"
-msgstr ""
-
-msgid ""
-"This network is not persistent. Instead of stop, this action will "
-"permanently delete it. Would you like to continue?"
-msgstr ""
-
-msgid ""
-"The bridged VLAN tag may not work well with NetworkManager enabled. You "
-"should consider disabling it."
-msgstr ""
-
-msgid ""
-"This will permanently delete the storage pool. Would you like to continue?"
-msgstr ""
-
-msgid "This storage pool is empty."
-msgstr ""
-
-msgid ""
-"It will format your disk and you will loose any data in there, are you sure "
-"to continue? "
-msgstr ""
-
-msgid "SCSI Fibre Channel"
-msgstr ""
-
-msgid "No SCSI adapters found."
-msgstr ""
-
-msgid "Loading iSCSI targets..."
-msgstr ""
-
-msgid "No iSCSI found. Please input one."
-msgstr ""
-
-msgid "Failed to load iSCSI targets."
-msgstr ""
-
-msgid "The storage pool name can not be blank."
-msgstr ""
-
-msgid "The storage pool path can not be blank."
-msgstr ""
-
-msgid "NFS server mount path can not be blank."
-msgstr ""
-
-msgid "Invalid NFS mount path."
-msgstr ""
-
-msgid "No logical device selected."
-msgstr ""
-
-msgid "The iSCSI target can not be blank."
-msgstr ""
-
-msgid "Server name can not be blank."
-msgstr ""
-
-msgid "This is not a valid Server Name or IP. Please, modify it."
-msgstr ""
-
-msgid "Looking for available partitions ..."
-msgstr ""
-
-msgid "No available partitions found."
-msgstr ""
-
-msgid ""
-"This storage pool is not persistent. Instead of deactivate, this action will "
-"permanently delete it. Would you like to continue?"
-msgstr ""
-
-msgid "Unable to retrieve partitions information."
-msgstr ""
-
-msgid "In progress..."
-msgstr ""
-
-msgid "Failed!"
-msgstr ""
-
 msgid "CDROM path needs to be a valid local/remote path and cannot be blank."
 msgstr ""
 
 msgid "Disk pool or volume cannot be blank."
 msgstr ""
 
-msgid "Session timeout, please re-login."
+msgid "Generate a New Debug Report"
 msgstr ""
 
-msgid "User Name"
+msgid "Report Name"
 msgstr ""
 
-msgid "Password"
+msgid ""
+"The name used to identify the report. If omitted, a name will be chosen "
+"based on current time. Name can contain: letters, digits, underscore (\"_\") "
+"and hyphen (\"-\")."
 msgstr ""
 
-msgid "Peers"
+msgid "Rename a Debug Report"
 msgstr ""
 
-msgid "Searching"
+msgid ""
+"The name used to identify the report. Name can contain: letters, digits and "
+"hyphen (\"-\")."
 msgstr ""
 
-msgid "No peers found."
+msgid "Submit"
 msgstr ""
 
-msgid "Help"
+msgid "Add a Repository"
 msgstr ""
 
-msgid "About"
+msgid "Identifier"
 msgstr ""
 
-msgid "Log out"
+msgid "Single word, unique identifier for the repository."
 msgstr ""
 
-msgid "Version:"
+msgid "Textual name for the repository."
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "Required Field"
+msgstr ""
+
+msgid "URL to the repository. Supported protocols are http, ftp, and file."
+msgstr ""
+
+msgid "Repository is a mirror"
+msgstr ""
+
+msgid "Distribution"
+msgstr ""
+
+msgid "Distribution of the DEB repository."
+msgstr ""
+
+msgid "Components"
+msgstr ""
+
+msgid "List of components in DEB repository."
+msgstr ""
+
+msgid "Edit Repository"
+msgstr ""
+
+msgid "Mirror List URL"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
 msgstr ""

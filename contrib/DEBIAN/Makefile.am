@@ -1,9 +1,7 @@
 #
-# Project Wok
+# Ginger Base
 #
-# Copyright IBM Corp, 2013-2015
-#
-# Code derived from Project Kimchi
+# Copyright IBM Corp, 2015
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public

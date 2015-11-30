@@ -1,5 +1,5 @@
 #
-# Project wok
+# Ginger Base
 #
 # Copyright IBM Corp, 2015
 #
@@ -43,7 +43,6 @@ test_config.py: test_config.py.in Makefile
 	$(do_substitution) < $(srcdir)/test_config.py.in > test_config.py
 
 check-local:
-	$(MKDIR_P) $(top_srcdir)/data/screenshots
 	./run_tests.sh
 
 BUILT_SOURCES = test_config.py

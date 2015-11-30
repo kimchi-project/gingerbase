@@ -1,9 +1,7 @@
 #
-# Project Wok
+# Ginger Base
 #
-# Copyright IBM Corp, 2013-2015
-#
-# Code derived from Project Kimchi
+# Copyright IBM Corp, 2015
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -19,7 +17,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-AC_INIT([wok], [m4_esyscmd([./build-aux/pkg-version --version])])
+AC_INIT([gingerbase], [m4_esyscmd([./build-aux/pkg-version --version])])
 
 AC_SUBST([PACKAGE_VERSION],
          [m4_esyscmd([./build-aux/pkg-version --version])])
@@ -38,7 +36,6 @@ AM_INIT_AUTOMAKE([-Wno-portability])
 AM_PATH_PYTHON([2.6])
 AC_PATH_PROG([PEP8], [pep8], [/usr/bin/pep8])
 AC_PYTHON_MODULE([unittest])
-AC_PYTHON_MODULE([cython], [fatal])
 AC_SUBST([HAVE_PYMOD_UNITTEST])
 AC_SUBST([PYTHON_VERSION])
 AM_GNU_GETTEXT([external])
@@ -49,12 +46,6 @@ AC_PATH_PROG([CHEETAH], [cheetah], [/usr/bin/cheetah])
 AC_PATH_PROG([PYFLAKES], [pyflakes])
 if test "x$PYFLAKES" = "x"; then
   AC_MSG_WARN([pyflakes not found])
-fi
-
-# Checking for libsass
-AC_PATH_PROG([LIBSASS], [sassc])
-if test "x$LIBSASS" = "x"; then
-    AC_MSG_ERROR([sassc not found. Please execute "pip install libsass"])
 fi
 
 AC_ARG_ENABLE(
@@ -73,72 +64,36 @@ else
 AC_SUBST([ENABLE_SAMPLE], [False])
 fi
 
-# check for systemd
-PKG_PROG_PKG_CONFIG
-AC_ARG_WITH([systemdsystemunitdir],
-    AS_HELP_STRING([--with-systemdsystemunitdir=DIR], [Directory for systemd service files]),
-    [], [with_systemdsystemunitdir=$($PKG_CONFIG --variable=systemdsystemunitdir systemd)])
-if test "x$with_systemdsystemunitdir" != xno; then
-    AC_SUBST([systemdsystemunitdir], [$with_systemdsystemunitdir])
-fi
-
-AC_ARG_WITH(
-    [spice-html5],
-    [AS_HELP_STRING([--with-spice-html5],
-                    [Build Kimchi with spice-html5 @<:@default=no@:>@])],
-    ,
-    [with_spice_html5="no"]
-)
-AM_CONDITIONAL([WITH_SPICE], [test "x$with_spice_html5" = xyes])
-
 AC_CONFIG_FILES([
     po/Makefile.in
     po/gen-pot
     Makefile
     docs/Makefile
-    docs/wokd.8
-    src/Makefile
-    src/nginx/Makefile
-    src/wok/Makefile
-    src/wok/control/Makefile
-    src/wok/model/Makefile
-    src/wok/xmlutils/Makefile
-    src/wok/plugins/Makefile
-    src/wok/plugins/sample/Makefile
-    src/wok/plugins/sample/po/Makefile.in
-    src/wok/plugins/sample/sample.conf
-    src/wok/plugins/sample/ui/Makefile
-    src/wok/plugins/sample/ui/config/Makefile
-    src/wok/plugins/sample/ui/js/Makefile
-    src/wok/plugins/sample/ui/pages/Makefile
+    control/Makefile
+    model/Makefile
     ui/Makefile
-    ui/base64/Makefile
+    ui/config/Makefile
     ui/css/Makefile
-    ui/css/fontawesome/Makefile
-    ui/css/opensans/Makefile
     ui/images/Makefile
-    ui/images/theme-default/Makefile
     ui/js/Makefile
-    ui/libs/Makefile
-    ui/libs/bootstrap/Makefile
-    ui/libs/bootstrap-select/Makefile
-    ui/libs/bootstrap-select/dist/Makefile
-    ui/libs/bootstrap-select/dist/js/Makefile
-    ui/libs/bootstrap-select/dist/css/Makefile
-    ui/libs/es5-shim/Makefile
-    ui/libs/jquery/Makefile
-    ui/libs/jquery-i18n/Makefile
-    ui/libs/jquery-ui/Makefile
-    ui/libs/jquery-ui/themes/Makefile
-    ui/libs/jquery-ui/themes/base/Makefile
-    ui/libs/jquery-ui/themes/base/images/Makefile
     ui/pages/Makefile
-    ui/pages/websockify/Makefile
+    ui/pages/help/Makefile
+    ui/pages/help/en_US/Makefile
+    ui/pages/help/de_DE/Makefile
+    ui/pages/help/es_ES/Makefile
+    ui/pages/help/fr_FR/Makefile
+    ui/pages/help/it_IT/Makefile
+    ui/pages/help/ja_JP/Makefile
+    ui/pages/help/ko_KR/Makefile
+    ui/pages/help/pt_BR/Makefile
+    ui/pages/help/ru_RU/Makefile
+    ui/pages/help/zh_CN/Makefile
+    ui/pages/help/zh_TW/Makefile
     contrib/Makefile
     contrib/DEBIAN/Makefile
     contrib/DEBIAN/control
-    contrib/wok.spec.fedora
-    contrib/wok.spec.suse
+    contrib/gingerbase.spec.fedora
+    contrib/gingerbase.spec.suse
     tests/Makefile
 ],[
     chmod +x po/gen-pot

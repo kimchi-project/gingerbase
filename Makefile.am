@@ -1,7 +1,7 @@
 #
-# Project Wok
+# Ginger Base
 #
-# Copyright IBM Corp, 2013-2015
+# Copyright IBM Corp, 2015
 #
 # Code derived from Project Kimchi
 #
@@ -19,9 +19,20 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-SUBDIRS = src ui docs contrib po tests
+SUBDIRS = contrib control docs model po tests ui
 
-man_MANS = docs/wokd.8
+gingerbase_PYTHON = $(filter-out config.py, $(wildcard *.py))
+
+nodist_gingerbase_PYTHON = config.py
+
+wokdir = $(pythondir)/wok
+gingerbasedir = $(pythondir)/wok/plugins/gingerbase
+
+confdir = $(sysconfdir)/wok/plugins.d
+dist_conf_DATA = gingerbase.conf
+
+name=ginger-base
+distdir=$(name)-$(PACKAGE_VERSION)
 
 AUTOMAKE_OPTIONS = foreign
 
@@ -29,34 +40,31 @@ ACLOCAL_AMFLAGS = --install -I m4
 
 EXTRA_DIST = \
 	config.rpath \
+	API.json \
 	autogen.sh \
 	COPYING.ASL2 \
 	COPYING.LGPL \
 	CONTRIBUTE.md \
 	VERSION \
 	build-aux/pkg-version \
+	config.py.in \
 	$(NULL)
 
 
-PEP8_BLACKLIST = *src/wok/plugins,*src/wok/config.py,*src/wok/i18n.py,*tests/test_config.py
+PEP8_BLACKLIST = *config.py,*i18n.py,*tests/test_config.py
 
-SKIP_PYFLAKES_ERR = "\./src/wok/websocket\.py"
-
-I18N_FILES = src/wok/plugins/*/i18n.py \
-	src/wok/i18n.py \
+I18N_FILES = ./i18n.py \
 	$(NULL)
 
 check-local:
-	PYTHONPATH=src contrib/check_i18n.py $(I18N_FILES)
+	contrib/check_i18n.py $(I18N_FILES)
 	find . -path './.git' -prune -type f -o \
 		-name '*.py' -o -name '*.py.in'  | xargs $(PYFLAKES) | \
-		grep -w -v $(SKIP_PYFLAKES_ERR) | \
 		while read LINE; do echo "$$LINE"; false; done
 
 	$(PEP8) --version
 	$(PEP8) --filename '*.py,*.py.in' --exclude="$(PEP8_BLACKLIST)" .
 
-	/bin/bash check_ui_code_errors.sh
 
 # Link built mo files in the source tree to enable use of translations from
 # within the source tree
@@ -64,8 +72,24 @@ all-local:
 	while read L && test -n "$$L"; do                  \
 		dir=mo/$$L/LC_MESSAGES ;                       \
 		$(MKDIR_P) $$dir ;                             \
-		ln -sf ../../../po/$$L.gmo $$dir/wok.mo ;   \
+		ln -sf ../../../po/$$L.gmo $$dir/gingerbase.mo ;   \
 	done < po/LINGUAS
+
+do_substitution = \
+	sed -e 's,[@]prefix[@],$(prefix),g'             \
+	-e 's,[@]datadir[@],$(datadir),g'               \
+	-e 's,[@]sysconfdir[@],$(sysconfdir),g'         \
+	-e 's,[@]localstatedir[@],$(localstatedir),g'   \
+	-e 's,[@]pkgdatadir[@],$(pkgdatadir),g'         \
+	-e 's,[@]wokdir[@],$(wokdir),g'           \
+	-e 's,[@]gingerbasedir[@],$(gingerbasedir),g'           \
+	-e 's,[@]gingerbaseversion[@],$(PACKAGE_VERSION),g' \
+	-e 's,[@]gingerbaserelease[@],$(PACKAGE_RELEASE),g' \
+	-e 's,[@]withspice[@],$(WITH_SPICE),g'
+
+config.py: config.py.in Makefile
+	$(do_substitution) < $(srcdir)/config.py.in > config.py
+
 
 #
 # Packaging helpers
@@ -73,46 +97,35 @@ all-local:
 
 install-deb: install
 	cp -R $(top_srcdir)/contrib/DEBIAN $(DESTDIR)/
-	@if test -d "$(systemdsystemunitdir)" ; then \
-		$(MKDIR_P) $(DESTDIR)/$(systemdsystemunitdir); \
-		cp -R contrib/wokd.service.fedora \
-			$(DESTDIR)/$(systemdsystemunitdir)/wokd.service; \
-	else \
-		$(MKDIR_P) $(DESTDIR)/etc/init; \
-		cp -R $(top_srcdir)/contrib/wokd-upstart.conf.debian \
-			$(DESTDIR)/etc/init/wokd.conf; \
-	fi
-	$(MKDIR_P) $(DESTDIR)/$(localstatedir)/lib/wok/
-	$(MKDIR_P) $(DESTDIR)/usr/lib/firewalld/services
-	cp -R $(top_srcdir)/src/firewalld.xml \
-		$(DESTDIR)/usr/lib/firewalld/services/wokd.xml
+	mkdir -p $(DESTDIR)/$(localstatedir)/lib/gingerbase
+	mkdir -p $(DESTDIR)/$(localstatedir)/lib/gingerbase/debugreports
 
 
 deb: contrib/make-deb.sh
 	$(top_srcdir)/contrib/make-deb.sh
 
-wok.spec: contrib/wok.spec.fedora contrib/wok.spec.suse
+gingerbase.spec: contrib/gingerbase.spec.fedora contrib/gingerbase.spec.suse
 	@if test -e /etc/redhat-release; then                   \
-		ln -sf contrib/wok.spec.fedora $@ ;              \
+		ln -sf contrib/gingerbase.spec.fedora $@ ;              \
 	elif test -e /etc/SuSE-release; then                    \
-		ln -sf contrib/wok.spec.suse $@ ;                \
+		ln -sf contrib/gingerbase.spec.suse $@ ;                \
 	else                                                    \
 		echo "Unable to select a spec file for RPM build" ; \
 		/bin/false ;                                        \
 	fi
 
-rpm: dist wok.spec
+rpm: dist gingerbase.spec
 	$(MKDIR_P) rpm/BUILD rpm/RPMS rpm/SOURCES rpm/SPECS rpm/SRPMS
-	cp $(top_srcdir)/wok.spec rpm/SPECS/wok.spec
+	cp $(top_srcdir)/gingerbase.spec rpm/SPECS/gingerbase.spec
 	cp $(DIST_ARCHIVES) rpm/SOURCES
-	rpmbuild -ba --define "_topdir `pwd`/rpm" rpm/SPECS/wok.spec
+	rpmbuild -ba --define "_topdir `pwd`/rpm" rpm/SPECS/gingerbase.spec
 
-fedora-rpm: contrib/wok.spec.fedora
-	ln -sf contrib/wok.spec.fedora wok.spec
+fedora-rpm: contrib/gingerbase.spec.fedora
+	ln -sf contrib/gingerbase.spec.fedora gingerbase.spec
 	$(MAKE) rpm
 
-suse-rpm: contrib/wok.spec.suse
-	ln -sf contrib/wok.spec.suse wok.spec
+suse-rpm: contrib/gingerbase.spec.suse
+	ln -sf contrib/gingerbase.spec.suse gingerbase.spec
 	$(MAKE) rpm
 
 ChangeLog:
@@ -121,40 +134,17 @@ ChangeLog:
 	fi
 
 install-data-local:
-	@if test -d "$(systemdsystemunitdir)" ; then \
-		mkdir -p $(DESTDIR)/$(systemdsystemunitdir); \
-		$(INSTALL_DATA) contrib/wokd.service.fedora $(DESTDIR)/$(systemdsystemunitdir)/wokd.service; \
-	else \
-		mkdir -p $(DESTDIR)/etc/init.d/; \
-		$(INSTALL_DATA) contrib/wokd.sysvinit $(DESTDIR)/etc/init.d/wokd; \
-		chmod +x $(DESTDIR)/etc/init.d/wokd; \
-	fi; \
-	if test -d /usr/lib/firewalld/services/; then \
-		mkdir -p $(DESTDIR)/usr/lib/firewalld/services/; \
-		$(INSTALL_DATA) src/firewalld.xml $(DESTDIR)/usr/lib/firewalld/services/wokd.xml; \
-	fi; \
-	mkdir -p $(DESTDIR)/$(localstatedir)/lib/wok/
-	mkdir -p $(DESTDIR)/$(localstatedir)/log/wok/
-	touch $(DESTDIR)/$(localstatedir)/log/wok/wok-access.log
-	touch $(DESTDIR)/$(localstatedir)/log/wok/wok-error.log
-	mkdir -p $(DESTDIR)/etc/wok/
-	$(INSTALL_DATA) src/dhparams.pem $(DESTDIR)/etc/wok/dhparams.pem
-	touch $(DESTDIR)/etc/nginx/conf.d/wok.conf
+	$(MKDIR_P) $(DESTDIR)/$(localstatedir)/lib/gingerbase/
+	$(MKDIR_P) $(DESTDIR)$(gingerbasedir)
+	$(INSTALL_DATA) API.json $(DESTDIR)$(gingerbasedir)/API.json
+	mkdir -p $(DESTDIR)/$(localstatedir)/lib/gingerbase/debugreports
 
 uninstall-local:
-	@if test -f $(systemdsystemunitdir)/wokd.service; then \
-		$(RM) $(DESTDIR)/$(systemdsystemunitdir)/wokd.service; \
-	elif test -f /etc/init.d/wokd; then \
-		$(RM) $(DESTDIR)/etc/init.d/wokd; \
-		$(RM) $(DESTDIR)/etc/init/wok.conf; \
+	@if test -f $(DESTDIR)/etc/systemd/system/wokd.service.d/gingerbase.conf; then \
+		$(RM) $(DESTDIR)/etc/systemd/system/wokd.service.d/gingerbase.conf; \
 	fi; \
-	if test -d /usr/lib/firewalld/services/; then \
-		$(RM) $(DESTDIR)/usr/lib/firewalld/services/wokd.xml; \
-	fi; \
-	$(RM) -rf $(DESTDIR)/$(localstatedir)/lib/wok
-	$(RM) -rf $(DESTDIR)/$(localstatedir)/log/wok
-	$(RM) -rf $(DESTDIR)/etc/wok
-	$(RM) $(DESTDIR)/etc/nginx/conf.d/wok.conf
+	$(RM) $(DESTDIR)$(gingerbasedir)/API.json
+	$(RM) -rf $(DESTDIR)/$(localstatedir)/lib/gingerbase/debugreports
 
 VERSION:
 	@if test -d .git; then                                \
@@ -167,4 +157,5 @@ VERSION:
 clean-local:
 	rm -rf mo rpm
 
-CLEANFILES = wok.spec `find "$(top_srcdir)" -type f -name "*.pyc" -print`
+BUILT_SOURCES = config.py
+CLEANFILES = config.py gingerbase.spec `find "$(top_srcdir)" -type f -name "*.pyc" -print`
