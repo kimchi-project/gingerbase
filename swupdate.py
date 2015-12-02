@@ -57,23 +57,28 @@ class SoftwareUpdate(object):
         # Get the distro of host machine and creates an object related to
         # correct package management system
         try:
-            __import__('yum')
+            __import__('dnf')
             wok_log.info("Loading YumUpdate features.")
             self._pkg_mnger = YumUpdate()
         except ImportError:
             try:
-                __import__('apt')
-                wok_log.info("Loading AptUpdate features.")
-                self._pkg_mnger = AptUpdate()
+                __import__('yum')
+                wok_log.info("Loading YumUpdate features.")
+                self._pkg_mnger = YumUpdate()
             except ImportError:
-                zypper_help = ["zypper", "--help"]
-                (stdout, stderr, returncode) = run_command(zypper_help)
-                if returncode == 0:
-                    wok_log.info("Loading ZypperUpdate features.")
-                    self._pkg_mnger = ZypperUpdate()
-                else:
-                    raise Exception("There is no compatible package manager "
-                                    "for this system.")
+                try:
+                    __import__('apt')
+                    wok_log.info("Loading AptUpdate features.")
+                    self._pkg_mnger = AptUpdate()
+                except ImportError:
+                    zypper_help = ["zypper", "--help"]
+                    (stdout, stderr, returncode) = run_command(zypper_help)
+                    if returncode == 0:
+                        wok_log.info("Loading ZypperUpdate features.")
+                        self._pkg_mnger = ZypperUpdate()
+                    else:
+                        raise Exception("There is no compatible package "
+                                        "manager for this system.")
 
     def _scanUpdates(self):
         """

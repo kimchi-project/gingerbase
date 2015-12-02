@@ -45,14 +45,18 @@ class Repositories(object):
     """
     def __init__(self):
         try:
-            __import__('yum')
+            __import__('dnf')
             self._pkg_mnger = YumRepo()
         except ImportError:
             try:
-                __import__('apt_pkg')
-                self._pkg_mnger = AptRepo()
+                __import__('yum')
+                self._pkg_mnger = YumRepo()
             except ImportError:
-                raise InvalidOperation('GGBREPOS0014E')
+                try:
+                    __import__('apt_pkg')
+                    self._pkg_mnger = AptRepo()
+                except ImportError:
+                    raise InvalidOperation('GGBREPOS0014E')
 
     def addRepository(self, params):
         """

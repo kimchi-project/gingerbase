@@ -54,8 +54,11 @@ Install Dependencies
                         libxslt pyparted \
                         python-websockify python-configobj
 
-     # If using RHEL, install the following additional packages:
-     $ sudo yum install python-unittest2 python-ordereddict
+    # If using Fedora, install the following additional packages:
+    $ sudo yum install python2-dnf
+
+    # If using RHEL, install the following additional packages:
+    $ sudo yum install python-unittest2 python-ordereddict
 
     # These dependencies are only required if you want to run the tests:
     $ sudo yum install pyflakes python-pep8 python-requests
