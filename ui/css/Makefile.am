@@ -18,6 +18,8 @@
 cssdir = $(datadir)/wok/plugins/gingerbase/ui/css
 dist_css_DATA = gingerbase.css
 
-gingerbase.css: src/gingerbase.scss
+%.css: src/%.scss
 	echo "Compiling .scss file $<"
 	sassc -s expanded $< $(@:.scss=.css)
+
+CLEANFILES = gingerbase.css
