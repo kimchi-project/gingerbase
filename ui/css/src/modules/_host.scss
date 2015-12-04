@@ -22,25 +22,80 @@
 
 .host-dashboard {
     padding-top: 40px;
-    padding-bottom: 50px;
     background: #eee;
     .container {
-        padding-left: 83px !important; // Overriding container padding to align according to mockups
-        padding-right: 73px !important;
+        padding-left: 0;
+        padding-right: 0;
     }
     h3 {
-        font-family: $font-family-light;
+        font-family: $font-family-base;
         font-size: 21pt;
+        font-weight: 400;
         margin: 0 0 13px 0;
     }
+  @media (min-width: $screen-md-min) {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
+#dashboard-container {
+    padding-bottom: 50px;
+}
+
+
 .host-dashboard .col-md-3 {
-    padding: 0 14px;
+    display: inline-block;
+    width: 357px;
+    margin-bottom: 14px;
+    margin-left: 14px;
+    padding: 0;
     > div {
         background: #fff;
         padding: 13px 20px 20px;
     }
+}
+
+@media (min-width: $screen-sm-max) and (max-width: $screen-md-min) {
+
+    .host-dashboard .container {
+        padding-right: 10px;
+        padding-left:  10px;
+    }
+
+}
+
+@media (min-width: $screen-md-max) and (max-width: $screen-lg) {
+
+    .host-dashboard .container {
+        padding-left: 83px !important;
+        padding-right: 73px !important;
+    }
+
+}
+
+@media (min-width: $screen-sm-min) and (max-width: $screen-lg - 1) {
+
+    #content-sys-statistics {
+        width: 752px;
+        margin: 0 auto;
+    }
+
+}
+
+@media (min-width: $screen-lg) {
+
+    #dashboard-container {
+        overflow-x: auto;
+    }
+
+    #content-sys-statistics {
+        margin:  0 auto;
+        width: 1504px;
+        height: 269px;
+        overflow: visible;
+    }
+
 }
 
 
@@ -67,8 +122,15 @@
 /* Host Panels Container and Panels */
 
 #host-info-container {
-    padding-top: 53px;
-    margin: 0 -8px;
+    margin:  0 10px;
+}
+
+@media (min-width: $screen-md-max) and (max-width: $screen-lg) {
+
+    .host-dashboard .container {
+        margin:  0;
+    }
+
 }
 
 #host-info-container .col-md-4 {
@@ -78,16 +140,25 @@
 }
 
 #software-update-section {
-    margin-top: 24px;
-    border-top: 1px solid #b0b0b0;
-    padding-top: 24px;
+    margin: 0 10px 14px 10px;
+    padding-top: 14px;
 }
 
-// TEMPORARY FIX TO LAYOUT UNTIL WOK.LIST WIDGET IS DONE
+
+@media (min-width: $screen-md-max) and (max-width: $screen-lg) {
+
+    #software-update-section {
+    margin: 0 0 14px 0;
+    }
+}
+
+#repositories-section {
+    border-bottom: 1px solid $gray;
+}
+
 #repositories-grid,
 #available-reports-grid {
     .wok-list-content {
-        height: 517px;
         overflow-x: hidden;
         overflow-y: auto;
     }
@@ -97,7 +168,13 @@
     }
 }
 
-// END OF TEMPORARY FIX
+#repositories-grid .wok-list-content {
+        height: 517px;
+}
+
+#available-reports-grid .wok-list-content {
+        height: 358px;
+}
 
 /* Basic Information */
 
@@ -114,12 +191,12 @@
     .panel-body dt {
             font-weight: 600;
             font-size: 14.5pt;
-            line-height: 12px;
+            line-height: 14.5pt;
         }
     .panel-body dd {
             font-size: 12.5pt;
             font-weight: 400;
-            margin-bottom: 12px;
+            margin-bottom: 12.5pt;
         }
 }
 
@@ -169,11 +246,11 @@
 
 .host-panel #software-updates-progress-container {
     padding: 15px;
-    background: #eee;
+    background: $table-border-color;
 }
 
 #software-updates-progress-container .software-updates-main {
-    background: #fff;
+    background: $table-bg;
 }
 
 #software-updates-progress-container h3 {
@@ -218,7 +295,7 @@
 }
 
 #software-updates-progress-container > div > h3 > a[aria-expanded="true"] {
-    border-color: #eee;
+    border-color: $table-border-color;
 }
 
 
