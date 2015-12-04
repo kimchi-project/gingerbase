@@ -41,14 +41,14 @@
                         <p class="help-block"><i class="fa fa-info-circle"></i> $_("Textual name for the repository.")
                         </p>
                 </div>
-                <div class="form-group">                
+                <div class="form-group">
                         <label for="baseurl">$_("URL")<span class="required" role="presentation" title='$_("Required Field")'>*</span></label>
                         <input type="text" class="form-control required" id="baseurl" name="baseurl" />
                         <p class="help-block"><i class="fa fa-info-circle"></i> $_("URL to the repository. Supported protocols are http, ftp, and file.")</p>
                 </div>
-                <div class="checkbox yum">
-                            <label id="isMirrorLabel" for="isMirror">
-                            <input type="checkbox" name="isMirror" value="true" id="isMirror" /> $_("Repository is a mirror")</label>
+                <div class="yum">
+                            <input type="checkbox" name="isMirror" class="wok-checkbox" value="true" id="isMirror" />
+                            <label id="isMirrorLabel" for="isMirror">$_("Repository is a mirror")</label>
                 </div>
                 <div class="form-group repository-dist deb">
                     <label>$_("Distribution")</label>

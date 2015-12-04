@@ -59,21 +59,20 @@
             </div>
             <div class="form-group repository-gpgcheck yum">
                 <label>$_("GPG Check")</label>
-                <label for="repository-edit-gpgcheck-radio-true" class="radio inline control-label">
-                    <input id="repository-edit-gpgcheck-radio-true" class="yum" name="config[gpgcheck]" type="radio" value="true" /> $_("Yes")
-                </label>
-                <label for="repository-edit-gpgcheck-radio-false" class="radio inline control-label">
-                    <input id="repository-edit-gpgcheck-radio-false" class="yum" name="config[gpgcheck]" type="radio" value="false" /> $_("No")
-                </label>
+
+                    <input id="repository-edit-gpgcheck-radio-true" class="yum wok-radio" name="config[gpgcheck]" type="radio" value="true" />
+                    <label for="repository-edit-gpgcheck-radio-true" class="radio inline control-label">$_("Yes")</label>
+
+                    <input id="repository-edit-gpgcheck-radio-false" class="yum wok-radio" name="config[gpgcheck]" type="radio" value="false" />
+                    <label for="repository-edit-gpgcheck-radio-false">$_("No")</label>
             </div>
         </form>
     </div>
     <div class="modal-footer">
         <button type="submit" id="repository-edit-button-save" class="btn btn-default">$_("Save")</button>
-        <button type="button" id="repository-edit-button-cancel" class="btn btn-default">$_("Cancel")</button>
+        <button type="button" id="repository-edit-button-cancel" class="btn btn-default" data-dismiss="modal">$_("Cancel")</button>
     </div>
 </div>
 <script type="text/javascript">
     gingerbase.repository_edit_main();
 </script>
- 
