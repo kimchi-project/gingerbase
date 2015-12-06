@@ -359,16 +359,19 @@ class AptRepo(object):
                 fd.write("# This file is managed by Ginger Base and it "
                          "must not be modified manually\n")
 
+        self.repos = None
+
     def _get_repos(self):
+        if self.repos is not None:
+            return self.repos
+
         try:
             with self.pkg_lock():
-                repos = self._sourceslist()
-                repos.refresh()
+                self.repos = self._sourceslist()
         except Exception, e:
-            gingerBaseLock.release()
             raise OperationFailed('GGBREPOS0025E', {'err': e.message})
 
-        return repos
+        return self.repos
 
     def _get_repo_id(self, repo):
         data = urlparse.urlparse(repo.uri)
@@ -377,8 +380,12 @@ class AptRepo(object):
 
     def _get_source_entry(self, repo_id):
         gingerBaseLock.acquire()
-        repos = self._get_repos()
-        gingerBaseLock.release()
+        try:
+            repos = self._get_repos()
+        except OperationFailed:
+            raise
+        finally:
+            gingerBaseLock.release()
 
         for r in repos:
             # Ignore deb-src repositories
@@ -400,9 +407,14 @@ class AptRepo(object):
         internal control, the repository ID will be built as described in
         _get_repo_id()
         """
+        self.repos = None
         gingerBaseLock.acquire()
-        repos = self._get_repos()
-        gingerBaseLock.release()
+        try:
+            repos = self._get_repos()
+        except OperationFailed:
+            raise
+        finally:
+            gingerBaseLock.release()
 
         res = []
         for r in repos:
