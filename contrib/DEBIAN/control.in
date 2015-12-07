@@ -4,6 +4,7 @@ Section: base
 Priority: optional
 Architecture: all
 Depends: wok,
+         python-apt,
          python-psutil (>= 0.6.0),
          sosreport
 Build-Depends: libxslt,

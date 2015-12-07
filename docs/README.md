@@ -73,7 +73,7 @@ channel at RHN Classic or Red Hat Satellite.
 
 **For debian:**
 
-    $ sudo apt-get install wok gettext \
+    $ sudo apt-get install wok gettext python-apt \
                            python-configobj \
                            python-psutil sosreport \
                            python-lxml xsltproc \
