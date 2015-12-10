@@ -30,7 +30,7 @@ from wok.plugins.gingerbase.control.cpuinfo import CPUInfo
 class Host(Resource):
     def __init__(self, model, id=None):
         super(Host, self).__init__(model, id)
-        self.role_key = 'host'
+        self.role_key = 'dashboard'
         self.admin_methods = ['GET', 'POST']
         self.uri_fmt = '/host/%s'
         self.reboot = self.generate_action_handler('reboot')
@@ -51,7 +51,7 @@ class Host(Resource):
 class SoftwareUpdateProgress(AsyncResource):
     def __init__(self, model, id=None):
         super(SoftwareUpdateProgress, self).__init__(model, id)
-        self.role_key = 'host'
+        self.role_key = 'updates'
         self.admin_methods = ['GET']
 
     @property
@@ -62,7 +62,7 @@ class SoftwareUpdateProgress(AsyncResource):
 class HostStats(Resource):
     def __init__(self, model, id=None):
         super(HostStats, self).__init__(model, id)
-        self.role_key = 'host'
+        self.role_key = 'dashboard'
         self.admin_methods = ['GET']
         self.history = HostStatsHistory(self.model)
 
@@ -89,7 +89,7 @@ class Capabilities(Resource):
 class PackagesUpdate(Collection):
     def __init__(self, model):
         super(PackagesUpdate, self).__init__(model)
-        self.role_key = 'host'
+        self.role_key = 'updates'
         self.admin_methods = ['GET']
         self.resource = PackageUpdate
 
@@ -97,7 +97,7 @@ class PackagesUpdate(Collection):
 class PackageUpdate(Resource):
     def __init__(self, model, id=None):
         super(PackageUpdate, self).__init__(model, id)
-        self.role_key = 'host'
+        self.role_key = 'updates'
         self.admin_methods = ['GET']
 
     @property
@@ -108,7 +108,7 @@ class PackageUpdate(Resource):
 class Repositories(Collection):
     def __init__(self, model):
         super(Repositories, self).__init__(model)
-        self.role_key = 'host'
+        self.role_key = 'updates'
         self.admin_methods = ['GET', 'POST']
         self.resource = Repository
 
@@ -116,7 +116,7 @@ class Repositories(Collection):
 class Repository(Resource):
     def __init__(self, model, id):
         super(Repository, self).__init__(model, id)
-        self.role_key = 'host'
+        self.role_key = 'updates'
         self.admin_methods = ['GET', 'PUT', 'POST', 'DELETE']
         self.uri_fmt = "/host/repositories/%s"
         self.enable = self.generate_action_handler('enable')
