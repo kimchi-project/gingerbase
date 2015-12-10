@@ -5,12 +5,12 @@
         <access role="admin" mode="admin"/>
         <access role="user" mode="none"/>
         <title>Dashboard</title>
-        <path>plugins/gingerbase/host-dashboard.html</path>
+        <path>plugins/gingerbase/tabs/host-dashboard.html</path>
     </tab>
     <tab>
         <access role="admin" mode="admin"/>
         <access role="user" mode="none"/>
         <title>Updates</title>
-        <path>plugins/gingerbase/host-update.html</path>
+        <path>plugins/gingerbase/tabs/host-update.html</path>
     </tab>
 </tabs-ext>

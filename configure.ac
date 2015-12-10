@@ -78,6 +78,7 @@ AC_CONFIG_FILES([
     ui/js/Makefile
     ui/pages/Makefile
     ui/pages/help/Makefile
+    ui/pages/tabs/Makefile
     ui/pages/help/en_US/Makefile
     ui/pages/help/de_DE/Makefile
     ui/pages/help/es_ES/Makefile
