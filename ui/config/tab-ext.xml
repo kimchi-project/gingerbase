@@ -3,7 +3,7 @@
     <functionality>Host</functionality>
     <tab>
         <access role="admin" mode="admin"/>
-        <access role="user" mode="none"/>
+        <access role="user" mode="read-only"/>
         <title>Dashboard</title>
         <path>plugins/gingerbase/tabs/host-dashboard.html</path>
     </tab>

@@ -235,6 +235,10 @@ gingerbase.host_dashboard = function() {
     };
 
     var initPage = function() {
+        if(wok.tabMode["dashboard"] === "admin") {
+            $("#host-button-restart").attr("style","display");
+            $("#host-button-shutdown").attr("style","display");
+        }
 
         $('#host-button-shutdown').on('click', function(event) {
             event.preventDefault();
