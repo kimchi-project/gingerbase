@@ -51,6 +51,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gingerbase
 %{_prefix}/share/locale/*/LC_MESSAGES/gingerbase.mo
 %{_datadir}/wok/plugins/gingerbase
+%{_datadir}/wok/plugins/gingerbase/ui/pages/tabs/host-dashboard.html.tmpl
+%{_datadir}/wok/plugins/gingerbase/ui/pages/tabs/host-update.html.tmpl
 %{_sysconfdir}/wok/plugins.d/gingerbase.conf
 %{_sharedstatedir}/gingerbase/
 

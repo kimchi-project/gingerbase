@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-tabshtmldir = $(datadir)/gingerbase/ui/pages/tabs
+tabshtmldir = $(datadir)/wok/plugins/gingerbase/ui/pages/tabs
+
 
 dist_tabshtml_DATA = $(wildcard *.html.tmpl) $(NULL)
