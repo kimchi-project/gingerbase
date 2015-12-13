@@ -257,11 +257,11 @@ class HostModel(object):
         """
         cpus = {}
         total_cpus = int(self.lscpu.get_total_cpus())
-        offline_cpus = 0
 
-        online_cpus = psutil.NUM_CPUS
         # psutil is unstable on how to get the number of
         # cpus, different versions call it differently
+        online_cpus = 0
+
         if hasattr(psutil, 'cpu_count'):
             online_cpus = psutil.cpu_count()
 
@@ -275,8 +275,15 @@ class HostModel(object):
                 if method is not None:
                     online_cpus = method()
                     break
-        if total_cpus >= online_cpus:
-            offline_cpus = total_cpus - online_cpus
+
+        if online_cpus > 0:
+            offline_cpus = 0
+            if total_cpus > online_cpus:
+                offline_cpus = total_cpus - online_cpus
+        else:
+            online_cpus = "unknown"
+            offline_cpus = "unknown"
+
         cpus['online'] = online_cpus
         cpus['offline'] = offline_cpus
         return cpus
