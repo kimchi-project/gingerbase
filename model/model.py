@@ -24,6 +24,7 @@ from wok.basemodel import BaseModel
 from wok.objectstore import ObjectStore
 from wok.plugins.gingerbase import config
 from wok.utils import import_module, listPathModules
+from wok.utils import upgrade_objectstore_schema
 
 
 class Model(BaseModel):
@@ -42,6 +43,10 @@ class Model(BaseModel):
 
         if objstore_loc is None:
             objstore_loc = config.get_object_store()
+
+        # Some paths or URI's present in the objectstore have changed after
+        # Wok 2.0.0 release. Check here if a schema upgrade is necessary.
+        upgrade_objectstore_schema(objstore_loc, 'version')
 
         self.objstore = ObjectStore(objstore_loc)
         kargs = {'objstore': self.objstore}
