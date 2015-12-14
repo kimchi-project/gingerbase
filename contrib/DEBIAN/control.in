@@ -5,7 +5,13 @@ Priority: optional
 Architecture: all
 Depends: wok,
          python-apt,
+         python-cherrypy3,
+         python-configobj,
+         python-lxml,
+         python-parted,
          python-psutil (>= 0.6.0),
+         gettext,
+         git,
          sosreport
 Build-Depends: libxslt,
                python-lxml

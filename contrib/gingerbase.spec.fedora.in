@@ -8,12 +8,23 @@ Group:		System Environment/Base
 License:	LGPL/ASL2
 Source0:	%{name}-%{version}.tar.gz
 Requires:	wok
+Requires:	pyparted
+Requires:	python-cherrypy
+Requires:	python-configobj
+Requires:	python-lxml
 Requires:	python-psutil >= 0.6.0
+Requires:	rpm-python
+Requires:	gettext
+Requires:	git
 Requires:	sos
 BuildRequires:	libxslt
 BuildRequires:	python-lxml
 BuildRequires:	python-devel
 BuildRequires:	python-pip
+
+%if 0%{?fedora} >= 23
+Requires:	python2-dnf
+%endif
 
 %if 0%{?fedora} >= 15 || 0%{?rhel} >= 7
 %global with_systemd 1

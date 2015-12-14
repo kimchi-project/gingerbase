@@ -49,10 +49,10 @@ Install Dependencies
 
 **For fedora and RHEL:**
 
-     $ sudo yum install wok gettext-devel git \
+    $ sudo yum install  wok gettext git rpm-python \
                         python-psutil sos python-lxml \
                         libxslt pyparted \
-                        python-websockify python-configobj
+                        python-cherrypy python-configobj \
 
     # If using Fedora, install the following additional packages:
     $ sudo yum install python2-dnf
@@ -73,11 +73,11 @@ channel at RHN Classic or Red Hat Satellite.
 
 **For debian:**
 
-    $ sudo apt-get install wok gettext python-apt \
+    $ sudo apt-get install wok gettext python-apt git \
                            python-configobj \
                            python-psutil sosreport \
                            python-lxml xsltproc \
-                           python-parted websockify
+                           python-parted python-cherrypy
 
     Packages version requirement:
         python-jsonschema >= 1.3.0
@@ -88,10 +88,10 @@ channel at RHN Classic or Red Hat Satellite.
 
 **For openSUSE:**
 
-    $ sudo zypper install wok gettext-tools \
+    $ sudo zypper install wok gettext-tools rpm-python git \
                           python-psutil python-lxml \
-                          libxslt-tools python-xml python-parted \
-                          python-configobj python-websockify
+                          libxslt-tools python-parted \
+                          python-configobj python-CherryPy
 
     Packages version requirement:
         python-psutil >= 0.6.0
