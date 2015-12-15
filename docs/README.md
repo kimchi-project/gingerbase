@@ -49,7 +49,7 @@ Install Dependencies
 
 **For fedora and RHEL:**
 
-    $ sudo yum install  wok gettext git rpm-python \
+    $ sudo yum install  wok gettext-devel git rpm-python \
                         python-psutil sos python-lxml \
                         libxslt pyparted \
                         python-cherrypy python-configobj \

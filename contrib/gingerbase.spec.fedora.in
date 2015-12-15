@@ -17,6 +17,7 @@ Requires:	rpm-python
 Requires:	gettext
 Requires:	git
 Requires:	sos
+BuildRequires:	gettext-devel
 BuildRequires:	libxslt
 BuildRequires:	python-lxml
 BuildRequires:	python-devel

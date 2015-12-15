@@ -16,6 +16,7 @@ Requires:	python-lxml
 Requires:	python-parted
 Requires:	python-psutil >= 0.6.0
 Requires:	rpm-python
+BuildRequires:	gettext-tools
 BuildRequires:	libxslt-tools
 BuildRequires:	python-lxml
 BuildRequires:	python-devel
