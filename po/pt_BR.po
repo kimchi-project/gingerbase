@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 12:01-0200\n"
+"POT-Creation-Date: 2015-12-16 18:49-0200\n"
 "PO-Revision-Date: 2015-03-23 12:57+0000\n"
 "Last-Translator: Crístian Deives dos Santos Viana <cristiandeives@gmail."
 "com>\n"
@@ -83,6 +83,9 @@ msgstr ""
 msgid "Unable to reboot host machine as there are running virtual machines"
 msgstr ""
 "Não foi possível resetar o host uma vez que há máquinas virtuais ligadas"
+
+msgid "There may be virtual machines running on the host"
+msgstr ""
 
 msgid ""
 "When specifying CPU topology, each element must be an integer greater than "
@@ -254,50 +257,8 @@ msgid ""
 "information."
 msgstr ""
 
-msgid "Restart"
-msgstr "Reiniciar"
-
-msgid "Shut down"
-msgstr "Desligar"
-
-msgid "Connect"
-msgstr "Conectar"
-
-msgid "CPU"
-msgstr "CPU"
-
-msgid "Memory"
-msgstr "Memória"
-
-msgid "Disk I/O"
-msgstr "Disco E/S"
-
-msgid "Network I/O"
-msgstr "Rede E/S"
-
-msgid "Basic Information"
-msgstr "Informações básicas"
-
-msgid "OS Distro"
-msgstr "Distribuição"
-
-msgid "OS Version"
-msgstr "Versão do Sistema Speracional"
-
-msgid "OS Code Name"
-msgstr "Nome-código do sistema operacional"
-
-msgid "Processor"
-msgstr "Processador"
-
-msgid "CPU(s)"
-msgstr "CPU(s)"
-
-msgid "Software Updates"
-msgstr "Atualizações de software"
-
-msgid "Update Progress"
-msgstr "Progresso da atualização"
+msgid ""
+"This host (or current configuration) does not provide CPU(s) information."
 
 msgid "The username or password you entered is incorrect. Please try again."
 msgstr ""
@@ -425,6 +386,9 @@ msgstr ""
 "Desligar ou reiniciar o host causará perda de trabalho que não foi salvo. "
 "Continuar o processo de desligar/reiniciar?"
 
+msgid "The system is going down"
+msgstr ""
+
 msgid ""
 "Repository will be removed permanently and can't be recovered. Do you want "
 "to continue?"
@@ -473,6 +437,9 @@ msgstr "Ativar"
 
 msgid "Disable"
 msgstr "Desativar"
+
+msgid "Software Updates"
+msgstr "Atualizações de software"
 
 msgid "Package Name"
 msgstr "Nome do pacote"
@@ -727,3 +694,45 @@ msgstr "Sim"
 
 msgid "No"
 msgstr "Não"
+
+#~ msgid "Restart"
+#~ msgstr "Reiniciar"
+
+#~ msgid "Shut down"
+#~ msgstr "Desligar"
+
+#~ msgid "Connect"
+#~ msgstr "Conectar"
+
+#~ msgid "CPU"
+#~ msgstr "CPU"
+
+#~ msgid "Memory"
+#~ msgstr "Memória"
+
+#~ msgid "Disk I/O"
+#~ msgstr "Disco E/S"
+
+#~ msgid "Network I/O"
+#~ msgstr "Rede E/S"
+
+#~ msgid "Basic Information"
+#~ msgstr "Informações básicas"
+
+#~ msgid "OS Distro"
+#~ msgstr "Distribuição"
+
+#~ msgid "OS Version"
+#~ msgstr "Versão do Sistema Speracional"
+
+#~ msgid "OS Code Name"
+#~ msgstr "Nome-código do sistema operacional"
+
+#~ msgid "Processor"
+#~ msgstr "Processador"
+
+#~ msgid "CPU(s)"
+#~ msgstr "CPU(s)"
+
+#~ msgid "Update Progress"
+#~ msgstr "Progresso da atualização"

@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 12:01-0200\n"
+"POT-Creation-Date: 2015-12-16 18:49-0200\n"
 "PO-Revision-Date: 2014-08-27 21:30+0000\n"
 "Last-Translator: BobSynfig\n"
 "Language-Team: French\n"
@@ -86,6 +86,9 @@ msgid "Unable to reboot host machine as there are running virtual machines"
 msgstr ""
 "Impossible de redémarrer la machine hôte car des machines virtuelles en sont "
 "cours d'exécution"
+
+msgid "There may be virtual machines running on the host"
+msgstr ""
 
 msgid ""
 "When specifying CPU topology, each element must be an integer greater than "
@@ -255,50 +258,9 @@ msgid ""
 "information."
 msgstr ""
 
-msgid "Restart"
-msgstr "Redémarrer"
-
-msgid "Shut down"
-msgstr "Éteindre"
-
-msgid "Connect"
-msgstr "Connecter"
-
-msgid "CPU"
-msgstr "CPU"
-
-msgid "Memory"
-msgstr "Mémoire"
-
-msgid "Disk I/O"
-msgstr "E/S Disque"
-
-msgid "Network I/O"
-msgstr "E/S Réseau"
-
-msgid "Basic Information"
-msgstr "Informations de Base"
-
-msgid "OS Distro"
-msgstr "Distro de l'OS"
-
-msgid "OS Version"
-msgstr "Version de l'OS"
-
-msgid "OS Code Name"
-msgstr "Nom de code de l'OS"
-
-msgid "Processor"
-msgstr "Processeur"
-
-msgid "CPU(s)"
+msgid ""
+"This host (or current configuration) does not provide CPU(s) information."
 msgstr ""
-
-msgid "Software Updates"
-msgstr "Mises à jour Logiciel"
-
-msgid "Update Progress"
-msgstr "Progrès de la Mise à Jour"
 
 msgid "The username or password you entered is incorrect. Please try again."
 msgstr ""
@@ -427,6 +389,9 @@ msgstr ""
 "Éteindre ou redémarrer l'hôte causera la perte de tout travail non "
 "enregistré. Continuer à éteindre/redémarrer ?"
 
+msgid "The system is going down"
+msgstr ""
+
 msgid ""
 "Repository will be removed permanently and can't be recovered. Do you want "
 "to continue?"
@@ -475,6 +440,9 @@ msgstr "Activer"
 
 msgid "Disable"
 msgstr "Désactiver"
+
+msgid "Software Updates"
+msgstr "Mises à jour Logiciel"
 
 msgid "Package Name"
 msgstr "Nom de paquet"
@@ -724,3 +692,42 @@ msgstr "Oui"
 
 msgid "No"
 msgstr "Non"
+
+#~ msgid "Restart"
+#~ msgstr "Redémarrer"
+
+#~ msgid "Shut down"
+#~ msgstr "Éteindre"
+
+#~ msgid "Connect"
+#~ msgstr "Connecter"
+
+#~ msgid "CPU"
+#~ msgstr "CPU"
+
+#~ msgid "Memory"
+#~ msgstr "Mémoire"
+
+#~ msgid "Disk I/O"
+#~ msgstr "E/S Disque"
+
+#~ msgid "Network I/O"
+#~ msgstr "E/S Réseau"
+
+#~ msgid "Basic Information"
+#~ msgstr "Informations de Base"
+
+#~ msgid "OS Distro"
+#~ msgstr "Distro de l'OS"
+
+#~ msgid "OS Version"
+#~ msgstr "Version de l'OS"
+
+#~ msgid "OS Code Name"
+#~ msgstr "Nom de code de l'OS"
+
+#~ msgid "Processor"
+#~ msgstr "Processeur"
+
+#~ msgid "Update Progress"
+#~ msgstr "Progrès de la Mise à Jour"

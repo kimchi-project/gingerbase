@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 12:01-0200\n"
+"POT-Creation-Date: 2015-12-16 18:49-0200\n"
 "PO-Revision-Date: 2013-07-11 17:32-0400\n"
 "Last-Translator: Crístian Viana <vianac@linux.vnet.ibm.com>\n"
 "Language-Team: English\n"
@@ -81,6 +81,9 @@ msgid "Unable to reboot host machine as there are running virtual machines"
 msgstr ""
 "Hostmaschine konnte nicht neu gestartet werden, weil virtuelle Maschinen "
 "ausgeführt werden"
+
+msgid "There may be virtual machines running on the host"
+msgstr ""
 
 msgid ""
 "When specifying CPU topology, each element must be an integer greater than "
@@ -247,50 +250,9 @@ msgid ""
 "information."
 msgstr ""
 
-msgid "Restart"
-msgstr "Erneut starten"
-
-msgid "Shut down"
-msgstr "Herunterfahren"
-
-msgid "Connect"
-msgstr "Verbinden"
-
-msgid "CPU"
-msgstr "CPU"
-
-msgid "Memory"
-msgstr "Speicher"
-
-msgid "Disk I/O"
-msgstr "Platten-E/A"
-
-msgid "Network I/O"
-msgstr "Netz-E/A"
-
-msgid "Basic Information"
-msgstr "Basisinformationen"
-
-msgid "OS Distro"
-msgstr "BS-Distro"
-
-msgid "OS Version"
-msgstr "BS-Version"
-
-msgid "OS Code Name"
-msgstr "BS-Codename"
-
-msgid "Processor"
-msgstr "Prozessor"
-
-msgid "CPU(s)"
+msgid ""
+"This host (or current configuration) does not provide CPU(s) information."
 msgstr ""
-
-msgid "Software Updates"
-msgstr "Software-Updates"
-
-msgid "Update Progress"
-msgstr "Aktualisierungsfortschritt"
 
 msgid "The username or password you entered is incorrect. Please try again."
 msgstr ""
@@ -419,6 +381,9 @@ msgstr ""
 "Arbeiten verloren gehen. Möchten Sie mit dem Herunterfahren/Neustarten "
 "fortfahren?"
 
+msgid "The system is going down"
+msgstr ""
+
 msgid ""
 "Repository will be removed permanently and can't be recovered. Do you want "
 "to continue?"
@@ -467,6 +432,9 @@ msgstr "Aktivieren"
 
 msgid "Disable"
 msgstr "Inaktivieren"
+
+msgid "Software Updates"
+msgstr "Software-Updates"
 
 msgid "Package Name"
 msgstr "Paketname"
@@ -708,3 +676,42 @@ msgstr "Ja"
 
 msgid "No"
 msgstr "Nein"
+
+#~ msgid "Restart"
+#~ msgstr "Erneut starten"
+
+#~ msgid "Shut down"
+#~ msgstr "Herunterfahren"
+
+#~ msgid "Connect"
+#~ msgstr "Verbinden"
+
+#~ msgid "CPU"
+#~ msgstr "CPU"
+
+#~ msgid "Memory"
+#~ msgstr "Speicher"
+
+#~ msgid "Disk I/O"
+#~ msgstr "Platten-E/A"
+
+#~ msgid "Network I/O"
+#~ msgstr "Netz-E/A"
+
+#~ msgid "Basic Information"
+#~ msgstr "Basisinformationen"
+
+#~ msgid "OS Distro"
+#~ msgstr "BS-Distro"
+
+#~ msgid "OS Version"
+#~ msgstr "BS-Version"
+
+#~ msgid "OS Code Name"
+#~ msgstr "BS-Codename"
+
+#~ msgid "Processor"
+#~ msgstr "Prozessor"
+
+#~ msgid "Update Progress"
+#~ msgstr "Aktualisierungsfortschritt"

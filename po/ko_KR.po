@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 12:01-0200\n"
+"POT-Creation-Date: 2015-12-16 18:49-0200\n"
 "PO-Revision-Date: 2013-07-11 17:32-0400\n"
 "Last-Translator: Crístian Viana <vianac@linux.vnet.ibm.com>\n"
 "Language-Team: English\n"
@@ -77,6 +77,9 @@ msgstr "가상 머신을 실행 중인 호스트 머신을 종료할 수 없습�
 
 msgid "Unable to reboot host machine as there are running virtual machines"
 msgstr "가상 머신을 실행 중인 호스트 머신을 다시 부팅할 수 없습니다."
+
+msgid "There may be virtual machines running on the host"
+msgstr ""
 
 msgid ""
 "When specifying CPU topology, each element must be an integer greater than "
@@ -237,50 +240,9 @@ msgid ""
 "information."
 msgstr ""
 
-msgid "Restart"
-msgstr "다시 시작"
-
-msgid "Shut down"
-msgstr "시스템 종료"
-
-msgid "Connect"
-msgstr "연결"
-
-msgid "CPU"
-msgstr "CPU"
-
-msgid "Memory"
-msgstr "메모리"
-
-msgid "Disk I/O"
-msgstr "디스크 I/O"
-
-msgid "Network I/O"
-msgstr "네트워크 I/O"
-
-msgid "Basic Information"
-msgstr "기본 정보"
-
-msgid "OS Distro"
-msgstr "OS Distro"
-
-msgid "OS Version"
-msgstr "OS 버전"
-
-msgid "OS Code Name"
-msgstr "OS 코드 이름"
-
-msgid "Processor"
-msgstr "프로세서"
-
-msgid "CPU(s)"
+msgid ""
+"This host (or current configuration) does not provide CPU(s) information."
 msgstr ""
-
-msgid "Software Updates"
-msgstr "소프트웨어 업데이트"
-
-msgid "Update Progress"
-msgstr "진행상태 업데이트"
 
 msgid "The username or password you entered is incorrect. Please try again."
 msgstr ""
@@ -405,6 +367,9 @@ msgstr ""
 "호스트를 종료하거나 다시 시작하면 저장되지 않은 작업이 손실됩니다. 시스템 종"
 "료/다시 시작을 계속하시겠습니까?"
 
+msgid "The system is going down"
+msgstr ""
+
 msgid ""
 "Repository will be removed permanently and can't be recovered. Do you want "
 "to continue?"
@@ -451,6 +416,9 @@ msgstr "사용"
 
 msgid "Disable"
 msgstr "사용 안함"
+
+msgid "Software Updates"
+msgstr "소프트웨어 업데이트"
 
 msgid "Package Name"
 msgstr "패키지 이름"
@@ -687,3 +655,42 @@ msgstr "예"
 
 msgid "No"
 msgstr "아니오"
+
+#~ msgid "Restart"
+#~ msgstr "다시 시작"
+
+#~ msgid "Shut down"
+#~ msgstr "시스템 종료"
+
+#~ msgid "Connect"
+#~ msgstr "연결"
+
+#~ msgid "CPU"
+#~ msgstr "CPU"
+
+#~ msgid "Memory"
+#~ msgstr "메모리"
+
+#~ msgid "Disk I/O"
+#~ msgstr "디스크 I/O"
+
+#~ msgid "Network I/O"
+#~ msgstr "네트워크 I/O"
+
+#~ msgid "Basic Information"
+#~ msgstr "기본 정보"
+
+#~ msgid "OS Distro"
+#~ msgstr "OS Distro"
+
+#~ msgid "OS Version"
+#~ msgstr "OS 버전"
+
+#~ msgid "OS Code Name"
+#~ msgstr "OS 코드 이름"
+
+#~ msgid "Processor"
+#~ msgstr "프로세서"
+
+#~ msgid "Update Progress"
+#~ msgstr "진행상태 업데이트"

@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 12:01-0200\n"
+"POT-Creation-Date: 2015-12-16 18:49-0200\n"
 "PO-Revision-Date: 2013-07-11 17:32-0400\n"
 "Last-Translator: Crístian Viana <vianac@linux.vnet.ibm.com>\n"
 "Language-Team: English\n"
@@ -81,6 +81,9 @@ msgid "Unable to reboot host machine as there are running virtual machines"
 msgstr ""
 "Impossibile riavviare la macchina host poiché sono presenti macchine "
 "virtuali in esecuzione"
+
+msgid "There may be virtual machines running on the host"
+msgstr ""
 
 msgid ""
 "When specifying CPU topology, each element must be an integer greater than "
@@ -249,50 +252,9 @@ msgid ""
 "information."
 msgstr ""
 
-msgid "Restart"
-msgstr "Riavvia"
-
-msgid "Shut down"
-msgstr "Arresta"
-
-msgid "Connect"
-msgstr "Connetti"
-
-msgid "CPU"
-msgstr "CPU"
-
-msgid "Memory"
-msgstr "Memoria"
-
-msgid "Disk I/O"
-msgstr "I/O disco"
-
-msgid "Network I/O"
-msgstr "I/O di rete"
-
-msgid "Basic Information"
-msgstr "Informazioni di base"
-
-msgid "OS Distro"
-msgstr "Distro SO"
-
-msgid "OS Version"
-msgstr "Versione SO"
-
-msgid "OS Code Name"
-msgstr "Nome codice SO"
-
-msgid "Processor"
-msgstr "Processore"
-
-msgid "CPU(s)"
+msgid ""
+"This host (or current configuration) does not provide CPU(s) information."
 msgstr ""
-
-msgid "Software Updates"
-msgstr "Aggiornamenti del software"
-
-msgid "Update Progress"
-msgstr "Avanzamento aggiornamento"
 
 msgid "The username or password you entered is incorrect. Please try again."
 msgstr ""
@@ -421,6 +383,9 @@ msgstr ""
 "L'arresto o il riavvio dell'host provocherà la perdita del lavoro non "
 "salvato. Continuare con l'arresto o il riavvio?"
 
+msgid "The system is going down"
+msgstr ""
+
 msgid ""
 "Repository will be removed permanently and can't be recovered. Do you want "
 "to continue?"
@@ -469,6 +434,9 @@ msgstr "Abilita"
 
 msgid "Disable"
 msgstr "Disabilita"
+
+msgid "Software Updates"
+msgstr "Aggiornamenti del software"
 
 msgid "Package Name"
 msgstr "Nome pacchetto"
@@ -709,3 +677,42 @@ msgstr "Sì"
 
 msgid "No"
 msgstr "No"
+
+#~ msgid "Restart"
+#~ msgstr "Riavvia"
+
+#~ msgid "Shut down"
+#~ msgstr "Arresta"
+
+#~ msgid "Connect"
+#~ msgstr "Connetti"
+
+#~ msgid "CPU"
+#~ msgstr "CPU"
+
+#~ msgid "Memory"
+#~ msgstr "Memoria"
+
+#~ msgid "Disk I/O"
+#~ msgstr "I/O disco"
+
+#~ msgid "Network I/O"
+#~ msgstr "I/O di rete"
+
+#~ msgid "Basic Information"
+#~ msgstr "Informazioni di base"
+
+#~ msgid "OS Distro"
+#~ msgstr "Distro SO"
+
+#~ msgid "OS Version"
+#~ msgstr "Versione SO"
+
+#~ msgid "OS Code Name"
+#~ msgstr "Nome codice SO"
+
+#~ msgid "Processor"
+#~ msgstr "Processore"
+
+#~ msgid "Update Progress"
+#~ msgstr "Avanzamento aggiornamento"

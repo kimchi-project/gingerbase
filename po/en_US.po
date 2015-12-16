@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 12:01-0200\n"
+"POT-Creation-Date: 2015-12-16 18:49-0200\n"
 "PO-Revision-Date: 2013-07-11 17:32-0400\n"
 "Last-Translator: Crístian Viana <vianac@linux.vnet.ibm.com>\n"
 "Language-Team: English\n"
@@ -76,6 +76,9 @@ msgid "Unable to shutdown host machine as there are running virtual machines"
 msgstr ""
 
 msgid "Unable to reboot host machine as there are running virtual machines"
+msgstr ""
+
+msgid "There may be virtual machines running on the host"
 msgstr ""
 
 msgid ""
@@ -235,49 +238,8 @@ msgid ""
 "information."
 msgstr ""
 
-msgid "Restart"
-msgstr ""
-
-msgid "Shut down"
-msgstr ""
-
-msgid "Connect"
-msgstr ""
-
-msgid "CPU"
-msgstr ""
-
-msgid "Memory"
-msgstr ""
-
-msgid "Disk I/O"
-msgstr ""
-
-msgid "Network I/O"
-msgstr ""
-
-msgid "Basic Information"
-msgstr ""
-
-msgid "OS Distro"
-msgstr ""
-
-msgid "OS Version"
-msgstr ""
-
-msgid "OS Code Name"
-msgstr ""
-
-msgid "Processor"
-msgstr ""
-
-msgid "CPU(s)"
-msgstr ""
-
-msgid "Software Updates"
-msgstr ""
-
-msgid "Update Progress"
+msgid ""
+"This host (or current configuration) does not provide CPU(s) information."
 msgstr ""
 
 msgid "The username or password you entered is incorrect. Please try again."
@@ -398,6 +360,9 @@ msgid ""
 "shut down/restarting?"
 msgstr ""
 
+msgid "The system is going down"
+msgstr ""
+
 msgid ""
 "Repository will be removed permanently and can't be recovered. Do you want "
 "to continue?"
@@ -443,6 +408,9 @@ msgid "Enable"
 msgstr ""
 
 msgid "Disable"
+msgstr ""
+
+msgid "Software Updates"
 msgstr ""
 
 msgid "Package Name"

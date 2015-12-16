@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 12:01-0200\n"
+"POT-Creation-Date: 2015-12-16 18:49-0200\n"
 "PO-Revision-Date: 2014-08-28 17:32+0000\n"
 "Last-Translator: Aline Manera <aline.manera@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -78,6 +78,9 @@ msgstr ""
 
 msgid "Unable to reboot host machine as there are running virtual machines"
 msgstr "Не удалось перезагрузить систему хоста: выполняются виртуальные машины"
+
+msgid "There may be virtual machines running on the host"
+msgstr ""
 
 msgid ""
 "When specifying CPU topology, each element must be an integer greater than "
@@ -241,50 +244,9 @@ msgid ""
 "information."
 msgstr ""
 
-msgid "Restart"
-msgstr "Перезапуск"
-
-msgid "Shut down"
-msgstr "Выключен"
-
-msgid "Connect"
-msgstr "Подключить"
-
-msgid "CPU"
-msgstr "Процессор"
-
-msgid "Memory"
-msgstr "Память"
-
-msgid "Disk I/O"
-msgstr "Дисковый ввод-вывод"
-
-msgid "Network I/O"
-msgstr "Сетевой ввод-вывод"
-
-msgid "Basic Information"
-msgstr "Базовая информация"
-
-msgid "OS Distro"
-msgstr "Вариант ОС"
-
-msgid "OS Version"
-msgstr "Версия ОС"
-
-msgid "OS Code Name"
-msgstr "Кодовое имя ОС"
-
-msgid "Processor"
-msgstr "Процессор"
-
-msgid "CPU(s)"
+msgid ""
+"This host (or current configuration) does not provide CPU(s) information."
 msgstr ""
-
-msgid "Software Updates"
-msgstr "Обновления программного обеспечения"
-
-msgid "Update Progress"
-msgstr "Ход обновления"
 
 msgid "The username or password you entered is incorrect. Please try again."
 msgstr "Указано неверное имя пользователя или пароль. Введите еще раз."
@@ -410,6 +372,9 @@ msgstr ""
 "Завершение работы и перезапуск хоста приведут к потере несохраненной работы. "
 "Продолжить завершение работы/перезапуск?"
 
+msgid "The system is going down"
+msgstr ""
+
 msgid ""
 "Repository will be removed permanently and can't be recovered. Do you want "
 "to continue?"
@@ -456,6 +421,9 @@ msgstr "Включить"
 
 msgid "Disable"
 msgstr "Выключить"
+
+msgid "Software Updates"
+msgstr "Обновления программного обеспечения"
 
 msgid "Package Name"
 msgstr "Имя пакета"
@@ -691,3 +659,42 @@ msgstr "Да"
 
 msgid "No"
 msgstr "Нет"
+
+#~ msgid "Restart"
+#~ msgstr "Перезапуск"
+
+#~ msgid "Shut down"
+#~ msgstr "Выключен"
+
+#~ msgid "Connect"
+#~ msgstr "Подключить"
+
+#~ msgid "CPU"
+#~ msgstr "Процессор"
+
+#~ msgid "Memory"
+#~ msgstr "Память"
+
+#~ msgid "Disk I/O"
+#~ msgstr "Дисковый ввод-вывод"
+
+#~ msgid "Network I/O"
+#~ msgstr "Сетевой ввод-вывод"
+
+#~ msgid "Basic Information"
+#~ msgstr "Базовая информация"
+
+#~ msgid "OS Distro"
+#~ msgstr "Вариант ОС"
+
+#~ msgid "OS Version"
+#~ msgstr "Версия ОС"
+
+#~ msgid "OS Code Name"
+#~ msgstr "Кодовое имя ОС"
+
+#~ msgid "Processor"
+#~ msgstr "Процессор"
+
+#~ msgid "Update Progress"
+#~ msgstr "Ход обновления"

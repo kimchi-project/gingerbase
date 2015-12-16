@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 12:01-0200\n"
+"POT-Creation-Date: 2015-12-16 18:49-0200\n"
 "PO-Revision-Date: 2013-07-11 17:32-0400\n"
 "Last-Translator: Crístian Viana <vianac@linux.vnet.ibm.com>\n"
 "Language-Team: English\n"
@@ -77,6 +77,9 @@ msgstr "稼働中の仮想マシンがあるため、ホスト・マシンをシ
 
 msgid "Unable to reboot host machine as there are running virtual machines"
 msgstr "稼働中の仮想マシンがあるため、ホスト・マシンをリブートできません"
+
+msgid "There may be virtual machines running on the host"
+msgstr ""
 
 msgid ""
 "When specifying CPU topology, each element must be an integer greater than "
@@ -247,50 +250,9 @@ msgid ""
 "information."
 msgstr ""
 
-msgid "Restart"
-msgstr "再始動"
-
-msgid "Shut down"
-msgstr "シャットダウン"
-
-msgid "Connect"
-msgstr "接続"
-
-msgid "CPU"
-msgstr "CPU"
-
-msgid "Memory"
-msgstr "メモリー"
-
-msgid "Disk I/O"
-msgstr "ディスク入出力"
-
-msgid "Network I/O"
-msgstr "ネットワーク入出力"
-
-msgid "Basic Information"
-msgstr "基本情報"
-
-msgid "OS Distro"
-msgstr "OS ディストリビューション"
-
-msgid "OS Version"
-msgstr "OS バージョン"
-
-msgid "OS Code Name"
-msgstr "OS コード名"
-
-msgid "Processor"
-msgstr "プロセッサー"
-
-msgid "CPU(s)"
+msgid ""
+"This host (or current configuration) does not provide CPU(s) information."
 msgstr ""
-
-msgid "Software Updates"
-msgstr "ソフトウェア更新"
-
-msgid "Update Progress"
-msgstr "更新の進行状況"
 
 msgid "The username or password you entered is incorrect. Please try again."
 msgstr "入力したユーザー名またはパスワードが誤っています。やり直してください。"
@@ -415,6 +377,9 @@ msgstr ""
 "ホストをシャットダウンまたは再始動すると、保存されていない作業は失われます。"
 "シャットダウン/再始動を続行しますか?"
 
+msgid "The system is going down"
+msgstr ""
+
 msgid ""
 "Repository will be removed permanently and can't be recovered. Do you want "
 "to continue?"
@@ -462,6 +427,9 @@ msgstr "使用可能"
 
 msgid "Disable"
 msgstr "使用不可"
+
+msgid "Software Updates"
+msgstr "ソフトウェア更新"
 
 msgid "Package Name"
 msgstr "パッケージ名"
@@ -699,3 +667,42 @@ msgstr " はい"
 
 msgid "No"
 msgstr " いいえ"
+
+#~ msgid "Restart"
+#~ msgstr "再始動"
+
+#~ msgid "Shut down"
+#~ msgstr "シャットダウン"
+
+#~ msgid "Connect"
+#~ msgstr "接続"
+
+#~ msgid "CPU"
+#~ msgstr "CPU"
+
+#~ msgid "Memory"
+#~ msgstr "メモリー"
+
+#~ msgid "Disk I/O"
+#~ msgstr "ディスク入出力"
+
+#~ msgid "Network I/O"
+#~ msgstr "ネットワーク入出力"
+
+#~ msgid "Basic Information"
+#~ msgstr "基本情報"
+
+#~ msgid "OS Distro"
+#~ msgstr "OS ディストリビューション"
+
+#~ msgid "OS Version"
+#~ msgstr "OS バージョン"
+
+#~ msgid "OS Code Name"
+#~ msgstr "OS コード名"
+
+#~ msgid "Processor"
+#~ msgstr "プロセッサー"
+
+#~ msgid "Update Progress"
+#~ msgstr "更新の進行状況"

@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 12:01-0200\n"
+"POT-Creation-Date: 2015-12-16 18:49-0200\n"
 "PO-Revision-Date: 2013-06-27 10:48+0000\n"
 "Last-Translator: ShaoHe Feng <shaohef@linux.vnet.ibm.com>\n"
 "Language-Team: ShaoHe Feng <shaohef@linux.vnet.ibm.com>\n"
@@ -79,6 +79,9 @@ msgstr "有虚拟机在运行，不能关闭主机"
 
 msgid "Unable to reboot host machine as there are running virtual machines"
 msgstr "有虚拟机在运行，不能重起主机"
+
+msgid "There may be virtual machines running on the host"
+msgstr ""
 
 msgid ""
 "When specifying CPU topology, each element must be an integer greater than "
@@ -237,50 +240,8 @@ msgid ""
 "information."
 msgstr ""
 
-msgid "Restart"
-msgstr "重启"
-
-msgid "Shut down"
-msgstr "关机"
-
-msgid "Connect"
-msgstr "连接到"
-
-msgid "CPU"
-msgstr "处理器"
-
-msgid "Memory"
-msgstr "内存"
-
-msgid "Disk I/O"
-msgstr "磁盘I/O"
-
-msgid "Network I/O"
-msgstr "网络I/O"
-
-msgid "Basic Information"
-msgstr "基本信息"
-
-msgid "OS Distro"
-msgstr "操作系统发行版"
-
-msgid "OS Version"
-msgstr "操作系统版本"
-
-msgid "OS Code Name"
-msgstr "操作系统代号"
-
-msgid "Processor"
-msgstr "处理器"
-
-msgid "CPU(s)"
-msgstr "CPU(s)"
-
-msgid "Software Updates"
-msgstr "软件更新"
-
-msgid "Update Progress"
-msgstr "更新进度"
+msgid ""
+"This host (or current configuration) does not provide CPU(s) information."
 
 msgid "The username or password you entered is incorrect. Please try again."
 msgstr "用户名或密码错误，请重新输入。"
@@ -401,6 +362,9 @@ msgid ""
 "shut down/restarting?"
 msgstr "关闭或者重启主机会导致没有保存的工作丢失。继续关机/重启？"
 
+msgid "The system is going down"
+msgstr ""
+
 msgid ""
 "Repository will be removed permanently and can't be recovered. Do you want "
 "to continue?"
@@ -447,6 +411,9 @@ msgstr "使能"
 
 msgid "Disable"
 msgstr "禁用"
+
+msgid "Software Updates"
+msgstr "软件更新"
 
 msgid "Package Name"
 msgstr "软件包名称"
@@ -678,3 +645,45 @@ msgstr "是"
 
 msgid "No"
 msgstr "否"
+
+#~ msgid "Restart"
+#~ msgstr "重启"
+
+#~ msgid "Shut down"
+#~ msgstr "关机"
+
+#~ msgid "Connect"
+#~ msgstr "连接到"
+
+#~ msgid "CPU"
+#~ msgstr "处理器"
+
+#~ msgid "Memory"
+#~ msgstr "内存"
+
+#~ msgid "Disk I/O"
+#~ msgstr "磁盘I/O"
+
+#~ msgid "Network I/O"
+#~ msgstr "网络I/O"
+
+#~ msgid "Basic Information"
+#~ msgstr "基本信息"
+
+#~ msgid "OS Distro"
+#~ msgstr "操作系统发行版"
+
+#~ msgid "OS Version"
+#~ msgstr "操作系统版本"
+
+#~ msgid "OS Code Name"
+#~ msgstr "操作系统代号"
+
+#~ msgid "Processor"
+#~ msgstr "处理器"
+
+#~ msgid "CPU(s)"
+#~ msgstr "CPU(s)"
+
+#~ msgid "Update Progress"
+#~ msgstr "更新进度"
