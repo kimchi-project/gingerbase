@@ -29,21 +29,6 @@ du système d'exploitation hôte, ainsi que le type de processeur, le nombre d'U
 <dd>Cette section affiche les graphiques des statistiques pour l'UC, mémoire, ainsi que
 les E-S disque et E-S réseau pour l'hôte. </dd>
 </dlentry><dlentry>
-<dt>Mises à jour logicielles</dt>
-<dd>Cette section affiche des informations pour tous les modules qui
-disposent de mises à jour disponibles, y compris le nom de module, la version, l'architecture
-et le référentiel. Vous pouvez mettre à jour toutes les modules répertoriés en sélectionnant <uicontrol>Tout
-mettre à jour</uicontrol>. Vous ne pouvez pas sélectionner des modules individuels pour les mises à jour.</dd>
-</dlentry><dlentry>
-<dt>Référentiels</dt>
-<dd>Cette section affiche les référentiels associés au système hôte. Vous pouvez ajouter, activer, éditer ou retirer des référentiels. L'ajout d'un référentiel associe celui-ci au système hôte,
-tandis que l'activation d'un référentiel permet à l'hôte d'y accéder. Si votre système est Red Hat Enterprise Linux ou Fedora,
-vous pouvez ajouter des référentiels <filepath>yum</filepath>.
-Si votre système est de type Ubuntu ou Debian, ajoutez des référentiels
-<filepath>deb</filepath>.<p>Si vous travaillez avec des référentiels yum, vous pouvez ajouter un contrôle GPG
-afin de vérifier qu'un module provenant de ce référentiel n'a pas été endommagé.
-Sélectionnez un référentiel puis cliquez sur <uicontrol>Editer</uicontrol>. Sélectionnez <uicontrol>Oui</uicontrol> pour activer <uicontrol>Contrôle GPG</uicontrol>, puis entrez une URL pour le fichier de clés GPG du référentiel.</p></dd>
-</dlentry><dlentry>
 <dt>Rapports de débogage</dt>
 <dd>Cette section affiche les rapports de débogage, y compris le nom et le chemin du fichier.
 Vous pouvez faire un choix parmi les options afin de générer un nouveau rapport, ou renommer, supprimer,
