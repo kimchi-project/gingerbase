@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE cshelp PUBLIC "-//IBM//DTD DITA CSHelp//EN"
+ "..\dtd\cshelp.dtd">
+
+
+<!--This DITA specialized document type is not supported by the Authoring Tools development team.
+For support please see:
+https://w3.opensource.ibm.com/projects/dita-cshelp/-->
+<cshelp id="kimhhost" xml:lang="ja-jp">
+<title>ホスト</title>
+<shortdesc><wintitle>「ホスト」</wintitle>ページには、ホスト・システムに関する情報が表示されます。
+</shortdesc>
+<csbody>
+<p>ホストに関する情報を表示するには、以下の選択項目をクリックしてください。
+</p>
+<dl><dlentry>
+<dt>ソフトウェア更新</dt>
+<dd>このセクションには、更新が用意されているパッケージすべての情報
+(パッケージ名、バージョン、アーキテクチャー、リポジトリーなど) が表示されます。
+<uicontrol>「すべて更新」</uicontrol>を選択すると、リストされているパッケージすべてを更新できます。
+更新する対象として個別のパッケージを選択することはできません。
+</dd>
+</dlentry><dlentry>
+<dt>リポジトリー</dt>
+<dd>このセクションには、ホスト・システムに関連付けられているリポジトリーが表示されます。
+リポジトリーを追加する、有効にする、編集する、または削除することができます。
+リポジトリーを追加すると、そのリポジトリーがホスト・システムに関連付けられ、リポジトリーを有効にすると、そのリポジトリーにホストがアクセスできるようになります。
+システムが Red Hat Enterprise Linux または Fedora であれば、<filepath>yum</filepath> リポジトリーを追加できます。
+システムが Ubuntu または Debian であれば、<filepath>deb</filepath> リポジトリーを追加してください。
+<p>yum リポジトリーを操作している場合、そのリポジトリーに入っているパッケージが壊れていないことを確認するため、GPG チェックを追加できます。
+リポジトリーを選択し、<uicontrol>「編集」</uicontrol>をクリックしてください。
+<uicontrol>「はい」</uicontrol>を選択して<uicontrol>「GPG チェック」</uicontrol>を有効にしてから、そのリポジトリーの GPG 鍵ファイルの URL を入力してください。
+</p></dd>
+</dlentry></dl>
+</csbody>
+<?tm 1392659967 1?>
+</cshelp>
+
+
+<!-- ENGL1SH_VERS10N 42248_4 DO NOT REMOVE OR CHANGE THIS LINE -->
+<!-- T9N_SRC_ID 232 -->
+<!-- T9N_SH1P_STR1NG KV310AAP001 1 -->
