@@ -24,15 +24,6 @@ https://w3.opensource.ibm.com/projects/dita-cshelp/-->
 <dt>系統統計資料</dt>
 <dd>此區段會顯示一些圖形，以顯示主機的 CPU、記憶體、磁碟 I/O 和網路 I/O 的統計資料。</dd>
 </dlentry><dlentry>
-<dt>軟體更新</dt>
-<dd>此區段會顯示具有可用更新的所有套件的相關資訊，包括套件名稱、版本、架構和儲存庫。您可以透過選取<uicontrol>全部更新</uicontrol>來更新所有列出的套件。不能選取個別套件以進行更新。</dd>
-</dlentry><dlentry>
-<dt>儲存庫</dt>
-<dd>此區段會顯示與主機系統相關聯的儲存庫。您可以新增、啟用、編輯或移除儲存庫。新增儲存庫可使它與主機系統相關聯，而啟用儲存庫則容許主機存取儲存庫。如果您的系統是
-Red Hat Enterprise Linux 或 Fedora，則可以新增 <filepath>yum</filepath> 儲存庫。如果您的系統是
-Ubuntu 或 Debian，則可以新增 <filepath>deb</filepath> 儲存庫。<p>如果您正在使用
-yum 儲存庫，則可以新增 GPG 檢查以驗證此儲存庫中的某個套件是否未毀損。選取儲存庫，然後選取<uicontrol>編輯</uicontrol>。選取<uicontrol>是</uicontrol>以啟用 <uicontrol>GPG 檢查</uicontrol>，然後輸入儲存庫的 GPG 金鑰檔的 URL。</p></dd>
-</dlentry><dlentry>
 <dt>除錯報告</dt>
 <dd>此區段顯示除錯報告，包括名稱和檔案路徑。您可以選取選項以產生新報告、或是重新命名、移除或下載現有報告。<p>除錯報告是使用
 <cmdname>sosreport</cmdname> 指令產生的。該指令可用於 Red
