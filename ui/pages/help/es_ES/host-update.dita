@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE cshelp PUBLIC "-//IBM//DTD DITA CSHelp//EN"
+ "..\dtd\cshelp.dtd">
+
+
+<!--This DITA specialized document type is not supported by the Authoring Tools development team.
+For support please see:
+https://w3.opensource.ibm.com/projects/dita-cshelp/-->
+<cshelp id="kimhhost" xml:lang="es-es">
+<title>Host</title>
+<shortdesc>La página <wintitle>Host Update</wintitle> muestra información sobre el sistema host.</shortdesc>
+<csbody>
+<p>Pulse en las secciones siguientes para visualizar información acerca del host:</p>
+<dl><dlentry>
+<dt>Actualizaciones de software</dt>
+<dd>En esta sección se muestra información para todos los paquetes que tienen actualizaciones disponibles, incluido el nombre de paquete, versión, arquitectura y repositorio. Puede actualizar todos los paquetes listados seleccionando <uicontrol>Actualizar todo</uicontrol>. No puede seleccionar paquetes individuales para las actualizaciones.</dd>
+</dlentry><dlentry>
+<dt>Repositorios</dt>
+<dd>En esta sección se muestran los repositorios que están asociados con el sistema host. Puede añadir, habilitar, editar o eliminar repositorios. Añadir un repositorio lo asocia con el sistema host mientras que habilitar un repositorio permite que el host acceda a él. Si el sistema es Red Hat Enterprise
+Linux o Fedora, puede añadir repositorios <filepath>yum</filepath>.
+Si el sistema es Ubuntu o Debian, añada repositorios <filepath>deb</filepath>.<p>Si está trabajando con repositorios yum, puede añadir una comprobación GPG para verificar que un paquete de este repositorio no ha resultado dañado.
+Seleccione un repositorio y, a continuación, <uicontrol>Editar</uicontrol>. Seleccione <uicontrol>Sí</uicontrol> para habilitar <uicontrol>Comprobación GPG</uicontrol> y, a continuación, especifique un URL al archivo de claves GPG para el repositorio. </p></dd>
+</dlentry></dl>
+</csbody>
+<?tm 1392659967 1?>
+</cshelp>
+
+
+<!-- ENGL1SH_VERS10N 42248_4 DO NOT REMOVE OR CHANGE THIS LINE -->
+<!-- T9N_SRC_ID 232 -->
+<!-- T9N_SH1P_STR1NG KV310AAP001 1 -->
