@@ -2,6 +2,8 @@ CHANGELOG
 =========
 
 #### [2.0.0] ####
+ * [39f6e43] Fixing errors in .po files                                                     (Daniel Henrique Barboza)
+ * [9d2ffb1] Preparing Ginger-base version 2.0.0                                            (Daniel Henrique Barboza)
  * [dda6b11] Use correct gettext package for building                                       (Lucio Correia)
  * [6c9f6ab] Fixing whitespace errors                                                       (Daniel Henrique Barboza)
  * [7e0cba5] Github #16: make check-local improvements                                      (Daniel Henrique Barboza)
