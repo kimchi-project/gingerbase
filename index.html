@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Gingerbase by kimchi-project</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Gingerbase</h1>
+        <h2>Gingerbase: basic host management for WoK</h2>
+        <a href="https://github.com/kimchi-project/gingerbase" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="ginger-base-plugin" class="anchor" href="#ginger-base-plugin" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ginger Base Plugin</h1>
+
+<p>Ginger Base is an open source base host management plugin for Wok
+(Webserver Originated from Kimchi), that provides an intuitive web panel with
+common tools for configuring and managing the Linux systems.</p>
+
+<p>Wok is a cherrypy-based web framework with HTML5 support that is extended by
+plugins which expose functionality through REST APIs.</p>
+
+<p>The current features of Base Host Management of Linux system include:
+    + Shutdown, Restart, Connect
+    + Basic Information
+    + System Statistics
+    + Software Updates
+    + Repository Management
+    + Debug Reports (SoS Reports)</p>
+
+<h1>
+<a id="browser-support" class="anchor" href="#browser-support" aria-hidden="true"><span class="octicon octicon-link"></span></a>Browser Support</h1>
+
+<h2>
+<a id="desktop-browser-support" class="anchor" href="#desktop-browser-support" aria-hidden="true"><span class="octicon octicon-link"></span></a>Desktop Browser Support:</h2>
+
+<ul>
+<li>
+<strong>Internet Explorer:</strong> Current version</li>
+<li>
+<strong>Chrome:</strong> Current version</li>
+<li>
+<strong>Firefox:</strong> Current version</li>
+<li>
+<strong>Safari:</strong> Current version</li>
+<li>
+<strong>Opera:</strong> Current version</li>
+</ul>
+
+<h2>
+<a id="mobile-browser-support" class="anchor" href="#mobile-browser-support" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mobile Browser Support:</h2>
+
+<ul>
+<li>
+<strong>Safari iOS:</strong> Current-1 version</li>
+<li>
+<strong>Android Browser</strong> Current-1 version</li>
+</ul>
+
+<h1>
+<a id="hypervisor-distro-support" class="anchor" href="#hypervisor-distro-support" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hypervisor Distro Support</h1>
+
+<p>Ginger Base and Wok might run on any GNU/Linux distribution that meets the conditions
+described on the 'Getting Started' section below.</p>
+
+<p>The Ginger community makes an effort to test it with the latest versions of
+Fedora, RHEL, OpenSuSe, and Ubuntu.</p>
+
+<h1>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h1>
+
+<h2>
+<a id="install-dependencies" class="anchor" href="#install-dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install Dependencies</h2>
+
+<p><strong>For fedora and RHEL:</strong></p>
+
+<pre><code>$ sudo yum install  wok gettext-devel git rpm-python \
+                    python-psutil sos python-lxml \
+                    libxslt pyparted \
+                    python-cherrypy python-configobj \
+
+# If using Fedora, install the following additional packages:
+$ sudo yum install python2-dnf
+
+# If using RHEL, install the following additional packages:
+$ sudo yum install python-unittest2 python-ordereddict
+
+# These dependencies are only required if you want to run the tests:
+$ sudo yum install pyflakes python-pep8 python-requests
+</code></pre>
+
+<p><em>Note for RHEL users</em>: Some of the above packages are located in the Red Hat
+EPEL repositories.  See
+<a href="http://fedoraproject.org/wiki/EPEL#How_can_I_use_these_extra_packages.3F">this FAQ</a>
+for more information on how to configure your system to access this repository.</p>
+
+<p>And for RHEL7 systems, you also need to subscribe to the "RHEL Server Optional"
+channel at RHN Classic or Red Hat Satellite.</p>
+
+<p><strong>For debian:</strong></p>
+
+<pre><code>$ sudo apt-get install wok gettext python-apt git \
+                       python-configobj \
+                       python-psutil sosreport \
+                       python-lxml xsltproc \
+                       python-parted python-cherrypy
+
+Packages version requirement:
+    python-jsonschema &gt;= 1.3.0
+    python-psutil &gt;= 0.6.0
+
+# These dependencies are only required if you want to run the tests:
+$ sudo apt-get install pep8 pyflakes python-requests
+</code></pre>
+
+<p><strong>For openSUSE:</strong></p>
+
+<pre><code>$ sudo zypper install wok gettext-tools rpm-python git \
+                      python-psutil python-lxml \
+                      libxslt-tools python-parted \
+                      python-configobj python-CherryPy
+
+Packages version requirement:
+    python-psutil &gt;= 0.6.0
+
+# These dependencies are only required if you want to run the tests:
+$ sudo zypper install python-pyflakes python-pep8 python-requests
+</code></pre>
+
+<p><em>Note for openSUSE users</em>: Some of the above packages are located in different
+openSUSE repositories. See
+<a href="http://download.opensuse.org/repositories/home:GRNET:synnefo/">this FAQ</a> for
+python-parted; And
+<a href="http://en.opensuse.org/SDB:Add_package_repositories">this FAQ</a> for more
+information on how configure your system to access this repository.</p>
+
+<h2>
+<a id="build-and-install" class="anchor" href="#build-and-install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Build and Install</h2>
+
+<pre><code>Wok:
+$ ./autogen.sh --system
+
+$ make
+$ sudo make install   # Optional if running from the source tree
+
+Ginger Base:
+$ cd plugins/gingerbasae
+
+$ ./autogen.sh --system
+
+$ make
+$ sudo make install   # Optional if running from the source tree
+</code></pre>
+
+<h2>
+<a id="run" class="anchor" href="#run" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run</h2>
+
+<pre><code>$ systemctl start wokd
+</code></pre>
+
+<h2>
+<a id="test" class="anchor" href="#test" aria-hidden="true"><span class="octicon octicon-link"></span></a>Test</h2>
+
+<pre><code>$ cd plugins/gingerbase
+$ make check-local # check for i18n and formatting errors
+$ sudo make check
+</code></pre>
+
+<p>After all tests are executed, a summary will be displayed containing any
+ errors/failures which might have occurred.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Connect your browser to https://localhost:8001.
+Once logged in you could see host tab which provides the gingerbase functionality.</p>
+
+<p>Wok uses PAM to authenticate users so you can log in with the same username
+and password that you would use to log in to the machine itself.</p>
+
+<p>Ginger Base Host tab provides the base host functionality like system information,
+system statistics, software updates, repositories and debug reports functionality.</p>
+
+<p>Also Ginger Base provides shutdown, re-start and connect options.</p>
+
+<h2>
+<a id="participating" class="anchor" href="#participating" aria-hidden="true"><span class="octicon octicon-link"></span></a>Participating</h2>
+
+<p>All patches are sent through our mailing list.  More information can be found at:</p>
+
+<p><a href="https://github.com/kimchi-project/ginger/wiki/Communications">https://github.com/kimchi-project/ginger/wiki/Communications</a></p>
+
+<p>Patches should be sent using git-send-email to <a href="mailto:ginger-dev-list@googlegroups.com">ginger-dev-list@googlegroups.com</a></p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/kimchi-project/gingerbase/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/kimchi-project/gingerbase/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/kimchi-project/gingerbase"></a> is maintained by <a href="https://github.com/kimchi-project">kimchi-project</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
