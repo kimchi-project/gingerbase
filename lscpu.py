@@ -18,8 +18,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 import logging
 import platform
+import subprocess
 
-from wok.utils import run_command
 from wok.exception import NotFoundError
 
 ARCH = platform.machine()
@@ -41,7 +41,18 @@ class LsCpu(object):
         self.lsCpuInfo = {}
         try:
             # lscpu - display information about the CPU architecture
-            out, error, rc = run_command(['lscpu'])
+            # lscpu output varies from system language used
+            # using LC_ALL='C' env variable forces the output
+            # to be in default English format.
+            lscpu_proc = subprocess.Popen(
+                ['lscpu'],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                env={'LC_ALL': 'C'}
+            )
+            out, error = lscpu_proc.communicate()
+            rc = lscpu_proc.returncode
+
             # Output of lscpu on x86 is expected to be:
             # Architecture:          x86_64
             # CPU op-mode(s):        32-bit, 64-bit
