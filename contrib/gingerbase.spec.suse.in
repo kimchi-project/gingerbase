@@ -19,8 +19,6 @@ Requires:	rpm-python
 BuildRequires:	gettext-tools
 BuildRequires:	libxslt-tools
 BuildRequires:	python-lxml
-BuildRequires:	python-devel
-BuildRequires:	python-pip
 
 %if 0%{?suse_version} == 1100
 Requires:       python-ordereddict

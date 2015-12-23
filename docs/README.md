@@ -63,6 +63,11 @@ Install Dependencies
     # These dependencies are only required if you want to run the tests:
     $ sudo yum install pyflakes python-pep8 python-requests
 
+    # For UI development
+    $ sudo yum install gcc-c++ python-devel python pip
+    $ sudo pip install cython libsass
+
+
 *Note for RHEL users*: Some of the above packages are located in the Red Hat
 EPEL repositories.  See
 [this FAQ](http://fedoraproject.org/wiki/EPEL#How_can_I_use_these_extra_packages.3F)
@@ -86,6 +91,11 @@ channel at RHN Classic or Red Hat Satellite.
     # These dependencies are only required if you want to run the tests:
     $ sudo apt-get install pep8 pyflakes python-requests
 
+    # For UI development
+    $ sudo apt-get install g++ python-dev python pip
+    $ sudo pip install cython libsass
+
+
 **For openSUSE:**
 
     $ sudo zypper install wok gettext-tools rpm-python git \
@@ -98,6 +108,11 @@ channel at RHN Classic or Red Hat Satellite.
 
     # These dependencies are only required if you want to run the tests:
     $ sudo zypper install python-pyflakes python-pep8 python-requests
+
+    # For UI development
+    $ sudo zypper install python-devel python pip
+    $ sudo pip install cython libsass
+
 
 *Note for openSUSE users*: Some of the above packages are located in different
 openSUSE repositories. See
@@ -137,6 +152,12 @@ Test
 
 After all tests are executed, a summary will be displayed containing any
  errors/failures which might have occurred.
+
+UI Development
+----
+Make sure to update the CSS files when modifying the SCSS files by running:
+
+    $ sudo make -C ui/css css
 
 Usage
 -----

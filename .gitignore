@@ -34,4 +34,3 @@ po/gen-pot
 *.rej
 *.pem
 ui/pages/help/*/*.html
-ui/css/gingerbase.css

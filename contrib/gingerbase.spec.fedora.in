@@ -20,8 +20,6 @@ Requires:	sos
 BuildRequires:	gettext-devel
 BuildRequires:	libxslt
 BuildRequires:	python-lxml
-BuildRequires:	python-devel
-BuildRequires:	python-pip
 
 %if 0%{?fedora} >= 23
 Requires:	python2-dnf
