@@ -56,7 +56,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_prefix}/share/locale/*/LC_MESSAGES/gingerbase.mo
 %{_datadir}/wok/plugins/gingerbase
 %{_sysconfdir}/wok/plugins.d/gingerbase.conf
-%{_sharedstatedir}/gingerbase/
+%{_var}/lib/gingerbase/
 
 
 %changelog
