@@ -35,8 +35,8 @@ Mobile Browser Support:
 Hypervisor Distro Support
 =========================
 
-Ginger Base and Wok might run on any GNU/Linux distribution that meets the conditions
-described on the 'Getting Started' section below.
+Ginger Base and Wok might run on any GNU/Linux distribution that meets the
+conditions described on the 'Getting Started' section below.
 
 The Ginger community makes an effort to test it with the latest versions of
 Fedora, RHEL, OpenSuSe, and Ubuntu.
@@ -44,29 +44,66 @@ Fedora, RHEL, OpenSuSe, and Ubuntu.
 Getting Started
 ===============
 
-Install Dependencies
---------------------
+All Ginger Base functionalities are provided to user by Wok infra-structure.
+It's important to install Wok before any Ginger Base operation be enabled on
+the system.
 
-**For fedora and RHEL:**
+There are two ways to have Ginger Base and Wok running together: by their
+packages (latest release) or by source code (development release).
 
-    $ sudo yum install  wok gettext-devel git rpm-python \
-                        python-psutil sos python-lxml \
-                        libxslt pyparted \
-                        python-cherrypy python-configobj \
+Installing From Packages
+------------------------
+
+Kimchi and Ginger teams provide packages of the latest stable release of Wok
+and Ginger Base. To install them, follow these instructions:
+
+**For Fedora:**
+
+```
+$ wget http://kimchi-project.github.io/wok/downloads/wok-2.0.0-0.fc23.noarch.rpm
+$ wget http://kimchi-project.github.io/gingerbase/downloads/ginger-base-2.0.0-0.fc23.noarch.rpm
+$ sudo dnf install wok-*.rpm ginger-base-*.rpm
+```
+
+**For RHEL:**
+
+```
+$ wget http://kimchi-project.github.io/wok/downloads/wok-2.0.0-0.el7.noarch.rpm
+$ wget http://kimchi-project.github.io/gingerbase/downloads/ginger-base-2.0.0-0.el7.noarch.rpm
+$ sudo yum install wok-*.rpm ginger-base-*.rpm
+```
+
+**For Debian/Ubuntu:**
+
+```
+$ wget http://kimchi-project.github.io/wok/downloads/wok-2.0.0-0.noarch.deb
+$ wget http://kimchi-project.github.io/gingerbase/downloads/ginger-base-2.0.0-0.noarch.deb
+$ sudo dpkg -i wok-*.deb ginger-base-*.deb
+```
+
+**For openSUSE:**
+
+```
+$ wget http://kimchi-project.github.io/wok/downloads/wok-2.0.0-0.noarch.rpm
+$ wget http://kimchi-project.github.io/gingerbase/downloads/ginger-base-2.0.0-0.noarch.rpm
+$ sudo zypper install wok-*.rpm ginger-base-*.rpm
+```
+
+Installing from Source Code
+---------------------------
+
+Before anything, it's necessary install Wok and Ginger Base dependencies. To
+install Wok dependencies, see Wok's README file at
+https://github.com/kimchi-project/wok/blob/master/docs/README.md
+
+To install Ginger Base dependencies, follow:
+
+**For Fedora and RHEL:**
+
+    $ sudo yum install rpm-python sos pyparted python-configobj
 
     # If using Fedora, install the following additional packages:
     $ sudo yum install python2-dnf
-
-    # If using RHEL, install the following additional packages:
-    $ sudo yum install python-unittest2 python-ordereddict
-
-    # These dependencies are only required if you want to run the tests:
-    $ sudo yum install pyflakes python-pep8 python-requests
-
-    # For UI development
-    $ sudo yum install gcc-c++ python-devel python pip
-    $ sudo pip install cython libsass
-
 
 *Note for RHEL users*: Some of the above packages are located in the Red Hat
 EPEL repositories.  See
@@ -76,43 +113,13 @@ for more information on how to configure your system to access this repository.
 And for RHEL7 systems, you also need to subscribe to the "RHEL Server Optional"
 channel at RHN Classic or Red Hat Satellite.
 
-**For debian:**
+**For Debian/Ubuntu:**
 
-    $ sudo apt-get install wok gettext python-apt git \
-                           python-configobj \
-                           python-psutil sosreport \
-                           python-lxml xsltproc \
-                           python-parted python-cherrypy
-
-    Packages version requirement:
-        python-jsonschema >= 1.3.0
-        python-psutil >= 0.6.0
-
-    # These dependencies are only required if you want to run the tests:
-    $ sudo apt-get install pep8 pyflakes python-requests
-
-    # For UI development
-    $ sudo apt-get install g++ python-dev python pip
-    $ sudo pip install cython libsass
-
+    $ sudo apt-get install python-apt sosreport python-configobj python-parted
 
 **For openSUSE:**
 
-    $ sudo zypper install wok gettext-tools rpm-python git \
-                          python-psutil python-lxml \
-                          libxslt-tools python-parted \
-                          python-configobj python-CherryPy
-
-    Packages version requirement:
-        python-psutil >= 0.6.0
-
-    # These dependencies are only required if you want to run the tests:
-    $ sudo zypper install python-pyflakes python-pep8 python-requests
-
-    # For UI development
-    $ sudo zypper install python-devel python pip
-    $ sudo pip install cython libsass
-
+    $ sudo zypper install rpm-python python-parted python-configobj
 
 *Note for openSUSE users*: Some of the above packages are located in different
 openSUSE repositories. See
@@ -121,43 +128,37 @@ python-parted; And
 [this FAQ](http://en.opensuse.org/SDB:Add_package_repositories) for more
 information on how configure your system to access this repository.
 
-Build and Install
------------------
+After install and resolve all dependencies, clone both source code:
 
-    Wok:
-    $ ./autogen.sh --system
+```
+$ git clone --recursive https://github.com/kimchi-project/wok.git
+$ cd wok
+$ git submodule update --remote
+$ ./build-all.sh
+```
 
-    $ make
-    $ sudo make install   # Optional if running from the source tree
+To run Ginger Base tests, execute:
 
-    Ginger Base:
-    $ cd plugins/gingerbasae
+```
+$ cd src/wok/plugins/gingerbase
+$ make check-local                      # check for i18n and formatting errors
+$ sudo make check                       # execute unit tests
+```
 
-    $ ./autogen.sh --system
+After all tests are executed, a summary will be displayed containing any
+errors/failures which might have occurred.
 
-    $ make
-    $ sudo make install   # Optional if running from the source tree
+Regarding UI development, make sure to update the CSS files when modifying the
+SCSS files by running:
+
+    $ sudo make -C ui/css css
+
 
 Run
 ---
 
-    $ systemctl start wokd
+    $ sudo systemctl start wokd.service
 
-Test
-----
-
-    $ cd plugins/gingerbase
-    $ make check-local # check for i18n and formatting errors
-    $ sudo make check
-
-After all tests are executed, a summary will be displayed containing any
- errors/failures which might have occurred.
-
-UI Development
-----
-Make sure to update the CSS files when modifying the SCSS files by running:
-
-    $ sudo make -C ui/css css
 
 Usage
 -----
