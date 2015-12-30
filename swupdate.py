@@ -25,7 +25,7 @@ import signal
 import subprocess
 import time
 from configobj import ConfigObj, ConfigObjError
-from psutil import pid_exists
+from psutil import pid_exists, process_iter
 
 from wok.basemodel import Singleton
 from wok.exception import NotFoundError, OperationFailed
@@ -59,7 +59,7 @@ class SoftwareUpdate(object):
         try:
             __import__('dnf')
             wok_log.info("Loading YumUpdate features.")
-            self._pkg_mnger = YumUpdate()
+            self._pkg_mnger = DnfUpdate()
         except ImportError:
             try:
                 __import__('yum')
@@ -287,6 +287,35 @@ class YumUpdate(object):
             return True
 
         return False
+
+
+class DnfUpdate(YumUpdate):
+    """
+    Class to represent and operate with DNF software update system.
+    It's loaded only on those systems listed at DNF_DISTROS and loads necessary
+    modules in runtime.
+    """
+    def __init__(self):
+        self._pkgs = {}
+        self.update_cmd = ["dnf", "-y", "update"]
+        self.logfile = '/var/log/dnf.log'
+
+    def isRunning(self):
+        """
+        Return True whether the YUM package manager is already running or
+        False otherwise.
+        """
+        pid = None
+        try:
+            for dnf_proc in process_iter():
+                if 'dnf' in dnf_proc.name():
+                    pid = dnf_proc.pid
+                    break
+        except:
+            return False
+
+        # the pidfile exists and it lives in process table
+        return pid_exists(pid)
 
 
 class AptUpdate(object):
