@@ -28,6 +28,7 @@ from wok.objectstore import ObjectStore
 from wok.utils import add_task, wok_log
 
 from wok.plugins.gingerbase import config
+from wok.plugins.gingerbase import swupdate
 from wok.plugins.gingerbase.model import cpuinfo
 from wok.plugins.gingerbase.model.debugreports import DebugReportsModel
 from wok.plugins.gingerbase.model.model import Model
@@ -116,6 +117,12 @@ class MockModel(Model):
                            self.objstore)
         return self.task_lookup(task_id)
 
+    def _mock_softwareupdateprogress_lookup(self, *name):
+        task_id = add_task('/plugins/gingerbase/host/swupdateprogress',
+                           self._mock_swupdate.doSlowUpdate,
+                           self.objstore)
+        return self.task_lookup(task_id)
+
     def _mock_repositories_get_list(self):
         return self._mock_repositories.repos.keys()
 
@@ -187,6 +194,22 @@ class MockSoftwareUpdate(object):
         # After updating all packages any package should be listed to be
         # updated, so reset self._packages
         self.pkgs = {}
+
+    def doSlowUpdate(self, cb, params):
+        class MockUpdate(object):
+            def __init__(self):
+                self.logfile = ""
+                self.revcounter = 5
+
+            def isRunning(self):
+                if self.revcounter <= 0:
+                    return False
+                self.revcounter -= 1
+                return True
+
+        sw_update = swupdate.SoftwareUpdate()
+        sw_update._pkg_mnger = MockUpdate()
+        sw_update.tailUpdateLogs(cb, params)
 
 
 class MockRepositories(object):

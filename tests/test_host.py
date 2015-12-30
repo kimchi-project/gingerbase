@@ -147,3 +147,22 @@ class HostTests(unittest.TestCase):
         self.assertIn(u'All packages updated', task_info['message'])
         pkgs = model.packagesupdate_get_list()
         self.assertEquals(0, len(pkgs))
+
+    def test_swupdateprogress(self):
+        resp = self.request('/plugins/gingerbase/host/swupdateprogress',
+                            None, 'GET')
+        task = json.loads(resp.read())
+        self.assertEquals(202, resp.status)
+
+        for i in xrange(1, 6):
+            resp = self.request('/tasks/' + task['id'], None, 'GET')
+            task = json.loads(resp.read())
+            self.assertEquals(200, resp.status)
+            self.assertIn('*', task['message'].rstrip('\n'))
+            time.sleep(1)
+
+        resp = self.request('/tasks/' + task['id'], None, 'GET')
+        task = json.loads(resp.read())
+        self.assertEquals(200, resp.status)
+        self.assertEqual(task['status'], 'finished')
+        time.sleep(1)
