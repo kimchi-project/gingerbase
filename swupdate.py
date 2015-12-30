@@ -326,7 +326,6 @@ class AptUpdate(object):
     """
     def __init__(self):
         self._pkgs = {}
-        self.pkg_lock = getattr(__import__('apt_pkg'), 'SystemLock')
         self.update_cmd = ['apt-get', 'upgrade', '-y']
         self.logfile = '/var/log/apt/term.log'
 
@@ -336,12 +335,10 @@ class AptUpdate(object):
         """
         apt_cache = getattr(__import__('apt'), 'Cache')()
         try:
-            with self.pkg_lock():
-                apt_cache.update()
-                apt_cache.upgrade()
-                self._pkgs = apt_cache.get_changes()
+            apt_cache.update()
+            apt_cache.upgrade()
+            self._pkgs = apt_cache.get_changes()
         except Exception, e:
-            gingerBaseLock.release()
             raise OperationFailed('GGBPKGUPD0003E', {'err': e.message})
 
     def getPackagesList(self):
@@ -355,8 +352,13 @@ class AptUpdate(object):
             raise OperationFailed('GGBPKGUPD0005E')
 
         gingerBaseLock.acquire()
-        self._refreshUpdateList()
-        gingerBaseLock.release()
+        try:
+            self._refreshUpdateList()
+        except Exception:
+            raise
+        finally:
+            gingerBaseLock.release()
+
         pkg_list = []
         for pkg in self._pkgs:
             package = {'package_name': pkg.shortname,
