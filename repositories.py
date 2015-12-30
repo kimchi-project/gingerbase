@@ -345,7 +345,6 @@ class AptRepo(object):
         getattr(__import__('apt_pkg'), 'init_config')()
         getattr(__import__('apt_pkg'), 'init_system')()
         config = getattr(__import__('apt_pkg'), 'config')
-        self.pkg_lock = getattr(__import__('apt_pkg'), 'SystemLock')
         module = __import__('aptsources.sourceslist', globals(), locals(),
                             ['SourcesList'], -1)
 
@@ -359,19 +358,13 @@ class AptRepo(object):
                 fd.write("# This file is managed by Ginger Base and it "
                          "must not be modified manually\n")
 
-        self.repos = None
-
     def _get_repos(self):
-        if self.repos is not None:
-            return self.repos
-
         try:
-            with self.pkg_lock():
-                self.repos = self._sourceslist()
+            repos = self._sourceslist()
         except Exception, e:
             raise OperationFailed('GGBREPOS0025E', {'err': e.message})
 
-        return self.repos
+        return repos
 
     def _get_repo_id(self, repo):
         data = urlparse.urlparse(repo.uri)
@@ -407,7 +400,6 @@ class AptRepo(object):
         internal control, the repository ID will be built as described in
         _get_repo_id()
         """
-        self.repos = None
         gingerBaseLock.acquire()
         try:
             repos = self._get_repos()
@@ -465,12 +457,11 @@ class AptRepo(object):
             repos = self._get_repos()
             source_entry = repos.add('deb', uri, dist, comps,
                                      file=self.filename)
-            with self.pkg_lock():
-                repos.save()
+            repos.save()
         except Exception as e:
-            gingerBaseLock.release()
             raise OperationFailed("GGBREPOS0026E", {'err': e.message})
-        gingerBaseLock.release()
+        finally:
+            gingerBaseLock.release()
         return self._get_repo_id(source_entry)
 
     def toggleRepo(self, repo_id, enable):
@@ -495,12 +486,10 @@ class AptRepo(object):
         gingerBaseLock.acquire()
         try:
             repos = self._get_repos()
-            with self.pkg_lock():
-                repos.remove(r)
-                repos.add(line, r.uri, r.dist, r.comps, file=self.filename)
-                repos.save()
+            repos.remove(r)
+            repos.add(line, r.uri, r.dist, r.comps, file=self.filename)
+            repos.save()
         except:
-            gingerBaseLock.release()
             if enable:
                 raise OperationFailed("GGBREPOS0020E", {'repo_id': repo_id})
 
@@ -544,11 +533,9 @@ class AptRepo(object):
         gingerBaseLock.acquire()
         try:
             repos = self._get_repos()
-            with self.pkg_lock():
-                repos.remove(r)
-                repos.save()
+            repos.remove(r)
+            repos.save()
         except:
-            gingerBaseLock.release()
             raise OperationFailed("GGBREPOS0017E", {'repo_id': repo_id})
         finally:
             gingerBaseLock.release()
