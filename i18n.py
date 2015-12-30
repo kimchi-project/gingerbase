@@ -30,13 +30,16 @@ messages = {
     "GGBDR0001E": _("Debug report %(name)s does not exist"),
     "GGBDR0002E": _("Debug report tool not found in system"),
     "GGBDR0003E": _("Unable to create debug report %(name)s. Details: %(err)s."),
-    "GGBDR0004E": _("Can not find any debug report with the given name %(name)s"),
+    "GGBDR0004E": _("Can not find any sosreport with the given name %(name)s with %(retcode)s."),
     "GGBDR0005E": _("Unable to generate debug report %(name)s. Details: %(err)s"),
     "GGBDR0006E": _("You should give a name for the debug report file."),
     "GGBDR0007E": _("Debug report name must be a string. Only letters, digits, underscore ('_') and "
                     "hyphen ('-') are allowed."),
     "GGBDR0008E": _("The debug report with specified name \"%(name)s\" already exists. Please use another one."),
-
+    "GGBDR0009E": _("Unable to create dbginfo report with %(retcode)s. Details: %(err)s"),
+    "GGBDR0010E": _("Unable to compress the final debug report tar file with %(retcode)s. Details: %(error)s"),
+    "GGBDR0011E": _("Unable to generate final debug report %(name)s. Details: %(err)s"),
+    "GGBDR0012E": _("Can not find any dbginforeport with the %(retcode)s. Details: %(err)s"),
     "GGBHOST0001E": _("Unable to shutdown host machine as there are running virtual machines"),
     "GGBHOST0002E": _("Unable to reboot host machine as there are running virtual machines"),
     "GGBHOST0003E": _("There may be virtual machines running on the host"),
@@ -88,6 +91,5 @@ messages = {
     "GGBCPUINF0005E": _("This host (or current configuration) does not provide Socket(s) information."),
     "GGBCPUINF0006E": _("This host (or current configuration) does not provide Core(s) per socket information."),
     "GGBCPUINF0007E": _("This host (or current configuration) does not provide Thread(s) per core information."),
-    "GGBCPUINF0008E": _("This host (or current configuration) does not provide CPU(s) information."),
 
 }

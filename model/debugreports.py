@@ -19,13 +19,13 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
-import fnmatch
 import glob
 import logging
 import os
 import shutil
 import subprocess
 import time
+
 
 from wok.exception import InvalidParameter, NotFoundError, OperationFailed
 from wok.exception import WokException
@@ -71,54 +71,107 @@ class DebugReportsModel(object):
         raise OperationFailed("GGBDR0002E")
 
     @staticmethod
-    def sosreport_generate(cb, name):
+    def debugreport_generate(cb, name):
         def log_error(e):
-            log = logging.getLogger('Model')
-            log.warning('Exception in generating debug file: %s', e)
+            wok_log = logging.getLogger('Model')
+            wok_log.warning('Exception in generating debug file: %s', e)
 
         try:
-            command = ['sosreport', '--batch', '--name=%s' % name]
+            # Sosreport generation
+            sosreport_file = sosreport_collection(name)
+            md5_report_file = sosreport_file + '.md5'
+            report_file_extension = '.' + sosreport_file.split('.', 1)[1]
+            # If the platform is a system Z machine.
+            path_debugreport = '/var/tmp/'
+            dbginfo_report = None
+            dbgreport_regex = path_debugreport + 'DBGINFO-' + \
+                '[0-9][0-9][0-9][0-9]-' + '[0-9][0-9]-' + \
+                '[0-9][0-9]-' + '[0-9][0-9]-' + '[0-9][0-9]-' + \
+                '[0-9][0-9]-' + '*-' + '*.tgz'
+            command = ['/usr/sbin/dbginfo.sh', '-d', path_debugreport]
             output, error, retcode = run_command(command)
-
             if retcode != 0:
-                raise OperationFailed("GGBDR0003E", {'name': name,
-                                                     'err': retcode})
-
-            # SOSREPORT might create file in /tmp or /var/tmp
-            # FIXME: The right way should be passing the tar.xz file directory
-            # though the parameter '--tmp-dir', but it is failing in Fedora 20
-            patterns = ['/tmp/sosreport-%s-*', '/var/tmp/sosreport-%s-*']
-            reports = []
-            reportFile = None
-            for p in patterns:
-                reports = reports + [f for f in glob.glob(p % name)]
-            for f in reports:
-                if not fnmatch.fnmatch(f, '*.md5'):
-                    reportFile = f
-                    break
-            # Some error in sosreport happened
-            if reportFile is None:
-                wok_log.error('Debug report file not found. See sosreport '
-                              'output for detail:\n%s', output)
-                fname = (patterns[0] % name).split('/')[-1]
-                raise OperationFailed('GGBDR0004E', {'name': fname})
-
-            md5_report_file = reportFile + '.md5'
-            report_file_extension = '.' + reportFile.split('.', 1)[1]
+                raise OperationFailed("GGBDR0009E",
+                                      {'retcode': retcode, 'err': error})
+            # Checking for dbginforeport file.
+            if output.splitlines():
+                dbginfo_report = glob.glob(dbgreport_regex)
+            if len(dbginfo_report) == 0:
+                raise OperationFailed("GGBDR0012E",
+                                      {'retcode': retcode, 'err': error})
+            dbginfo_reportfile = dbginfo_report[-1]
+            final_tar_report_name = name + report_file_extension
+            sosreport_tar = sosreport_file.split('/', 3)[3]
+            dbginfo_tar = dbginfo_reportfile.split('/', 3)[3]
+            msg = 'Compressing the sosreport and debug info files into ' \
+                  'final report file'
+            wok_log.info(msg)
+            # Compressing the sosreport and dbginfo reports into one
+            # tar file
+            command = ['tar', '-cvzf', '%s' % final_tar_report_name,
+                       '-C', path_debugreport, dbginfo_tar,
+                       sosreport_tar]
+            output, error, retcode = run_command(command)
+            if retcode != 0:
+                raise OperationFailed("GGBDR0010E",
+                                      {'retcode': retcode,
+                                       'error': error})
             path = config.get_debugreports_path()
-            target = os.path.join(path, name + report_file_extension)
-            # Moving report
-            msg = 'Moving debug report file "%s" to "%s"' % (reportFile,
-                                                             target)
+            dbg_target = os.path.join(path,
+                                      name + report_file_extension)
+            # Moving final tar file to debugreports path
+            msg = 'Moving final debug  report file "%s" to "%s"' % \
+                  (final_tar_report_name, dbg_target)
             wok_log.info(msg)
-            shutil.move(reportFile, target)
-            # Deleting md5
-            msg = 'Deleting report md5 file: "%s"' % (md5_report_file)
+            shutil.move(final_tar_report_name, dbg_target)
+            # Deleting the sosreport md5 file
+            delete_the_sosreport_md5_file(md5_report_file)
+            # Deleting the dbginfo report file
+            msg = 'Deleting the dbginfo file "%s" ' \
+                  % dbginfo_reportfile
             wok_log.info(msg)
-            with open(md5_report_file) as f:
-                md5 = f.read().strip()
-                wok_log.info('Md5 file content: "%s"', md5)
-            os.remove(md5_report_file)
+            os.remove(dbginfo_reportfile)
+            # Deleting the sosreport file
+            msg = 'Deleting the sosreport file "%s" ' % sosreport_file
+            wok_log.info(msg)
+            os.remove(sosreport_file)
+            wok_log.info('The debug report file has been moved')
+            cb('OK', True)
+            return
+
+        except WokException as e:
+            log_error(e)
+            raise
+
+        except OSError as e:
+            log_error(e)
+            raise
+
+        except Exception, e:
+            # No need to call cb to update the task status here.
+            # The task object will catch the exception raised here
+            # and update the task status there
+            log_error(e)
+            raise OperationFailed("GGBDR0011E", {'name': name, 'err': e})
+
+    @staticmethod
+    def sosreport_generate(cb, name):
+        def log_error(e):
+            wok_log = logging.getLogger('Model')
+            wok_log.warning('Exception in generating debug file: %s', e)
+        try:
+            # Sosreport collection
+            sosreport_file = sosreport_collection(name)
+            md5_report_file = sosreport_file + '.md5'
+            report_file_extension = '.' + sosreport_file.split('.', 1)[1]
+            path = config.get_debugreports_path()
+            sosreport_target = os.path.join(path,
+                                            name + report_file_extension)
+            msg = 'Moving debug report file "%s" to "%s"' \
+                  % (sosreport_file, sosreport_target)
+            wok_log.info(msg)
+            shutil.move(sosreport_file, sosreport_target)
+            delete_the_sosreport_md5_file(md5_report_file)
             cb('OK', True)
             return
 
@@ -142,7 +195,9 @@ class DebugReportsModel(object):
         # Please add new possible debug report command here
         # and implement the report generating function
         # based on the new report command
-        report_tools = ({'cmd': 'sosreport --help',
+        report_tools = ({'cmd': '/usr/sbin/dbginfo.sh --help',
+                         'fn': DebugReportsModel.debugreport_generate},
+                        {'cmd': 'sosreport --help',
                          'fn': DebugReportsModel.sosreport_generate},)
 
         # check if the command can be found by shell one by one
@@ -213,3 +268,39 @@ class DebugReportContentModel(object):
 
     def lookup(self, name):
         return self._debugreport.lookup(name)
+
+
+def delete_the_sosreport_md5_file(md5_file):
+    """
+    Deleting md5 file and displaying the contents of the same.
+    """
+    msg = 'Deleting report md5 file: "%s"' % md5_file
+    wok_log.info(msg)
+    with open(md5_file) as f:
+        md5 = f.read().strip()
+        wok_log.info('Md5 file content: "%s"', md5)
+    os.remove(md5_file)
+
+
+def sosreport_collection(name):
+    """
+    Code for the collection of sosreport in the path
+    /var/tmp as specified in the command.
+    """
+    path_sosreport = '/var/tmp/'
+    sosreport_file = None
+    command = ['sosreport', '--batch', '--name=%s' % name,
+               '--tmp-dir=%s' % path_sosreport]
+    output, error, retcode = run_command(command)
+    if retcode != 0:
+        raise OperationFailed("GGBDR0003E", {'name': name,
+                                             'err': retcode})
+    # Checking for sosreport file generation.
+    if output.splitlines():
+        sosreport_pattern = path_sosreport + 'sosreport-' \
+            + name + '-' + '*.tar.xz'
+        sosreport_file = glob.glob(sosreport_pattern)
+    if len(sosreport_file) == 0:
+        raise OperationFailed("GGBDR0004E", {'name': name,
+                                             'err': retcode})
+    return sosreport_file[0]
