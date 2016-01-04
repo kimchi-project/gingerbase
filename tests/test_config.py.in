@@ -60,6 +60,7 @@ class ConfigTests(unittest.TestCase):
         self.assertInstalledPath(paths.mo_dir, '@prefix@/share/locale')
 
     def test_uninstalled_plugin_paths(self):
+        GingerBasePaths.get_prefix = PluginPaths.get_prefix = get_prefix
         paths = GingerBasePaths()
         prefix = paths.prefix
         self.assertEquals(paths.conf_dir, '%s/src/wok/plugins/gingerbase'

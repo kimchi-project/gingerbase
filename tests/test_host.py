@@ -74,7 +74,11 @@ class HostTests(unittest.TestCase):
         else:
             keys = ['os_distro', 'os_version', 'os_codename', 'cpu_model',
                     'memory', 'cpus', 'architecture', 'host']
-            self.assertEquals(psutil.TOTAL_PHYMEM, info['memory']['online'])
+            try:
+                total_phymem = psutil.TOTAL_PHYMEM
+            except AttributeError:
+                total_phymem = psutil.virtual_memory().total
+            self.assertEquals(total_phymem, info['memory']['online'])
         self.assertEquals(sorted(keys), sorted(info.keys()))
 
         distro, version, codename = platform.linux_distribution()
