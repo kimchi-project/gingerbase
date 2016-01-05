@@ -93,7 +93,25 @@ def _is_dev_leaf(devNodePath):
 def _is_dev_extended_partition(devType, devNodePath):
     if devType != 'part':
         return False
-    diskPath = devNodePath.rstrip('0123456789')
+
+    if devNodePath.startswith('/dev/mapper'):
+        try:
+            dev_maj_min = _get_dev_major_min(devNodePath.split("/")[-1])
+            parent_sys_path = '/sys/dev/block/' + dev_maj_min + '/slaves'
+            parent_dm_name = os.listdir(parent_sys_path)[0]
+            parent_maj_min = open(
+                parent_sys_path +
+                '/' +
+                parent_dm_name +
+                '/dev').readline().rstrip()
+            diskPath = _get_dev_node_path(parent_maj_min)
+        except Exception as e:
+            wok_log.error(
+                "Error dealing with dev mapper device: " + devNodePath)
+            raise OperationFailed("GGBDISK00001E", {'err': e.message})
+    else:
+        diskPath = devNodePath.rstrip('0123456789')
+
     device = PDevice(diskPath)
     try:
         extended_part = PDisk(device).getExtendedPartition()
