@@ -123,10 +123,8 @@ channel at RHN Classic or Red Hat Satellite.
 
 *Note for openSUSE users*: Some of the above packages are located in different
 openSUSE repositories. See
-[this FAQ](http://download.opensuse.org/repositories/home:GRNET:synnefo/) for
-python-parted; And
-[this FAQ](http://en.opensuse.org/SDB:Add_package_repositories) for more
-information on how configure your system to access this repository.
+[this FAQ](http://software.opensuse.org/download.html?project=home%3AGRNET%3Asynnefo&package=python-parted) for
+python-parted package.
 
 After install and resolve all dependencies, clone both source code:
 
