@@ -35,6 +35,7 @@ from wok.exception import OperationFailed
 from wok.utils import add_task, run_command, wok_log
 from wok.model.tasks import TaskModel
 
+from wok.plugins.gingerbase.i18n import messages
 from wok.plugins.gingerbase.lscpu import LsCpu
 from wok.plugins.gingerbase.model.debugreports import DebugReportsModel
 from wok.plugins.gingerbase.repositories import Repositories
@@ -332,7 +333,8 @@ class HostModel(object):
 
         pkgs = swupdate.getNumOfUpdates()
         if pkgs == 0:
-            raise OperationFailed('GGBPKGUPD0001E')
+            wok_log.debug(messages['GGBPKGUPD0001E'])
+            return {'message': messages['GGBPKGUPD0001E']}
 
         wok_log.debug('Host is going to be updated.')
         taskid = add_task('/plugins/gingerbase/host/swupdate',
