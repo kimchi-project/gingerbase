@@ -25,8 +25,8 @@ import subprocess
 from parted import Device as PDevice
 from parted import Disk as PDisk
 
-from wok.exception import OperationFailed
-from wok.utils import wok_log
+from wok.exception import NotFoundError, OperationFailed
+from wok.utils import run_command, wok_log
 
 
 def _get_dev_node_path(maj_min):
@@ -48,12 +48,14 @@ def _get_dev_node_path(maj_min):
 
 
 def _get_lsblk_devs(keys, devs=[]):
-    lsblk = subprocess.Popen(
-        ["lsblk", "-Pbo"] + [','.join(keys)] + devs,
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = lsblk.communicate()
-    if lsblk.returncode != 0:
-        raise OperationFailed("KCHDISKS0001E", {'err': err})
+    out, err, returncode = run_command(
+        ["lsblk", "-Pbo"] + [','.join(keys)] + devs
+    )
+    if returncode != 0:
+        if 'not a block device' in err:
+            raise NotFoundError("GGBDISK00002E")
+        else:
+            raise OperationFailed("GGBDISK00001E", {'err': err})
 
     return _parse_lsblk_output(out, keys)
 
@@ -62,14 +64,17 @@ def _get_dev_major_min(name):
     maj_min = None
 
     keys = ["NAME", "MAJ:MIN"]
-    dev_list = _get_lsblk_devs(keys)
+    try:
+        dev_list = _get_lsblk_devs(keys)
+    except:
+        raise
 
     for dev in dev_list:
         if dev['name'].split()[0] == name:
             maj_min = dev['maj:min']
             break
     else:
-        raise OperationFailed("KCHDISKS0002E", {'device': name})
+        raise NotFoundError("GGBDISK00003E", {'device': name})
 
     return maj_min
 
@@ -198,9 +203,8 @@ def get_partition_details(name):
     keys = ["TYPE", "FSTYPE", "SIZE", "MOUNTPOINT"]
     try:
         dev = _get_lsblk_devs(keys, [dev_path])[0]
-    except OperationFailed as e:
-        wok_log.error(
-            "Error getting partition info for %s: %s", name, e)
+    except:
+        wok_log.error("Error getting partition info for %s", name)
         return {}
 
     dev['available'] = _is_available(name, dev['type'], dev['fstype'],

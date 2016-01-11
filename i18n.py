@@ -91,5 +91,8 @@ messages = {
     "GGBCPUINF0005E": _("This host (or current configuration) does not provide Socket(s) information."),
     "GGBCPUINF0006E": _("This host (or current configuration) does not provide Core(s) per socket information."),
     "GGBCPUINF0007E": _("This host (or current configuration) does not provide Thread(s) per core information."),
-    "GGBDISK00001E": _("Error while accessing dev mapper device, %(err)s")
+
+    "GGBDISK00001E": _("Error while accessing dev mapper device, %(err)s"),
+    "GGBDISK00002E": _("Block device not found."),
+    "GGBDISK00003E": _("Block device %(device)s not found.")
 }
