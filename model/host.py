@@ -29,7 +29,6 @@ from collections import defaultdict
 import glob
 
 from wok.basemodel import Singleton
-from wok.config import config as kconfig
 from wok.exception import InvalidOperation
 from wok.exception import OperationFailed
 from wok.utils import add_task, run_command, wok_log
@@ -552,9 +551,7 @@ class CapabilitiesModel(object):
 
         return {'system_report_tool': bool(report_tool),
                 'update_tool': update_tool,
-                'repo_mngt_tool': repo_mngt_tool,
-                'federation': kconfig.get("server", "federation")
-                }
+                'repo_mngt_tool': repo_mngt_tool}
 
 
 class PackagesUpdateModel(object):
