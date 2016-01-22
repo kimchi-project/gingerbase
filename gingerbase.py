@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM, Corp. 2015
+# Copyright IBM, Corp. 2015-2016
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -27,7 +27,7 @@ from wok.plugins.gingerbase.model import model as gingerBaseModel
 from wok.root import WokRoot
 
 
-class GingerBase(WokRoot):
+class Gingerbase(WokRoot):
     def __init__(self, wok_options):
         make_dirs = [
             os.path.dirname(os.path.abspath(config.get_object_store())),
@@ -45,7 +45,7 @@ class GingerBase(WokRoot):
             self.model = gingerBaseModel.Model()
 
         dev_env = wok_options.environment != 'production'
-        super(GingerBase, self).__init__(self.model, dev_env)
+        super(Gingerbase, self).__init__(self.model, dev_env)
 
         for ident, node in sub_nodes.items():
             setattr(self, ident, node(self.model))
