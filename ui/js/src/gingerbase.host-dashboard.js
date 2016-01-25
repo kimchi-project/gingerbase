@@ -18,6 +18,15 @@
 gingerbase.host = {};
 
 gingerbase.host_dashboard = function() {
+  gingerbase.getCapabilities(function(result) {
+    gingerbase.capabilities = result;
+    gingerbase.init_dashboard();
+  }, function() {
+    gingerbase.init_dashboard();
+  })
+};
+
+gingerbase.init_dashboard = function() {
     "use strict";
     var reportGridID = 'available-reports-grid';
     var reportGrid = null;

@@ -18,6 +18,15 @@
 gingerbase.host = {};
 
 gingerbase.host_update = function() {
+  gingerbase.getCapabilities(function(result) {
+    gingerbase.capabilities = result;
+    gingerbase.init_update();
+  }, function() {
+    gingerbase.init_update();
+  })
+};
+
+gingerbase.init_update = function() {
     "use strict";
     var repositoriesGrid = null;
     var initRepositoriesGrid = function(repo_type) {

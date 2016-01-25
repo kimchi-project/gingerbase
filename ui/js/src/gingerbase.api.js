@@ -399,9 +399,5 @@ var gingerbase = {
         });
     },
 
-    capabilities: {}
+    capabilities: undefined
 };
-
-gingerbase.getCapabilities(function(result) {
-     gingerbase.capabilities = result;
-});
