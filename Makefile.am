@@ -1,7 +1,7 @@
 #
 # Ginger Base
 #
-# Copyright IBM Corp, 2015
+# Copyright IBM Corp, 2015-2016
 #
 # Code derived from Project Kimchi
 #
@@ -61,15 +61,25 @@ I18N_FILES = ./i18n.py \
 # # $ git hash-object -t tree /dev/null
 check-local:
 	contrib/check_i18n.py $(I18N_FILES)
-	find . -path './.git' -prune -type f -o \
-		-name '*.py' -o -name '*.py.in'  | xargs $(PYFLAKES) | \
-		while read LINE; do echo "$$LINE"; false; done
-
+	@if [ -d '.git' ]; then                                        \
+		find . -path './.git' -prune -o                        \
+			-name '*.py' -o -name '*.py.in'  |             \
+			xargs $(PYFLAKES) |                            \
+			while read LINE; do echo "$$LINE"; false; done \
+	else                                                           \
+		find . -name '*.py' -o -name '*.py.in'  |              \
+			xargs $(PYFLAKES) |                            \
+			while read LINE; do echo "$$LINE"; false; done \
+	fi
 	$(PEP8) --version
 	$(PEP8) --filename '*.py,*.py.in' --exclude="$(PEP8_BLACKLIST)" .
-	$(GIT) diff --check
-	$(GIT) diff-tree --check '4b825dc642cb6eb9a060e54bf8d69288fbee4904' HEAD
-
+	@if $(GIT) rev-parse &> /dev/null ; then                          \
+		echo "git diff verification ...";                         \
+		$(GIT) diff --check ;                                     \
+		$(GIT) diff-tree --check                                  \
+			'4b825dc642cb6eb9a060e54bf8d69288fbee4904' HEAD ; \
+	fi
+	@echo "Ok"
 
 # Link built mo files in the source tree to enable use of translations from
 # within the source tree
@@ -134,7 +144,7 @@ suse-rpm: contrib/gingerbase.spec.suse
 	$(MAKE) rpm
 
 ChangeLog:
-	@if test -d .git; then                                   \
+	@if $(GIT) rev-parse &> /dev/null ; then                     \
 		$(top_srcdir)/build-aux/genChangelog --release > $@; \
 	fi
 
@@ -152,7 +162,7 @@ uninstall-local:
 	$(RM) -rf $(DESTDIR)/$(localstatedir)/lib/gingerbase/debugreports
 
 VERSION:
-	@if test -d .git; then                                \
+	@if $(GIT) rev-parse &> /dev/null ; then                  \
 		git describe --abbrev=0 --always > $@;            \
 	fi
 
