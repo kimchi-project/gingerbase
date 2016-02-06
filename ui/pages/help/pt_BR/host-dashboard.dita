@@ -17,8 +17,6 @@ ao host.</shortdesc>
 <li>Selecione <uicontrol>Encerrar</uicontrol> para encerrar o sistema
 host.</li>
 <li>Selecione <uicontrol>Reiniciar</uicontrol> para reiniciar o sistema host.</li>
-<li>Selecione <uicontrol>Conectar</uicontrol> para abrir uma conexão VNC
-para o sistema host, se ele já não estiver conectado.</li>
 </ul></p>
 <p>Clique nas seções a seguir para exibir informações sobre o host:</p>
 <dl><dlentry>

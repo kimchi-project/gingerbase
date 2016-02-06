@@ -16,8 +16,6 @@ connecter à l'hôte.</shortdesc>
 <p>Vous pouvez effectuer les actions suivantes sur l'hôte :<ul>
 <li>Sélectionnez <uicontrol>Arrêter</uicontrol> pour arrêter le système hôte.</li>
 <li>Sélectionnez <uicontrol>Redémarrer</uicontrol> pour redémarrer le système hôte.</li>
-<li>Sélectionnez <uicontrol>Connexion</uicontrol> pour ouvrir une connexion VNC
-au système hôte, si celui-ci n'est pas déjà connecté.</li>
 </ul></p>
 <p>Cliquez sur les sections suivantes pour afficher des informations sur l'hôte :</p>
 <dl><dlentry>

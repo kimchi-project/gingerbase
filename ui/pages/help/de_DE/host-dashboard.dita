@@ -14,7 +14,6 @@ https://w3.opensource.ibm.com/projects/dita-cshelp/-->
 <p>Sie können die folgenden Aktionen am Host durchführen:<ul>
 <li>Wählen Sie <uicontrol>Herunterfahren</uicontrol> aus, um das Hostsystem herunterzufahren.</li>
 <li>Wählen Sie <uicontrol>Erneut starten</uicontrol> aus, um das Hostsystem erneut zu starten.</li>
-<li>Wählen Sie <uicontrol>Verbinden</uicontrol> aus, um eine VNC-Verbindung zum Hostsystem herzustellen, wenn noch keine Verbindung besteht.</li>
 </ul></p>
 <p>Klicken Sie auf die folgenden Abschnitte, um Informationen zum Host anzuzeigen:</p>
 <dl><dlentry>

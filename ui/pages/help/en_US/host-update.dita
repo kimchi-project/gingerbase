@@ -24,7 +24,7 @@ All</uicontrol>. You cannot select individual packages for updates.</dd>
 <dd>This section displays repositories that are associated with the
 host system. You can add, enable, edit, or remove repositories. Adding
 a repository associates it with the host system while enabling a repository
-allows the host to access it. If your system is Red Hat Enterprise
+allows the host to access it. If your system is based on Red Hat Enterprise
 Linux or Fedora, you can add <filepath>yum</filepath> repositories.
 If your system is Ubuntu or Debian, then add <filepath>deb</filepath> repositories.<p>If
 you are working with yum repositories, you can add a GPG check to

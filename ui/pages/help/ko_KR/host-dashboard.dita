@@ -14,7 +14,6 @@ https://w3.opensource.ibm.com/projects/dita-cshelp/-->
 <p>호스트에 대해 다음 조치를 수행할 수 있습니다.<ul>
 <li>호스트 시스템을 종료하려면 <uicontrol>시스템 종료</uicontrol>를 선택합니다.</li>
 <li>호스트 시스템을 다시 시작하려면 <uicontrol>다시 시작</uicontrol>을 선택합니다.</li>
-<li>이미 연결되어 있지 않은 경우, 호스트 시스템에 대한 VNC 연결을 시작하려면 <uicontrol>연결</uicontrol>을 선택합니다.</li>
 </ul></p>
 <p>호스트에 대한 정보를 표시하려면 다음 섹션을 클릭하십시오.</p>
 <dl><dlentry>

@@ -14,7 +14,6 @@ https://w3.opensource.ibm.com/projects/dita-cshelp/-->
 <p>È possibile effettuare le seguenti operazioni sull'host:<ul>
 <li>Selezionare <uicontrol>Arresta</uicontrol> per arrestare il sistema host.</li>
 <li>Selezionare <uicontrol>Riavvia</uicontrol> per riavviare il sistema host.</li>
-<li>Selezionare <uicontrol>Connetti</uicontrol> per aprire una connessione VNC al sistema host, se non è già connesso.</li>
 </ul></p>
 <p>Fare clic sulle seguenti sezioni per visualizzare le informazioni sull'host:</p>
 <dl><dlentry>

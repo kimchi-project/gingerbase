@@ -17,8 +17,6 @@ to the host.</shortdesc>
 <li>Select <uicontrol>Shut down</uicontrol> to shut down the host
 system.</li>
 <li>Select <uicontrol>Restart</uicontrol> to restart the host system.</li>
-<li>Select <uicontrol>Connect</uicontrol> to open a VNC connection
-to the host system, if it is not already connected.</li>
 </ul></p>
 <p>Click the following sections to display information about the host:</p>
 <dl><dlentry>

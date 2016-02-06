@@ -14,7 +14,6 @@ https://w3.opensource.ibm.com/projects/dita-cshelp/-->
 <p>可对主机执行以下操作：<ul>
 <li>选择<uicontrol>关闭</uicontrol>以关闭主机系统。</li>
 <li>选择<uicontrol>重新启动</uicontrol>以重新启动主机系统。</li>
-<li>选择<uicontrol>连接</uicontrol>以打开与主机系统的 VNC 连接（如果尚未连接）。</li>
 </ul></p>
 <p>单击以下部分以显示有关主机的信息：</p>
 <dl><dlentry>

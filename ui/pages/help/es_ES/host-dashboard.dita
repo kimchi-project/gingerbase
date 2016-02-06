@@ -14,7 +14,6 @@ https://w3.opensource.ibm.com/projects/dita-cshelp/-->
 <p>Puede realizar las acciones siguientes en el host:<ul>
 <li>Seleccione <uicontrol>Concluir</uicontrol> para concluir el sistema host.</li>
 <li>Seleccione <uicontrol>Reiniciar</uicontrol> para reiniciar el sistema host.</li>
-<li>Seleccione <uicontrol>Conectar</uicontrol> para abrir una conexión VNC al sistema host, si no está conectado aún.</li>
 </ul></p>
 <p>Pulse en las secciones siguientes para visualizar información acerca del host:</p>
 <dl><dlentry>

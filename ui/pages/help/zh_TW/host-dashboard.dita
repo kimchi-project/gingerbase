@@ -14,7 +14,6 @@ https://w3.opensource.ibm.com/projects/dita-cshelp/-->
 <p>您可以針對主機執行下列動作：<ul>
 <li>選取<uicontrol>關閉</uicontrol>以關閉主機系統。</li>
 <li>選取<uicontrol>重新啟動</uicontrol>以重新啟動主機系統。</li>
-<li>選取<uicontrol>連接</uicontrol>以開啟與主機系統的 VNC 連線（如果尚未連線到主機系統）。</li>
 </ul></p>
 <p>按一下下列區段以顯示主機的相關資訊：</p>
 <dl><dlentry>
