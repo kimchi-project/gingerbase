@@ -2,7 +2,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM, Corp. 2015
+# Copyright IBM Corp, 2015-2016
 #
 # Code derived from Project Kimchi
 #

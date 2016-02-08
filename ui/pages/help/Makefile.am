@@ -1,7 +1,7 @@
 #
 # Ginger Base
 #
-# Copyright IBM Corp, 2015
+# Copyright IBM Corp, 2014-2016
 #
 # Code derived from Project Kimchi
 # This library is free software; you can redistribute it and/or
