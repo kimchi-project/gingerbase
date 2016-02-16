@@ -306,6 +306,14 @@ class HostModel(object):
         common_info['architecture'] = ARCH
         common_info['host'] = platform.node()
         common_info['memory'] = self._get_memory()
+        common_info['cpu_threads'] = {}
+        common_info['cpu_threads']['sockets'] = self.lscpu.get_sockets()
+        common_info['cpu_threads']['cores_per_socket'] = \
+            self.lscpu.get_cores_per_socket()
+        common_info['cpu_threads']['threads_per_core'] = \
+            self.lscpu.get_threads_per_core()
+        if ARCH.startswith('s390x'):
+            common_info['cpu_threads']['books'] = self.lscpu.get_books()
 
         return common_info
 

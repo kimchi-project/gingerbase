@@ -108,6 +108,11 @@ Contains information of host.
     * os_version: The version of OS distribution
     * os_codename: The code name of OS distribution
     * host: Host name of the network node
+    * cpu_threads: total sockets and threads information of host
+                * sockets: Total number of Socket(s)[Socket(s) per book for s390x]
+                * cores_per_socket: Total number of Core(s) per socket
+                * threads_per_core: Total number of Thread(s) per core
+                * books *(s390x only)*: Total number of Book(s)
     * architecture: Architecture of the host
     * virtualization *(s390x only)*: This is a json with following keys
                 * hypervisor: Hypervisor name of the host

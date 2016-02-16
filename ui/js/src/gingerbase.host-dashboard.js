@@ -282,33 +282,46 @@ gingerbase.init_dashboard = function() {
         var htmlTmpl = $('#host-dashboard-tmpl').html();
         var memory = null
         var cpus = null
+        var cpu_threads = null
         data['logo'] = data['logo'] || '';
-        // Memory fetch online, offline details
+        // fetch online and offline memory details
         data['memory']['online'] = wok.formatMeasurement(data['memory']['online'], {
             fixed: 2
         });
         data['memory']['offline'] = wok.formatMeasurement(data['memory']['offline'], {
             fixed: 2
         });
-        memory = "Online: " + data['memory']['online'] + ", Offline: " + data['memory']['offline'];
-        // CPU fetch online, offline details
-        cpus = 'Online: ' + data['cpus']['online'] + ', Offline: ' + data['cpus']['offline'];
+        memory =  i18n["GGBHOST6010M"] + ": " + data['memory']['online'] + ", " +
+                  i18n["GGBHOST6011M"] + ": " + data['memory']['offline'];
+        // fetch online and offline cpu details
+        cpus = i18n["GGBHOST6010M"] + ": " + data['cpus']['online'] + ", " +
+               i18n["GGBHOST6011M"] + ": " + data['cpus']['offline'];
+        // fetch socket(s), core(s) per socket and thread(s) per core details
+        cpu_threads = i18n["GGBHOST6015M"] + ": " + data['cpu_threads']['sockets'] + ", " +
+                      i18n["GGBHOST6016M"] + ": " + data['cpu_threads']['cores_per_socket'] + ", " +
+                      i18n["GGBHOST6017M"] + ": " + data['cpu_threads']['threads_per_core'];
         // This code is only for s390x architecture where hypervisor details required.
         if (data['architecture'] == 's390x'){
-            cpus += ', Shared: ' + data['cpus']['shared'] + ', Dedicated: ' + data['cpus']['dedicated'];
+            // cores_info is total shared and dedicated cpu cores for s390x
+            data['cores_info'] = i18n["GGBHOST6012M"] + ": " + data['cpus']['shared'] + ", " +
+                                 i18n["GGBHOST6013M"] + ": " + data['cpus']['dedicated'];
+            //prepend book(s) details to cpu_threads
+            cpu_threads = i18n["GGBHOST6014M"] + ": " + data['cpu_threads']['sockets'] + ", " + cpu_threads
             data['lpar_details'] = 'Name: ' + data['virtualization']['lpar_name'] + ', ID: ' + data['virtualization']['lpar_number'];
             data['hypervisor_details'] = 'Name: ' + data['virtualization']['hypervisor'] + ', Vendor :' + data['virtualization']['hypervisor_vendor'];
         }
         data['memory'] = memory
         data['cpus'] = cpus
+        data['cpu_threads'] = cpu_threads
         var templated = wok.substitute(htmlTmpl, data);
         $('#host-content-container').html(templated);
 
         initPage();
         initTracker();
-        // Enable hypervisor, LPAR details on s390x architechture
+        // Enable cores details, hypervisor details and LPAR details on s390x architechture
         if (data['architecture'] == 's390x'){
-            $('#s390x-info').removeClass();
+            $('#s390x-cores-info').removeClass('hidden');
+            $('#s390x-info').removeClass('hidden');
         }
     });
 

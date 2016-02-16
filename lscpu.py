@@ -195,3 +195,13 @@ class LsCpu(object):
                 self.lsCpuInfo.keys():
             return self.lsCpuInfo[hypervisor_vendor]
         return None
+
+    def get_books(self):
+        """
+        method to get number of Book(s) if present in lscpu o/p
+        :return: Book(s) (number of books for s390x)
+        """
+        books = 'Book(s)'
+        if len(self.lsCpuInfo) > 0 and books in self.lsCpuInfo.keys():
+            return self.lsCpuInfo[books]
+        return None

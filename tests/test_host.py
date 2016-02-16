@@ -70,10 +70,12 @@ class HostTests(unittest.TestCase):
         info = json.loads(resp)
         if platform.machine().startswith('s390x'):
             keys = ['os_distro', 'os_version', 'os_codename', 'cpu_model',
-                    'memory', 'cpus', 'architecture', 'host', 'virtualization']
+                    'memory', 'cpus', 'architecture', 'host', 'virtualization',
+                    'cpu_threads']
         else:
             keys = ['os_distro', 'os_version', 'os_codename', 'cpu_model',
-                    'memory', 'cpus', 'architecture', 'host']
+                    'memory', 'cpus', 'architecture', 'host',
+                    'cpu_threads']
             try:
                 total_phymem = psutil.TOTAL_PHYMEM
             except AttributeError:

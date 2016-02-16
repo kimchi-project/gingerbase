@@ -119,11 +119,18 @@
                         <dt>{cpu_model}</dt>
                         <dd>$_("Processor")</dd>
                         <dt>{cpus}</dt>
+                        <dt>{cpu_threads}</dt>
                         <dd>$_("CPU(s)")</dd>
+                    </dl>
+                    <dl id="s390x-cores-info" class="basic-information-list hidden">
+                        <dt>{cores_info}</dt>
+                        <dd>$_("Core(s)")</dd>
+                    </dl>
+                    <dl class="basic-information-list">
                         <dt>{memory}</dt>
                         <dd>$_("Memory")</dd>
                     </dl>
-                    <dl id="s390x-info" class="hidden">
+                    <dl id="s390x-info" class="basic-information-list hidden">
                         <dt>{lpar_details}</dt>
                         <dd>$_("LPAR Details")</dd>
                         <dt>{hypervisor_details}</dt>
