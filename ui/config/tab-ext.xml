@@ -5,12 +5,14 @@
         <access role="admin" mode="admin"/>
         <access role="user" mode="read-only"/>
         <title>Dashboard</title>
+        <order>0</order>
         <path>plugins/gingerbase/tabs/host-dashboard.html</path>
     </tab>
     <tab>
         <access role="admin" mode="admin"/>
         <access role="user" mode="none"/>
         <title>Updates</title>
+        <order>20</order>
         <path>plugins/gingerbase/tabs/host-update.html</path>
     </tab>
 </tabs-ext>
