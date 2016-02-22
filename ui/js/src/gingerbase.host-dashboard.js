@@ -306,7 +306,7 @@ gingerbase.init_dashboard = function() {
             data['cores_info'] = i18n["GGBHOST6012M"] + ": " + data['cpus']['shared'] + ", " +
                                  i18n["GGBHOST6013M"] + ": " + data['cpus']['dedicated'];
             //prepend book(s) details to cpu_threads
-            cpu_threads = i18n["GGBHOST6014M"] + ": " + data['cpu_threads']['sockets'] + ", " + cpu_threads
+            cpu_threads = i18n["GGBHOST6014M"] + ": " + data['cpu_threads']['books'] + ", " + cpu_threads
             data['lpar_details'] = 'Name: ' + data['virtualization']['lpar_name'] + ', ID: ' + data['virtualization']['lpar_number'];
             data['hypervisor_details'] = 'Name: ' + data['virtualization']['hypervisor'] + ', Vendor :' + data['virtualization']['hypervisor_vendor'];
         }
