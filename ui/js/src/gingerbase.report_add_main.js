@@ -31,7 +31,7 @@ gingerbase.report_add_main = function() {
         var reportName = nameTextbox.val();
         var validator = RegExp("^[_A-Za-z0-9-]*$");
         if (!validator.test(reportName)) {
-            wok.message.error.code('GGBDR6011M');
+            wok.message.error.code('GGBDR6011M','#alert-modal-debugreportadd-container', true);
             return false;
         }
         var formData = addReportForm.serializeObject();
@@ -41,13 +41,14 @@ gingerbase.report_add_main = function() {
                 return;
             }
             taskAccepted = true;
-            wok.window.close();
             wok.topic('gingerbase/debugReportAdded').publish();
+            $('#button-report-cancel').trigger('click');
         };
 
         gingerbase.createReport(formData, function(result) {
             onTaskAccepted();
             wok.topic('gingerbase/debugReportAdded').publish();
+             $('#button-report-cancel').trigger('click');
         }, function(result) {
             // Error message from Async Task status
             if (result['message']) {
@@ -57,7 +58,7 @@ gingerbase.report_add_main = function() {
             else {
                 var errText = result['responseJSON']['reason'];
             }
-            result && wok.message.error(errText);
+            result && wok.message.error(errText,'#alert-modal-debugreportadd-container', true);
 
             taskAccepted &&
                 $('.grid-body-view table tr:first-child',

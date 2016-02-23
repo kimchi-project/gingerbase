@@ -30,13 +30,13 @@ gingerbase.report_rename_main = function() {
         // if the user hasn't changed the report's name,
         // nothing should be done.
         if (reportName == gingerbase.selectedReport) {
-            wok.message.error.code('GGBDR6013M');
-            return false;
+        wok.message.error.code('GGBDR6013M','#alert-modal-debugreportrename-container', true);
+        return false;
         }
 
-        var validator = RegExp("^[A-Za-z0-9-]*$");
+        var validator = RegExp("^[_A-Za-z0-9-]*$");
         if (!validator.test(reportName)) {
-            wok.message.error.code('GGBDR6011M');
+            wok.message.error.code('GGBDR6011M','#alert-modal-debugreportrename-container', true);
             return false;
         }
         var formData = renameReportForm.serializeObject();
@@ -53,7 +53,7 @@ gingerbase.report_rename_main = function() {
             var errText = result &&
                 result['responseJSON'] &&
                 result['responseJSON']['reason'];
-            wok.message.error(errText);
+            wok.message.error(errText,'#alert-modal-debugreportrename-container', true);
             submitButton.prop('disabled', false);
             nameTextbox.prop('disabled', false).focus();
         });
