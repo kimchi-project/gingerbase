@@ -22,7 +22,6 @@
 import cherrypy
 
 from wok.basemodel import Singleton
-from wok.config import get_version
 from wok.utils import wok_log
 
 from ..repositories import Repositories
@@ -30,12 +29,16 @@ from ..swupdate import SoftwareUpdate
 from debugreports import DebugReportsModel
 
 
+__version__ = "@gingerbaseversion@"
+__release__ = "@gingerbaserelease@"
+
+
 class ConfigModel(object):
     def __init__(self, **kargs):
         pass
 
     def lookup(self, name):
-        return {'version': get_version()}
+        return {'version': "-".join([__version__, __release__])}
 
 
 class CapabilitiesModel(object):

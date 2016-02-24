@@ -17,9 +17,25 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-model_PYTHON = *.py
+model_PYTHON = $(filter-out config.py, $(wildcard *.py))
+
+nodist_model_PYTHON = config.py
+
+EXTRA_DIST = config.py.in
 
 modeldir = $(pythondir)/wok/plugins/gingerbase/model
 
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(modeldir)
+
+do_substitution = \
+	sed -e 's,[@]gingerbaseversion[@],$(PACKAGE_VERSION),g' \
+	-e 's,[@]gingerbaserelease[@],$(PACKAGE_RELEASE),g'
+
+config.py: config.py.in Makefile
+	$(do_substitution) < $(srcdir)/config.py.in > config.py
+
+BUILT_SOURCES = config.py
+CLEANFILES = config.py
+	$(models_PYTHON:%.py=%.pyc) \
+	$(NULL)
