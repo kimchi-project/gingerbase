@@ -22,7 +22,6 @@
 import cherrypy
 
 from wok.basemodel import Singleton
-from wok.config import config as kconfig
 from wok.config import get_version
 from wok.utils import wok_log
 
@@ -36,9 +35,7 @@ class ConfigModel(object):
         pass
 
     def lookup(self, name):
-        proxy_port = kconfig.get('display', 'display_proxy_port')
-        return {'display_proxy_port': proxy_port,
-                'version': get_version()}
+        return {'version': get_version()}
 
 
 class CapabilitiesModel(object):
