@@ -24,6 +24,16 @@ from wok.control.utils import internal_redirect
 from wok.control.utils import UrlSubNode
 
 
+DEBUGREPORTS_ACTIVITY = {
+    'POST': {'default': "Create host debug report '%(name)s'"},
+}
+
+DEBUGREPORT_ACTIVITY = {
+    'PUT':  {'default': "Update host debug report '%(name)s'"},
+    'DELETE':  {'default': "Delete host debug report '%(ident)s'"},
+}
+
+
 @UrlSubNode('debugreports', True)
 class DebugReports(AsyncCollection):
     def __init__(self, model):
@@ -31,6 +41,7 @@ class DebugReports(AsyncCollection):
         self.resource = DebugReport
         self.role_key = 'dashboard'
         self.admin_methods = ['GET', 'POST']
+        self.log_map = DEBUGREPORTS_ACTIVITY
 
     def _get_resources(self, filter_params):
         res_list = super(DebugReports, self)._get_resources(filter_params)
@@ -44,6 +55,7 @@ class DebugReport(Resource):
         self.admin_methods = ['GET', 'PUT', 'POST']
         self.uri_fmt = '/debugreports/%s'
         self.content = DebugReportContent(model, ident)
+        self.log_map = DEBUGREPORT_ACTIVITY
 
     @property
     def data(self):

@@ -26,6 +26,28 @@ from wok.control.utils import UrlSubNode
 from wok.plugins.gingerbase.control.cpuinfo import CPUInfo
 
 
+HOST_ACTIVITY = {
+    'POST': {
+        'reboot': "Host reboot",
+        'shutdown': "Host shutdown",
+        'swupdate': "Host software update",
+    },
+}
+
+REPOSITORIES_ACTIVITY = {
+    'POST': {'default': "Add host software repository '%(repo_id)s'"},
+}
+
+REPOSITORY_ACTIVITY = {
+    'PUT': {'default': "Update host software repository '%(repo_id)s'"},
+    'DELETE': {'default': "Remove host software repository '%(ident)s'"},
+    'POST': {
+        'enable': "Enable host software repository '%(ident)s'",
+        'disable': "Disable host software repository '%(ident)s'",
+    },
+}
+
+
 @UrlSubNode('host', True)
 class Host(Resource):
     def __init__(self, model, id=None):
@@ -42,6 +64,7 @@ class Host(Resource):
         self.swupdateprogress = SoftwareUpdateProgress(self.model)
         self.cpuinfo = CPUInfo(self.model)
         self.capabilities = Capabilities(self.model)
+        self.log_map = HOST_ACTIVITY
 
     @property
     def data(self):
@@ -111,6 +134,7 @@ class Repositories(Collection):
         self.role_key = 'updates'
         self.admin_methods = ['GET', 'POST']
         self.resource = Repository
+        self.log_map = REPOSITORIES_ACTIVITY
 
 
 class Repository(Resource):
@@ -121,6 +145,7 @@ class Repository(Resource):
         self.uri_fmt = "/host/repositories/%s"
         self.enable = self.generate_action_handler('enable')
         self.disable = self.generate_action_handler('disable')
+        self.log_map = REPOSITORY_ACTIVITY
 
     @property
     def data(self):
