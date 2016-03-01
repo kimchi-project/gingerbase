@@ -24,5 +24,6 @@ po/Makevars
 po/POTFILES.in
 po/gingerbase.pot
 ui/config/tab-ext.xml
+ui/images/.*.svg
 ui/pages/help/dita-help.xsl
 ui/pages/help/.*/.*.dita
