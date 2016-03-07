@@ -39,7 +39,7 @@ REPOSITORIES_ACTIVITY = {
 }
 
 REPOSITORY_ACTIVITY = {
-    'PUT': {'default': "Update host software repository '%(repo_id)s'"},
+    'PUT': {'default': "Update host software repository '%(ident)s'"},
     'DELETE': {'default': "Remove host software repository '%(ident)s'"},
     'POST': {
         'enable': "Enable host software repository '%(ident)s'",

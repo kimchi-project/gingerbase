@@ -29,8 +29,8 @@ DEBUGREPORTS_ACTIVITY = {
 }
 
 DEBUGREPORT_ACTIVITY = {
-    'PUT':  {'default': "Update host debug report '%(name)s'"},
-    'DELETE':  {'default': "Delete host debug report '%(ident)s'"},
+    'PUT':  {'default': "Update host debug report '%(ident)s'"},
+    'DELETE':  {'default': "Remove host debug report '%(ident)s'"},
 }
 
 
