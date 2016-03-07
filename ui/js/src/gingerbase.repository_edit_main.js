@@ -65,7 +65,7 @@ gingerbase.repository_edit_main = function() {
             var reason = jqXHR &&
                 jqXHR['responseJSON'] &&
                 jqXHR['responseJSON']['reason'];
-            wok.message.error(reason);
+            wok.message.error(reason, '#alert-modal-container');
         });
 
         return false;
