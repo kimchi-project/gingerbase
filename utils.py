@@ -20,10 +20,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
+import base64
 import contextlib
 import os
 import urllib2
-from httplib import HTTPConnection, HTTPException
+from httplib import HTTPConnection, HTTPException, HTTPSConnection
 from urlparse import urlparse
 
 from wok.exception import InvalidParameter
@@ -38,7 +39,15 @@ def check_url_path(path, redirected=0):
     try:
         code = ''
         parse_result = urlparse(path)
-        server_name = parse_result.netloc
+        headers = {}
+        server_name = parse_result.hostname
+        if (parse_result.scheme in ['https', 'ftp']) and \
+           (parse_result.username and parse_result.password):
+            # Yum accepts http urls with user and password credentials. Handle
+            # them and avoid access test errors
+            credential = parse_result.username + ':' + parse_result.password
+            headers = {'Authorization': 'Basic %s' %
+                       base64.b64encode(credential)}
         urlpath = parse_result.path
         if not urlpath:
             # Just a server, as with a repo.
@@ -47,9 +56,12 @@ def check_url_path(path, redirected=0):
         else:
             # socket.gaierror could be raised,
             #   which is a child class of IOError
-            conn = HTTPConnection(server_name, timeout=15)
+            if headers:
+                conn = HTTPSConnection(server_name, timeout=15)
+            else:
+                conn = HTTPConnection(server_name, timeout=15)
             # Don't try to get the whole file:
-            conn.request('HEAD', path)
+            conn.request('HEAD', urlpath, headers=headers)
             response = conn.getresponse()
             code = response.status
             conn.close()
