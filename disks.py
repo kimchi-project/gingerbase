@@ -218,3 +218,111 @@ def get_partition_details(name):
     dev['path'] = dev_path
     dev['name'] = name
     return dev
+
+
+def vgs():
+    """
+    lists all volume groups in the system. All size units are in bytes.
+
+    [{'vgname': 'vgtest', 'size': 999653638144L, 'free': 0}]
+    """
+    cmd = ['vgs',
+           '--units',
+           'b',
+           '--nosuffix',
+           '--noheading',
+           '--unbuffered',
+           '--options',
+           'vg_name,vg_size,vg_free']
+
+    out, err, rc = run_command(cmd)
+    if rc != 0:
+        raise OperationFailed("KCHLVM0001E", {'err': err})
+
+    if not out:
+        return []
+
+    # remove blank spaces and create a list of VGs
+    vgs = map(lambda v: v.strip(), out.strip('\n').split('\n'))
+
+    # create a dict based on data retrieved from vgs
+    return map(lambda l: {'vgname': l[0],
+                          'size': long(l[1]),
+                          'free': long(l[2])},
+               [fields.split() for fields in vgs])
+
+
+def lvs(vgname=None):
+    """
+    lists all logical volumes found in the system. It can be filtered by
+    the volume group. All size units are in bytes.
+
+    [{'lvname': 'lva', 'path': '/dev/vgtest/lva', 'size': 12345L},
+     {'lvname': 'lvb', 'path': '/dev/vgtest/lvb', 'size': 12345L}]
+    """
+    cmd = ['lvs',
+           '--units',
+           'b',
+           '--nosuffix',
+           '--noheading',
+           '--unbuffered',
+           '--options',
+           'lv_name,lv_path,lv_size,vg_name']
+
+    out, err, rc = run_command(cmd)
+    if rc != 0:
+        raise OperationFailed("KCHLVM0001E", {'err': err})
+
+    if not out:
+        return []
+
+    # remove blank spaces and create a list of LVs filtered by vgname, if
+    # provided
+    lvs = filter(lambda f: vgname is None or vgname in f,
+                 map(lambda v: v.strip(), out.strip('\n').split('\n')))
+
+    # create a dict based on data retrieved from lvs
+    return map(lambda l: {'lvname': l[0],
+                          'path': l[1],
+                          'size': long(l[2])},
+               [fields.split() for fields in lvs])
+
+
+def pvs(vgname=None):
+    """
+    lists all physical volumes in the system. It can be filtered by the
+    volume group. All size units are in bytes.
+
+    [{'pvname': '/dev/sda3',
+      'size': 469502001152L,
+      'uuid': 'kkon5B-vnFI-eKHn-I5cG-Hj0C-uGx0-xqZrXI'},
+     {'pvname': '/dev/sda2',
+      'size': 21470642176L,
+      'uuid': 'CyBzhK-cQFl-gWqr-fyWC-A50Y-LMxu-iHiJq4'}]
+    """
+    cmd = ['pvs',
+           '--units',
+           'b',
+           '--nosuffix',
+           '--noheading',
+           '--unbuffered',
+           '--options',
+           'pv_name,pv_size,pv_uuid,vg_name']
+
+    out, err, rc = run_command(cmd)
+    if rc != 0:
+        raise OperationFailed("KCHLVM0001E", {'err': err})
+
+    if not out:
+        return []
+
+    # remove blank spaces and create a list of PVs filtered by vgname, if
+    # provided
+    pvs = filter(lambda f: vgname is None or vgname in f,
+                 map(lambda v: v.strip(), out.strip('\n').split('\n')))
+
+    # create a dict based on data retrieved from pvs
+    return map(lambda l: {'pvname': l[0],
+                          'size': long(l[1]),
+                          'uuid': l[2]},
+               [fields.split() for fields in pvs])
