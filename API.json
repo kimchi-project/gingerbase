@@ -54,8 +54,8 @@
                 "name": {
                     "description": "New name of debug report",
                     "type": "string",
-                    "pattern": "^[_A-Za-z0-9-]*$",
-                    "error": "GGBDR0007E"
+                    "pattern": "^[_A-Za-z0-9-]+$",
+                    "error": "GGBDR0013E"
                 }
             },
             "additionalProperties": false

@@ -40,6 +40,8 @@ messages = {
     "GGBDR0010E": _("Unable to compress the final debug report tar file with %(retcode)s. Details: %(error)s"),
     "GGBDR0011E": _("Unable to generate final debug report %(name)s. Details: %(err)s"),
     "GGBDR0012E": _("Can not find any dbginforeport with the %(retcode)s. Details: %(err)s"),
+    "GGBDR0013E": _("Debug report name must be a non-empty string. Only letters, digits, underscore ('_') and "
+                    "hyphen ('-') are allowed."),
     "GGBHOST0001E": _("Unable to shutdown host machine as there are running virtual machines"),
     "GGBHOST0002E": _("Unable to reboot host machine as there are running virtual machines"),
     "GGBHOST0003E": _("There may be virtual machines running on the host"),
