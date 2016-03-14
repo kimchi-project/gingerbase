@@ -294,7 +294,7 @@ def sosreport_collection(name):
     output, error, retcode = run_command(command)
     if retcode != 0:
         raise OperationFailed("GGBDR0003E", {'name': name,
-                                             'err': retcode})
+                                             'err': error})
     # Checking for sosreport file generation.
     if output.splitlines():
         sosreport_pattern = path_sosreport + 'sosreport-' \
