@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-16 22:45-0200\n"
+"POT-Creation-Date: 2016-03-21 17:28-0300\n"
 "PO-Revision-Date: 2013-07-11 17:32-0400\n"
 "Last-Translator: Crístian Viana <vianac@linux.vnet.ibm.com>\n"
 "Language-Team: English\n"
@@ -49,7 +49,8 @@ msgid "Unable to create debug report %(name)s. Details: %(err)s."
 msgstr "Debugbericht %(name)s konnte nicht erstellt werden. Details: %(err)s."
 
 #, python-format
-msgid "Can not find any debug report with the given name %(name)s"
+msgid ""
+"Can not find any sosreport with the given name %(name)s with %(retcode)s."
 msgstr ""
 
 #, python-format
@@ -71,6 +72,29 @@ msgid ""
 msgstr ""
 "Eine Datenträgergruppe mit dem Namen '%(name)s' ist bereits vorhanden. "
 "Wählen Sie einen anderen Namen aus, um den logischen Pool zu erstellen."
+
+#, python-format
+msgid "Unable to create dbginfo report with %(retcode)s. Details: %(err)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to compress the final debug report tar file with %(retcode)s. "
+"Details: %(error)s"
+msgstr ""
+
+#, python-format
+msgid "Unable to generate final debug report %(name)s. Details: %(err)s"
+msgstr ""
+
+#, python-format
+msgid "Can not find any dbginforeport with the %(retcode)s. Details: %(err)s"
+msgstr ""
+
+msgid ""
+"Debug report name must be a non-empty string. Only letters, digits, "
+"underscore ('_') and hyphen ('-') are allowed."
+msgstr ""
 
 msgid "Unable to shutdown host machine as there are running virtual machines"
 msgstr ""
@@ -250,8 +274,15 @@ msgid ""
 "information."
 msgstr ""
 
-msgid ""
-"This host (or current configuration) does not provide CPU(s) information."
+#, python-format
+msgid "Error while accessing dev mapper device, %(err)s"
+msgstr ""
+
+msgid "Block device not found."
+msgstr ""
+
+#, python-format
+msgid "Block device %(device)s not found."
 msgstr ""
 
 msgid "The username or password you entered is incorrect. Please try again."
@@ -382,6 +413,30 @@ msgstr ""
 "fortfahren?"
 
 msgid "The system is going down"
+msgstr ""
+
+msgid "Online"
+msgstr ""
+
+msgid "Offline"
+msgstr ""
+
+msgid "Shared"
+msgstr ""
+
+msgid "Dedicated"
+msgstr ""
+
+msgid "Book(s)"
+msgstr ""
+
+msgid "Socket(s)"
+msgstr ""
+
+msgid "Core(s) per Socket"
+msgstr ""
+
+msgid "Thread(s) per Core"
 msgstr ""
 
 msgid ""

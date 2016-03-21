@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-16 22:45-0200\n"
+"POT-Creation-Date: 2016-03-21 17:28-0300\n"
 "PO-Revision-Date: 2013-06-27 10:48+0000\n"
 "Last-Translator: ShaoHe Feng <shaohef@linux.vnet.ibm.com>\n"
 "Language-Team: ShaoHe Feng <shaohef@linux.vnet.ibm.com>\n"
@@ -51,8 +51,9 @@ msgid "Unable to create debug report %(name)s. Details: %(err)s."
 msgstr "不能创建诊断报告%(name)s。详情：%(err)s"
 
 #, python-format
-msgid "Can not find any debug report with the given name %(name)s"
-msgstr "未能找到指定名称%(name)s的调试报告"
+msgid ""
+"Can not find any sosreport with the given name %(name)s with %(retcode)s."
+msgstr ""
 
 #, python-format
 msgid "Unable to generate debug report %(name)s. Details: %(err)s"
@@ -73,6 +74,29 @@ msgid ""
 "The debug report with specified name \"%(name)s\" already exists. Please use "
 "another one."
 msgstr "名字为\"'%(name)s\"的调试报告已经存在，请选择其它的名字。"
+
+#, python-format
+msgid "Unable to create dbginfo report with %(retcode)s. Details: %(err)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to compress the final debug report tar file with %(retcode)s. "
+"Details: %(error)s"
+msgstr ""
+
+#, python-format
+msgid "Unable to generate final debug report %(name)s. Details: %(err)s"
+msgstr ""
+
+#, python-format
+msgid "Can not find any dbginforeport with the %(retcode)s. Details: %(err)s"
+msgstr ""
+
+msgid ""
+"Debug report name must be a non-empty string. Only letters, digits, "
+"underscore ('_') and hyphen ('-') are allowed."
+msgstr ""
 
 msgid "Unable to shutdown host machine as there are running virtual machines"
 msgstr "有虚拟机在运行，不能关闭主机"
@@ -240,8 +264,15 @@ msgid ""
 "information."
 msgstr ""
 
-msgid ""
-"This host (or current configuration) does not provide CPU(s) information."
+#, python-format
+msgid "Error while accessing dev mapper device, %(err)s"
+msgstr ""
+
+msgid "Block device not found."
+msgstr ""
+
+#, python-format
+msgid "Block device %(device)s not found."
 msgstr ""
 
 msgid "The username or password you entered is incorrect. Please try again."
@@ -364,6 +395,30 @@ msgid ""
 msgstr "关闭或者重启主机会导致没有保存的工作丢失。继续关机/重启？"
 
 msgid "The system is going down"
+msgstr ""
+
+msgid "Online"
+msgstr ""
+
+msgid "Offline"
+msgstr ""
+
+msgid "Shared"
+msgstr ""
+
+msgid "Dedicated"
+msgstr ""
+
+msgid "Book(s)"
+msgstr ""
+
+msgid "Socket(s)"
+msgstr ""
+
+msgid "Core(s) per Socket"
+msgstr ""
+
+msgid "Thread(s) per Core"
 msgstr ""
 
 msgid ""
