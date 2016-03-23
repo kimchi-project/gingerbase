@@ -291,49 +291,66 @@ class AptUpdate(object):
     modules in runtime.
     """
     def __init__(self):
-        self._pkgs = {}
         self.update_cmd = ['apt-get', 'upgrade', '-y']
         self.logfile = '/var/log/apt/term.log'
-
-    def _refreshUpdateList(self):
-        """
-        Update the list of packages to be updated in the system.
-        """
-        apt_cache = getattr(__import__('apt'), 'Cache')()
-        try:
-            apt_cache.update()
-            apt_cache.upgrade()
-            self._pkgs = apt_cache.get_changes()
-        except Exception, e:
-            raise OperationFailed('GGBPKGUPD0003E', {'err': e.message})
+        self._apt_cache = getattr(__import__('apt'), 'Cache')()
 
     def getPackagesList(self):
         """
-        Return a list of package's dictionaries. Each dictionary contains the
-        information about a package, in the format
-        package = {'package_name': <string>, 'version': <string>,
-                   'arch': <string>, 'repository': <string>}
+        Return a list of packages eligible to be updated by apt-get.
         """
         if self.isRunning():
             raise OperationFailed('GGBPKGUPD0005E')
 
         gingerBaseLock.acquire()
         try:
-            self._refreshUpdateList()
-        except Exception:
-            raise
+            self._apt_cache.update()
+            self._apt_cache.upgrade()
+            pkgs = self._apt_cache.get_changes()
+        except Exception, e:
+            raise OperationFailed('GGBPKGUPD0003E', {'err': e.message})
         finally:
             gingerBaseLock.release()
 
-        pkg_list = []
-        for pkg in self._pkgs:
-            package = {'package_name': pkg.shortname,
-                       'version': pkg.candidate.version,
-                       'arch': pkg._pkg.architecture,
-                       'repository': pkg.candidate.origins[0].label}
-            pkg_list.append(package)
+        return [pkg.shortname for pkg in pkgs]
 
-        return pkg_list
+    def getPackageInfo(self, pkg_name):
+        """
+        Get package information. The return is a dictionary containg the
+        information about a package, in the format:
+
+        package = {'package_name': <string>,
+                   'version': <string>,
+                   'arch': <string>,
+                   'repository': <string>,
+                   'depends': <list>
+                  }
+        """
+        if self.isRunning():
+            raise OperationFailed('GGBPKGUPD0005E')
+
+        package = {}
+        gingerBaseLock.acquire()
+        try:
+            self._apt_cache.upgrade()
+            pkgs = self._apt_cache.get_changes()
+        except Exception, e:
+            raise OperationFailed('GGBPKGUPD0006E', {'err': e.message})
+        finally:
+            gingerBaseLock.release()
+
+        pkg = next((x for x in pkgs if x.shortname == pkg_name), None)
+        if not pkg:
+            message = 'No package found'
+            raise NotFoundError('GGBPKGUPD0006E', {'err': message})
+
+        package = {'package_name': pkg.shortname,
+                   'version': pkg.candidate.version,
+                   'arch': pkg._pkg.architecture,
+                   'repository': pkg.candidate.origins[0].label,
+                   'depends': list(set([d[0].name for d in
+                                       pkg.candidate.dependencies]))}
+        return package
 
     def isRunning(self):
         """
