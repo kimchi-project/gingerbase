@@ -19,11 +19,12 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
-from wok.control.base import AsyncResource, Collection
-from wok.control.base import Resource
+from wok.control.base import Collection, Resource
 from wok.control.utils import UrlSubNode
 
 from wok.plugins.gingerbase.control.cpuinfo import CPUInfo
+from wok.plugins.gingerbase.control.packagesupdate import PackagesUpdate
+from wok.plugins.gingerbase.control.packagesupdate import SwUpdateProgress
 
 
 HOST_ACTIVITY = {
@@ -61,21 +62,10 @@ class Host(Resource):
         self.packagesupdate = PackagesUpdate(self.model)
         self.repositories = Repositories(self.model)
         self.swupdate = self.generate_action_handler_task('swupdate')
-        self.swupdateprogress = SoftwareUpdateProgress(self.model)
+        self.swupdateprogress = SwUpdateProgress(self.model)
         self.cpuinfo = CPUInfo(self.model)
         self.capabilities = Capabilities(self.model)
         self.log_map = HOST_ACTIVITY
-
-    @property
-    def data(self):
-        return self.info
-
-
-class SoftwareUpdateProgress(AsyncResource):
-    def __init__(self, model, id=None):
-        super(SoftwareUpdateProgress, self).__init__(model, id)
-        self.role_key = 'updates'
-        self.admin_methods = ['GET']
 
     @property
     def data(self):
@@ -103,25 +93,6 @@ class HostStatsHistory(Resource):
 class Capabilities(Resource):
     def __init__(self, model, id=None):
         super(Capabilities, self).__init__(model, id)
-
-    @property
-    def data(self):
-        return self.info
-
-
-class PackagesUpdate(Collection):
-    def __init__(self, model):
-        super(PackagesUpdate, self).__init__(model)
-        self.role_key = 'updates'
-        self.admin_methods = ['GET']
-        self.resource = PackageUpdate
-
-
-class PackageUpdate(Resource):
-    def __init__(self, model, id=None):
-        super(PackageUpdate, self).__init__(model, id)
-        self.role_key = 'updates'
-        self.admin_methods = ['GET']
 
     @property
     def data(self):

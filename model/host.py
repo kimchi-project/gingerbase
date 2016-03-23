@@ -387,22 +387,6 @@ class HostModel(object):
             raise OperationFailed("GGBHOST0003E")
 
 
-class SoftwareUpdateProgressModel(object):
-    def __init__(self, **kargs):
-        self.task = TaskModel(**kargs)
-        self.objstore = kargs['objstore']
-
-    def lookup(self, *name):
-        try:
-            swupdate = SoftwareUpdate()
-        except:
-            raise OperationFailed('GGBPKGUPD0004E')
-
-        taskid = add_task('/plugins/gingerbase/host/swupdateprogress',
-                          swupdate.tailUpdateLogs, self.objstore, None)
-        return self.task.lookup(taskid)
-
-
 class HostStatsModel(object):
     __metaclass__ = Singleton
 
@@ -560,33 +544,6 @@ class CapabilitiesModel(object):
         return {'system_report_tool': bool(report_tool),
                 'update_tool': update_tool,
                 'repo_mngt_tool': repo_mngt_tool}
-
-
-class PackagesUpdateModel(object):
-    def __init__(self, **kargs):
-        try:
-            self.host_swupdate = SoftwareUpdate()
-        except:
-            self.host_swupdate = None
-
-    def get_list(self):
-        if self.host_swupdate is None:
-            raise OperationFailed('GGBPKGUPD0004E')
-
-        return self.host_swupdate.getUpdates()
-
-
-class PackageUpdateModel(object):
-    def __init__(self, **kargs):
-        pass
-
-    def lookup(self, name):
-        try:
-            swupdate = SoftwareUpdate()
-        except Exception:
-            raise OperationFailed('GGBPKGUPD0004E')
-
-        return swupdate.getUpdate(name)
 
 
 class RepositoriesModel(object):
