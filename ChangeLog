@@ -2,6 +2,8 @@ CHANGELOG
 =========
 
 #### [2.1.0] ####
+ * [a0be2dd] Added wok version restriction in gingerbase packaging                          (Daniel Henrique Barboza)
+ * [b9be809] ChangeLog update for release 2.1.0                                             (Daniel Henrique Barboza)
  * [44f3b33] po files update prior to 2.1 release                                           (Daniel Henrique Barboza)
  * [d4812f7] Fix error messages IDs                                                         (Rodrigo Trujillo)
  * [22d0510] Fixing debug report error message in sosreport_collection                      (Daniel Henrique Barboza)

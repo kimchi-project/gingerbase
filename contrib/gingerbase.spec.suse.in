@@ -7,7 +7,7 @@ BuildArch:	noarch
 Group:		System Environment/Base
 License:	LGPL/ASL2
 Source0:	%{name}-%{version}.tar.gz
-Requires:	wok
+Requires:	wok >= 2.1.0
 Requires:	gettext-tools
 Requires:	git
 Requires:	python-CherryPy
@@ -60,5 +60,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Mar 23 2016 Daniel Henrique Barboza <dhbarboza82@gmail.com>
+- Added wok version restriction >= 2.1.0
+
 * Tue Aug 25 2015 Chandra Shehkhar Reddy Potula <chandra@linux.vnet.ibm.com> 0.0-1
 - First build
