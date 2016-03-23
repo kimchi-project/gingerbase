@@ -32,6 +32,7 @@ from wok.exception import NotFoundError, OperationFailed
 from wok.utils import run_command, wok_log
 
 from wok.plugins.gingerbase.config import gingerBaseLock
+from wok.plugins.gingerbase.yumparser import get_yum_package_info
 from wok.plugins.gingerbase.yumparser import get_yum_packages_list_update
 
 
@@ -185,7 +186,6 @@ class YumUpdate(object):
     modules in runtime.
     """
     def __init__(self):
-        self._pkgs = {}
         self.update_cmd = ["yum", "-y", "update"]
         self.logfile = self._get_output_log()
 
@@ -205,35 +205,47 @@ class YumUpdate(object):
 
         return None
 
-    def _refreshUpdateList(self):
-        """
-        Update the list of packages to be updated in the system.
-        """
-        try:
-            gingerBaseLock.acquire()
-            self._pkgs = get_yum_packages_list_update()
-        except Exception, e:
-            raise OperationFailed('GGBPKGUPD0003E', {'err': str(e)})
-        finally:
-            gingerBaseLock.release()
-
     def getPackagesList(self):
         """
-        Return a list of package's dictionaries. Each dictionary contains the
-        information about a package, in the format:
-        package = {'package_name': <string>, 'version': <string>,
-                   'arch': <string>, 'repository': <string>}
+        Return a list of packages eligible to be updated by Yum.
         """
         if self.isRunning():
             raise OperationFailed('GGBPKGUPD0005E')
 
-        self._refreshUpdateList()
-        pkg_list = []
-        for pkg in self._pkgs:
-            package = {'package_name': pkg.name, 'version': pkg.version,
-                       'arch': pkg.arch, 'repository': pkg.ui_from_repo}
-            pkg_list.append(package)
-        return pkg_list
+        pkgs = []
+        try:
+            gingerBaseLock.acquire()
+            pkgs = get_yum_packages_list_update()
+        except Exception, e:
+            raise OperationFailed('GGBPKGUPD0003E', {'err': str(e)})
+        finally:
+            gingerBaseLock.release()
+        return pkgs
+
+    def getPackageInfo(self, pkg_name):
+        """
+        Get package information. The return is a dictionary containg the
+        information about a package, in the format:
+
+        package = {'package_name': <string>,
+                   'version': <string>,
+                   'arch': <string>,
+                   'repository': <string>,
+                   'depends': <list>
+                  }
+        """
+        if self.isRunning():
+            raise OperationFailed('GGBPKGUPD0005E')
+
+        package = {}
+        try:
+            gingerBaseLock.acquire()
+            package = get_yum_package_info(pkg_name)
+        except Exception, e:
+            raise NotFoundError('GGBPKGUPD0003E', {'err': str(e)})
+        finally:
+            gingerBaseLock.release()
+        return package
 
     def isRunning(self):
         """
@@ -251,7 +263,6 @@ class YumUpdate(object):
         # the pidfile exists and it lives in process table
         if pid_exists(pid):
             return True
-
         return False
 
 

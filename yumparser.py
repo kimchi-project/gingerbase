@@ -18,11 +18,13 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-import subprocess
+
 import glob
 
 from os import listdir
 from os.path import isfile, splitext, basename
+
+from wok.utils import run_command
 
 try:
     import rpm
@@ -233,8 +235,8 @@ def _get_releasever():
 
 def _get_basearch():
     cmd = ['uname', '-i']
-    uname = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    return uname.communicate()[0].strip('"\n')
+    out, error, return_code = run_command(cmd)
+    return out.strip('"\n')
 
 
 def _get_all_yum_vars():
@@ -280,15 +282,6 @@ def get_expanded_url(url):
     return _expand_variables(url, '/')
 
 
-class YumUpdatePackageObject(object):
-
-    def __init__(self, name, arch, version, repo):
-        self.name = name
-        self.arch = arch
-        self.version = version
-        self.ui_from_repo = repo
-
-
 def _include_line_checkupdate_output(line):
     tokens = line.split()
 
@@ -323,33 +316,54 @@ def _filter_lines_checkupdate_output(output):
 
 def _get_yum_checkupdate_output():
     cmd = ['yum', 'check-update', '-d0']
-    yum_update_cmd = subprocess.Popen(cmd,
-                                      stdout=subprocess.PIPE,
-                                      stderr=subprocess.PIPE)
-    out, error = yum_update_cmd.communicate()
-    return_code = yum_update_cmd.returncode
+    out, error, return_code = run_command(cmd, silent=True)
     if return_code == 1:
         return None
-
     return out
 
 
 def get_yum_packages_list_update(checkupdate_output=None):
+    """
+    Returns a list of packages eligible to be updated.
+    """
     if checkupdate_output is None:
         checkupdate_output = _get_yum_checkupdate_output()
-
     filtered_output = _filter_lines_checkupdate_output(checkupdate_output)
 
     packages = []
     for line in filtered_output:
         line = line.split()
-        index = 0
-        name_arch = line[index]
-        index += 1
-        version = line[index]
-        index += 1
-        repo = line[index]
-        name, arch = name_arch.rsplit('.', 1)
-        packages.append(YumUpdatePackageObject(name, arch, version, repo))
-
+        name, arch = line[0].rsplit('.', 1)
+        packages.append(name)
     return packages
+
+
+def get_yum_package_info(pkg_name):
+    """
+    Returns package information as a dictionary.
+    """
+    cmd = ['yum', '-v', '--assumeno', 'update', pkg_name]
+    out, error, returncode = run_command(cmd, silent=True)
+    if returncode != 1:
+        return []
+
+    # Get the end of the output and parse it
+    out = out.split('\n')
+    out = out[out.index('Dependencies Resolved')+1:]
+    # Remove the useless part of the output
+    out = out[5:out.index('Transaction Summary')]
+
+    package = {}
+    pkg_dep = []
+    for line in out:
+        line = line.split()
+        if len(line) < 5:
+            continue
+        if line[0] == pkg_name:
+            package = {'package_name': line[0], 'arch': line[1],
+                       'version': line[2], 'repository': line[3]}
+        else:
+            # it's a dependency
+            pkg_dep.append(line[0])
+    package['depends'] = pkg_dep
+    return package
