@@ -359,16 +359,19 @@ class ZypperUpdate(object):
     necessary modules in runtime.
     """
     def __init__(self):
-        self._pkgs = {}
         self.update_cmd = ["zypper", "--non-interactive", "update",
                            "--auto-agree-with-licenses"]
         self.logfile = '/var/log/zypp/history'
 
-    def _refreshUpdateList(self):
+    def getPackagesList(self):
         """
-        Update the list of packages to be updated in the system.
+        Return a list of packages eligible to be updated by Zypper.
         """
-        self._pkgs = []
+        if self.isRunning():
+            raise OperationFailed('GGBPKGUPD0005E')
+
+        gingerBaseLock.acquire()
+        packages = []
         cmd = ["zypper", "list-updates"]
         (stdout, stderr, returncode) = run_command(cmd)
 
@@ -376,26 +379,67 @@ class ZypperUpdate(object):
             raise OperationFailed('GGBPKGUPD0003E', {'err': stderr})
 
         for line in stdout.split('\n'):
-            if line.find('v |') >= 0:
-                info = line.split(' | ')
-                package = {'package_name': info[2], 'version': info[4],
-                           'arch': info[5], 'repository': info[1]}
-                self._pkgs.append(package)
+            if line.startswith('v |'):
+                packages.append(line.split(' | ')[2].strip())
+        gingerBaseLock.release()
+        return packages
 
-    def getPackagesList(self):
+    def getPackageInfo(self, pkg_name):
         """
-        Return a list of package's dictionaries. Each dictionary contains the
-        information about a package, in the format
-        package = {'package_name': <string>, 'version': <string>,
-                   'arch': <string>, 'repository': <string>}
+        Get package information. The return is a dictionary containg the
+        information about a package, in the format:
+
+        package = {'package_name': <string>,
+                   'version': <string>,
+                   'arch': <string>,
+                   'repository': <string>,
+                   'depends': <list>
+                  }
         """
         if self.isRunning():
             raise OperationFailed('GGBPKGUPD0005E')
 
         gingerBaseLock.acquire()
-        self._refreshUpdateList()
+        cmd = ["zypper", "info", "--requires", pkg_name]
+        (stdout, stderr, returncode) = run_command(cmd)
+
+        if len(stderr) > 0:
+            raise OperationFailed('GGBPKGUPD0006E', {'err': stderr})
+
+        # Zypper returns returncode == 0 and stderr <= 0, even if package is
+        # not found in it's base. Need check the output of the command to parse
+        # correctly.
+        stdout = stdout.split('\n')
+        message = 'package \'%s\' not found.' % pkg_name
+        if message in stdout:
+            raise NotFoundError('GGBPKGUPD0006E', {'err': message})
+
+        package = {}
+        for (key, token) in (('repository', 'Repository:'),
+                             ('version', 'Version:'),
+                             ('arch', 'Arch:'),
+                             ('package_name', 'Name:')):
+            for line in stdout:
+                if line.startswith(token):
+                    package[key] = line.split(': ')[1].strip()
+                    break
+
+        # get the list of dependencies
+        pkg_dep = []
+        for line in stdout[stdout.index('Requires:')+1:len(stdout)-1]:
+            # scan for valid lines with package names
+            line = line.strip()
+            if '.so' in line:
+                continue
+            if line.startswith('/'):
+                continue
+            if "python(abi)" in line:
+                line = "python-base"
+            pkg_dep.append(line.split()[0])
+        pkg_dep = list(set(pkg_dep))
+        package['depends'] = pkg_dep
         gingerBaseLock.release()
-        return self._pkgs
+        return package
 
     def isRunning(self):
         """
