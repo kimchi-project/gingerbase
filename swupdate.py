@@ -42,18 +42,6 @@ class SoftwareUpdate(object):
     Class to represent and operate with OS software update.
     """
     def __init__(self):
-        # This stores all packages to be updated for Ginger Base perspective.
-        # It's a dictionary of dictionaries, in the format
-        # {'package_name': package},
-        # where:
-        # package = {'package_name': <string>, 'version': <string>,
-        #           'arch': <string>, 'repository': <string>
-        #           }
-        self._packages = {}
-
-        # This stores the number of packages to update
-        self._num2update = 0
-
         # Get the distro of host machine and creates an object related to
         # correct package management system
         try:
@@ -80,48 +68,26 @@ class SoftwareUpdate(object):
                         raise Exception("There is no compatible package "
                                         "manager for this system.")
 
-    def _scanUpdates(self):
-        """
-        Update self._packages with packages to be updated.
-        """
-        self._packages = {}
-        self._num2update = 0
-
-        # Call system pkg_mnger to get the packages as list of dictionaries.
-        for pkg in self._pkg_mnger.getPackagesList():
-
-            # Check if already exist a package in self._packages
-            pkg_id = pkg.get('package_name')
-            if pkg_id in self._packages.keys():
-                # package already listed to update. do nothing
-                continue
-
-            # Update the self._packages and self._num2update
-            self._packages[pkg_id] = pkg
-            self._num2update = self._num2update + 1
-
     def getUpdates(self):
         """
-        Return the self._packages.
+        Return a list of packages eligigle to be updated in the system.
         """
-        self._scanUpdates()
-        return self._packages
+        return [pkg for pkg in self._pkg_mnger.getPackagesList()]
 
     def getUpdate(self, name):
         """
         Return a dictionary with all info from a given package name.
         """
-        if name not in self._packages.keys():
+        package = self._pkg_mnger.getPackageInfo(name)
+        if not package:
             raise NotFoundError('GGBPKGUPD0002E', {'name': name})
-
-        return self._packages[name]
+        return package
 
     def getNumOfUpdates(self):
         """
         Return the number of packages to be updated.
         """
-        self._scanUpdates()
-        return self._num2update
+        return len(self.getUpdates())
 
     def preUpdate(self):
         """

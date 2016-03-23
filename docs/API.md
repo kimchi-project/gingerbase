@@ -218,11 +218,11 @@ stats history
 
 **URI:** /plugins/gingerbase/host/packagesupdate
 
-Contains the information and action of packages update in the host.
+Collection of eligible packages to be updated/upgraded in the system.
 
 **Methods:**
 
-* **GET**: Retrieves a list of all packages to be updated in the host:
+* **GET**: Retrieves a list of eligible packages to be updated in the host
 
 ### Resource: Host Package Update
 
@@ -232,11 +232,12 @@ Contains the information for a specific package to be updated.
 
 **Methods:**
 
-* **GET**: Retrieves a full description of a package:
-    * package_name: The name of the package to be updated
+* **GET**: Retrieves a dictionary with package information:
+    * package_name: The name of the package
     * arch: The architecture of the package
-    * version: The new version of the package
+    * version: The version of the package will be installed
     * repository: The repository name from where package will be downloaded
+    * depends: List of packages eligible to update that this depends on
 
 ### Collection: Host Repositories
 
