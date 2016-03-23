@@ -34,7 +34,8 @@ class PackageUpdate(Resource):
     def __init__(self, model, id=None):
         super(PackageUpdate, self).__init__(model, id)
         self.role_key = 'updates'
-        self.admin_methods = ['GET']
+        self.admin_methods = ['GET', 'POST']
+        self.upgrade = self.generate_action_handler_task('upgrade')
 
     @property
     def data(self):

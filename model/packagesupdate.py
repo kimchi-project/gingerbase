@@ -44,6 +44,7 @@ class PackageUpdateModel(object):
     def __init__(self, **kargs):
         self.task = TaskModel(**kargs)
         self.objstore = kargs['objstore']
+        self.pkgs2update = []
         try:
             self.host_swupdate = SoftwareUpdate()
         except:
@@ -54,6 +55,41 @@ class PackageUpdateModel(object):
             raise OperationFailed('GGBPKGUPD0004E')
 
         return self.host_swupdate.getUpdate(name)
+
+    def _resolve_dependencies(self, package=None, dep_list=[]):
+        """
+        Resolve the dependencies for a given package from the dictionary of
+        eligible packages to be upgraded.
+        """
+        if package is None:
+            return []
+        dep_list.append(package)
+        deps = self.host_swupdate.getUpdate(package)['depends']
+        for pkg in set(deps).intersection(self.pkgs2update):
+            if pkg in dep_list:
+                break
+            self._resolve_dependencies(pkg, dep_list)
+        return dep_list
+
+    def upgrade(self, name):
+        """
+        Execute the update of a specific package (and its dependencies, if
+        necessary) in the system.
+
+        @param: Name
+        @return: task
+        """
+        if self.host_swupdate is None:
+            raise OperationFailed('GGBPKGUPD0004E')
+
+        self.pkgs2update = self.host_swupdate.getUpdates()
+        pkgs_list = self._resolve_dependencies(name)
+        msg = 'The following packages will be updated: ' + ', '.join(pkgs_list)
+        wok_log.debug(msg)
+        taskid = add_task('/plugins/gingerbase/host/packagesupdate/%s/upgrade'
+                          % name, self.host_swupdate.doUpdate,
+                          self.objstore, pkgs_list)
+        return self.task.lookup(taskid)
 
 
 class SwUpdateProgressModel(object):

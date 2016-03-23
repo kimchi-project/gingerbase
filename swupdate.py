@@ -159,7 +159,11 @@ class SoftwareUpdate(object):
         # reset messages
         cb('')
 
-        cmd = self._pkg_mnger.update_cmd
+        if params is not None:
+            cmd = self._pkg_mnger.update_cmd['specific'] + params
+        else:
+            cmd = self._pkg_mnger.update_cmd['all']
+
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE,
                                 preexec_fn=self.preUpdate)
@@ -187,7 +191,8 @@ class YumUpdate(object):
     modules in runtime.
     """
     def __init__(self):
-        self.update_cmd = ["yum", "-y", "update"]
+        self.update_cmd = dict.fromkeys(['all', 'specific'],
+                                        ["yum", "-y", "update"])
         self.logfile = self._get_output_log()
 
     def _get_output_log(self):
@@ -275,7 +280,8 @@ class DnfUpdate(YumUpdate):
     """
     def __init__(self):
         self._pkgs = {}
-        self.update_cmd = ["dnf", "-y", "update"]
+        self.update_cmd = dict.fromkeys(['all', 'specific'],
+                                        ["dnf", "-y", "update"])
         self.logfile = '/var/log/dnf.log'
 
     def getPackageInfo(self, pkg_name):
@@ -328,7 +334,9 @@ class AptUpdate(object):
     modules in runtime.
     """
     def __init__(self):
-        self.update_cmd = ['apt-get', 'upgrade', '-y']
+        self.update_cmd = {'all': ['apt-get', 'upgrade', '-y'],
+                           'specific': ['apt-get', '--only-upgrade',
+                                        'install']}
         self.logfile = '/var/log/apt/term.log'
         self._apt_cache = getattr(__import__('apt'), 'Cache')()
 
@@ -413,8 +421,10 @@ class ZypperUpdate(object):
     necessary modules in runtime.
     """
     def __init__(self):
-        self.update_cmd = ["zypper", "--non-interactive", "update",
-                           "--auto-agree-with-licenses"]
+        self.update_cmd = dict.fromkeys(['all', 'specific'],
+                                        ["zypper", "--non-interactive",
+                                         "update",
+                                         "--auto-agree-with-licenses"])
         self.logfile = '/var/log/zypp/history'
 
     def getPackagesList(self):
