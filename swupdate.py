@@ -32,6 +32,7 @@ from wok.exception import NotFoundError, OperationFailed
 from wok.utils import run_command, wok_log
 
 from wok.plugins.gingerbase.config import gingerBaseLock
+from wok.plugins.gingerbase.yumparser import get_dnf_package_info
 from wok.plugins.gingerbase.yumparser import get_yum_package_info
 from wok.plugins.gingerbase.yumparser import get_yum_packages_list_update
 
@@ -47,7 +48,7 @@ class SoftwareUpdate(object):
         # correct package management system
         try:
             __import__('dnf')
-            wok_log.info("Loading YumUpdate features.")
+            wok_log.info("Loading DnfUpdate features.")
             self._pkg_mnger = DnfUpdate()
         except ImportError:
             try:
@@ -276,6 +277,31 @@ class DnfUpdate(YumUpdate):
         self._pkgs = {}
         self.update_cmd = ["dnf", "-y", "update"]
         self.logfile = '/var/log/dnf.log'
+
+    def getPackageInfo(self, pkg_name):
+        """
+        Get package information. The return is a dictionary containg the
+        information about a package, in the format:
+
+        package = {'package_name': <string>,
+                   'version': <string>,
+                   'arch': <string>,
+                   'repository': <string>,
+                   'depends': <list>
+                  }
+        """
+        if self.isRunning():
+            raise OperationFailed('GGBPKGUPD0005E')
+
+        package = {}
+        try:
+            gingerBaseLock.acquire()
+            package = get_dnf_package_info(pkg_name)
+        except Exception, e:
+            raise NotFoundError('GGBPKGUPD0003E', {'err': str(e)})
+        finally:
+            gingerBaseLock.release()
+        return package
 
     def isRunning(self):
         """

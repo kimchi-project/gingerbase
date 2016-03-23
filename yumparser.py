@@ -335,7 +335,28 @@ def get_yum_packages_list_update(checkupdate_output=None):
         line = line.split()
         name, arch = line[0].rsplit('.', 1)
         packages.append(name)
+    packages = list(set(packages))
     return packages
+
+
+def _get_package_info(pkg_name, output=None):
+    if output is None:
+        return {}
+
+    package = {}
+    pkg_dep = []
+    for line in output:
+        line = line.split()
+        if len(line) < 5:
+            continue
+        if line[0] == pkg_name:
+            package = {'package_name': line[0], 'arch': line[1],
+                       'version': line[2], 'repository': line[3]}
+        else:
+            # it's a dependency
+            pkg_dep.append(line[0])
+    package['depends'] = list(set(pkg_dep))
+    return package
 
 
 def get_yum_package_info(pkg_name):
@@ -353,17 +374,22 @@ def get_yum_package_info(pkg_name):
     # Remove the useless part of the output
     out = out[5:out.index('Transaction Summary')]
 
-    package = {}
-    pkg_dep = []
-    for line in out:
-        line = line.split()
-        if len(line) < 5:
-            continue
-        if line[0] == pkg_name:
-            package = {'package_name': line[0], 'arch': line[1],
-                       'version': line[2], 'repository': line[3]}
-        else:
-            # it's a dependency
-            pkg_dep.append(line[0])
-    package['depends'] = pkg_dep
-    return package
+    return _get_package_info(pkg_name, out)
+
+
+def get_dnf_package_info(pkg_name):
+    """
+    Returns package information as a dictionary.
+    """
+    cmd = ['dnf', '-v', '--assumeno', 'update', pkg_name]
+    out, error, returncode = run_command(cmd, silent=True)
+    if returncode != 1:
+        return []
+
+    # Get the end of the output and parse it
+    out = out.split('\n')
+    out = out[out.index('Dependencies resolved.')+1:]
+    # Remove the useless part of the output
+    out = out[3:out.index('Transaction Summary')]
+
+    return _get_package_info(pkg_name, out)
