@@ -26,8 +26,8 @@ import unittest
 from wok.rollbackcontext import RollbackContext
 
 from wok.plugins.gingerbase.model import model
-from wok.plugins.gingerbase.yumparser \
-    import delete_repo_from_file, get_repo_files
+from wok.plugins.gingerbase.yumparser import delete_repo_from_file
+from wok.plugins.gingerbase.yumparser import get_repo_files
 from wok.plugins.gingerbase.yumparser import get_yum_packages_list_update
 from wok.plugins.gingerbase.yumparser import get_yum_repositories
 from wok.plugins.gingerbase.yumparser import write_repo_to_file, YumRepoObject
@@ -159,7 +159,6 @@ class YumParserTests(unittest.TestCase):
         output = _generate_yumcheckupdate_output()
         packages = get_yum_packages_list_update(output)
         self.assertEqual(len(packages), 3)
-        self.assertEqual(packages[0].ui_from_repo, 'REPOSITORY1')
-        self.assertEqual(packages[1].version, '20150611.-no-FAKE2')
-        self.assertEqual(packages[2].name, 'PACKAGE3.dot.dot')
-        self.assertEqual(packages[2].arch, 'i386')
+        self.assertEqual(packages[0], 'PACKAGE1')
+        self.assertEqual(packages[1], 'PACKAGE2')
+        self.assertEqual(packages[2], 'PACKAGE3.dot.dot')

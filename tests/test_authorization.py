@@ -71,3 +71,10 @@ class AuthorizationTests(unittest.TestCase):
         self.assertEquals(403, resp.status)
         resp = self.request('/plugins/gingerbase/host/shutdown', '{}', 'POST')
         self.assertEquals(403, resp.status)
+
+        # Normal users can not upgrade packages
+        uri = '/plugins/gingerbase/host/packagesupdate/ginger/upgrade'
+        resp = self.request(uri, '{}', 'POST')
+        self.assertEquals(403, resp.status)
+        resp = self.request('/plugins/gingerbase/host/swupdate', '{}', 'POST')
+        self.assertEquals(403, resp.status)

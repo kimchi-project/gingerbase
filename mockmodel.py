@@ -111,13 +111,20 @@ class MockModel(Model):
     def _mock_packageupdate_lookup(self, pkg_name):
         return self._mock_swupdate.pkgs[pkg_name]
 
+    def _mock_packageupdate_upgrade(self, pkg_name):
+        pkgs_list = [pkg_name] + self._mock_swupdate.pkgs[pkg_name]['depends']
+        taskid = add_task('/plugins/gingerbase/host/packagesupdate/%s/upgrade'
+                          % pkg_name, self._mock_swupdate.doUpdate,
+                          self.objstore, pkgs_list)
+        return self.task_lookup(taskid)
+
     def _mock_host_swupdate(self, args=None):
         task_id = add_task('/plugins/gingerbase/host/swupdate',
                            self._mock_swupdate.doUpdate,
                            self.objstore)
         return self.task_lookup(task_id)
 
-    def _mock_softwareupdateprogress_lookup(self, *name):
+    def _mock_swupdateprogress_lookup(self, *name):
         task_id = add_task('/plugins/gingerbase/host/swupdateprogress',
                            self._mock_swupdate.doSlowUpdate,
                            self.objstore)
@@ -169,31 +176,43 @@ class MockSoftwareUpdate(object):
             'udevmountd': {'repository': 'openSUSE-13.1-Update',
                            'version': '0.81.5-14.1',
                            'arch': 'x86_64',
-                           'package_name': 'udevmountd'},
+                           'package_name': 'udevmountd',
+                           'depends': []},
             'sysconfig-network': {'repository': 'openSUSE-13.1-Extras',
                                   'version': '0.81.5-14.1',
                                   'arch': 'x86_64',
-                                  'package_name': 'sysconfig-network'},
+                                  'package_name': 'sysconfig-network',
+                                  'depends': []},
             'libzypp': {'repository': 'openSUSE-13.1-Update',
                         'version': '13.9.0-10.1',
                         'arch': 'noarch',
-                        'package_name': 'libzypp'}}
-        self._num2update = 3
+                        'package_name': 'libzypp',
+                        'depends': []},
+            'wok': {'repository': 'openSUSE-13.1-Update',
+                    'version': '2.0.0',
+                    'arch': 'noarch',
+                    'package_name': 'wok',
+                    'depends': []},
+            'ginger': {'repository': 'openSUSE-13.1-Update',
+                       'version': '2.0.0',
+                       'arch': 'noarch',
+                       'package_name': 'ginger',
+                       'depends': ['wok']}}
+        self._num2update = 5
 
     def doUpdate(self, cb, params):
         msgs = []
-        for pkg in self.pkgs.keys():
+        pkgs = params if params is not None else self.pkgs.keys()
+        for pkg in pkgs:
             msgs.append("Updating package %s" % pkg)
             cb('\n'.join(msgs))
+            del self.pkgs[pkg]
+            self._num2update -= 1
             time.sleep(1)
 
         time.sleep(2)
         msgs.append("All packages updated")
         cb('\n'.join(msgs), True)
-
-        # After updating all packages any package should be listed to be
-        # updated, so reset self._packages
-        self.pkgs = {}
 
     def doSlowUpdate(self, cb, params):
         class MockUpdate(object):

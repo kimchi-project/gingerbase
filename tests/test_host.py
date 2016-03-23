@@ -115,22 +115,22 @@ class HostTests(unittest.TestCase):
         self.assertEquals(sorted(stats_keys), sorted(history.keys()))
 
     def test_host_actions(self):
-        def _task_lookup(taskid):
-            return json.loads(self.request('/plugins/gingerbase/tasks/%s' %
-                                           taskid).read())
-
         resp = self.request('/plugins/gingerbase/host/shutdown', '{}', 'POST')
         self.assertEquals(200, resp.status)
         resp = self.request('/plugins/gingerbase/host/reboot', '{}', 'POST')
         self.assertEquals(200, resp.status)
 
-        # Test system update
+    def test_packages_update(self):
+        def _task_lookup(taskid):
+            return json.loads(self.request('/plugins/gingerbase/tasks/%s' %
+                                           taskid).read())
+
         resp = self.request('/plugins/gingerbase/host/packagesupdate',
                             None, 'GET')
         pkgs = json.loads(resp.read())
-        self.assertEquals(3, len(pkgs))
+        self.assertEquals(5, len(pkgs))
 
-        pkg_keys = ['package_name', 'repository', 'arch', 'version']
+        pkg_keys = ['package_name', 'repository', 'arch', 'version', 'depends']
         for p in pkgs:
             name = p['package_name']
             resp = self.request('/plugins/gingerbase/host/packagesupdate/' +
@@ -138,6 +138,29 @@ class HostTests(unittest.TestCase):
             info = json.loads(resp.read())
             self.assertEquals(sorted(pkg_keys), sorted(info.keys()))
 
+        # Test system update of specific package. Since package 'ginger' has
+        # 'wok' as dependency, both packages must be selected to be updated
+        # and, in the end of the process, we have only 3 packages to update.
+        uri = '/plugins/gingerbase/host/packagesupdate/ginger/upgrade'
+        resp = self.request(uri, '{}', 'POST')
+        task = json.loads(resp.read())
+        task_params = [u'id', u'message', u'status', u'target_uri']
+        self.assertEquals(sorted(task_params), sorted(task.keys()))
+
+        resp = self.request('/plugins/gingerbase/tasks/' + task[u'id'],
+                            None, 'GET')
+        task_info = json.loads(resp.read())
+        self.assertEquals(task_info['status'], 'running')
+        wait_task(_task_lookup, task_info['id'])
+        resp = self.request('/plugins/gingerbase/tasks/' + task[u'id'],
+                            None, 'GET')
+        task_info = json.loads(resp.read())
+        self.assertEquals(task_info['status'], 'finished')
+        self.assertIn(u'All packages updated', task_info['message'])
+        pkgs = model.packagesupdate_get_list()
+        self.assertEquals(3, len(pkgs))
+
+        # test system update of the rest of packages
         resp = self.request('/plugins/gingerbase/host/swupdate', '{}', 'POST')
         task = json.loads(resp.read())
         task_params = [u'id', u'message', u'status', u'target_uri']
