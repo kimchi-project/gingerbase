@@ -60,32 +60,32 @@ and Ginger Base. To install them, follow these instructions:
 **For Fedora:**
 
 ```
-$ wget http://kimchi-project.github.io/wok/downloads/wok-2.0.0-0.fc23.noarch.rpm
-$ wget http://kimchi-project.github.io/gingerbase/downloads/ginger-base-2.0.0-0.fc23.noarch.rpm
+$ wget http://kimchi-project.github.io/wok/downloads/wok-2.1.0-0.fc23.noarch.rpm
+$ wget http://kimchi-project.github.io/gingerbase/downloads/ginger-base-2.1.0-0.fc23.noarch.rpm
 $ sudo dnf install wok-*.rpm ginger-base-*.rpm
 ```
 
 **For RHEL:**
 
 ```
-$ wget http://kimchi-project.github.io/wok/downloads/wok-2.0.0-0.el7.noarch.rpm
-$ wget http://kimchi-project.github.io/gingerbase/downloads/ginger-base-2.0.0-0.el7.noarch.rpm
+$ wget http://kimchi-project.github.io/wok/downloads/wok-2.1.0-0.el7.noarch.rpm
+$ wget http://kimchi-project.github.io/gingerbase/downloads/ginger-base-2.1.0-0.el7.noarch.rpm
 $ sudo yum install wok-*.rpm ginger-base-*.rpm
 ```
 
 **For Debian/Ubuntu:**
 
 ```
-$ wget http://kimchi-project.github.io/wok/downloads/wok-2.0.0-0.noarch.deb
-$ wget http://kimchi-project.github.io/gingerbase/downloads/ginger-base-2.0.0-0.noarch.deb
+$ wget http://kimchi-project.github.io/wok/downloads/wok-2.1.0-0.noarch.deb
+$ wget http://kimchi-project.github.io/gingerbase/downloads/ginger-base-2.1.0-0.noarch.deb
 $ sudo dpkg -i wok-*.deb ginger-base-*.deb
 ```
 
 **For openSUSE:**
 
 ```
-$ wget http://kimchi-project.github.io/wok/downloads/wok-2.0.0-0.noarch.rpm
-$ wget http://kimchi-project.github.io/gingerbase/downloads/ginger-base-2.0.0-0.noarch.rpm
+$ wget http://kimchi-project.github.io/wok/downloads/wok-2.1.0-0.noarch.rpm
+$ wget http://kimchi-project.github.io/gingerbase/downloads/ginger-base-2.1.0-0.noarch.rpm
 $ sudo zypper install wok-*.rpm ginger-base-*.rpm
 ```
 
