@@ -243,7 +243,8 @@ class DebugReportModel(object):
         except IndexError:
             raise NotFoundError("GGBDR0001E", {'name': name})
 
-        file_target = file_source.replace(name, params['name'])
+        f_name = os.path.basename(file_source).replace(name, params['name'], 1)
+        file_target = os.path.join(path, f_name)
         if os.path.isfile(file_target):
             raise InvalidParameter('GGBDR0008E', {'name': params['name']})
 
