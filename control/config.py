@@ -27,16 +27,6 @@ from wok.control.utils import UrlSubNode
 class Config(Resource):
     def __init__(self, model, id=None):
         super(Config, self).__init__(model, id)
-        self.capabilities = Capabilities(self.model)
-
-    @property
-    def data(self):
-        return self.info
-
-
-class Capabilities(Resource):
-    def __init__(self, model, id=None):
-        super(Capabilities, self).__init__(model, id)
 
     @property
     def data(self):

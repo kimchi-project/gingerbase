@@ -310,3 +310,24 @@ http://, ftp:// or file://  URL.
 
 * enable: Enable the Repository as package source
 * disable: Disable the Repository as package source
+
+### Resource: Capabilities
+
+**URI:** /plugins/gingerbase/host/capabilities
+
+Contains the host capabilities.
+
+**Methods:**
+
+* **GET**: Retrieve capabilities information
+    * system_report_tool: True, if an expected report tool is installed in the
+                          host system; False, otherwise
+    * update_tool: True, if an expected update tool is installed in the host
+                   system; False, otherwise,
+    * repo_mngt_tool: Type of the repository management tool used by host system
+
+* **POST**: *See Capabilities Actions*
+
+**Actions (POST):**
+
+*No actions defined*
