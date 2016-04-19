@@ -62,11 +62,11 @@ gingerbase.init_update = function() {
                 type: 'status'
             }, {
                 name: 'config[dist]',
-                label: "dist",
+                label: i18n['GGBREPO6018M'],
                 'class': 'repository-gpgcheck deb'
             }, {
                 name: 'config[comps]',
-                label: "comps",
+                label: i18n['GGBREPO6019M'],
                 'class': 'repository-gpgcheck deb'
             }];
         } else {
