@@ -29,23 +29,47 @@ gingerbase.host_update = function() {
 gingerbase.init_update = function() {
     "use strict";
     var repositoriesGrid = null;
+    var enableRepositoryButtons = function(toEnable) {
+        // available-reports-grid-action-group
+        if(toEnable === 'all'){
+            $.each($('#'+repositoriesGrid.selectButtonContainer[0].id+' ul.dropdown-menu .btn'), function(i,button){;
+                $(this).attr('disabled', false);
+            });
+        }else if(toEnable === 'some'){
+            $.each($('#'+repositoriesGrid.selectButtonContainer[0].id+' ul.dropdown-menu .btn'), function(i,button){
+                if($(this).attr('id') === 'repositories-grid-edit-button' || $(this).attr('id') === 'repositories-grid-enable-button'){
+                    $(this).attr('disabled', true);
+                }else {
+                    $(this).attr('disabled', false);
+                }
+            });
+        }else {
+            $.each($('#'+repositoriesGrid.selectButtonContainer[0].id+' ul.dropdown-menu .btn'), function(i,button){
+                if($(this).attr('id') === 'repositories-grid-add-button'){
+                    $(this).attr('disabled', false);
+                }else {
+                    $(this).attr('disabled', true);
+                }
+            });
+        }
+    };
     var initRepositoriesGrid = function(repo_type) {
         var gridFields = [];
         if (repo_type === "yum") {
             gridFields = [{
                 name: 'repo_id',
                 label: i18n['GGBREPO6004M'],
-                'class': 'repository-id',
+                cssClass: 'repository-id',
                 type: 'name'
             }, {
                 name: 'config[display_repo_name]',
                 label: i18n['GGBREPO6005M'],
-                'class': 'repository-name',
+                cssClass: 'repository-name',
                 type: 'description'
             }, {
                 name: 'enabled',
                 label: i18n['GGBREPO6009M'],
-                'class': 'repository-enabled',
+                cssClass: 'repository-enabled',
                 type: 'status'
             }];
         } else if (repo_type === "deb") {
@@ -53,38 +77,38 @@ gingerbase.init_update = function() {
                 name: 'baseurl',
                 label: i18n['GGBREPO6006M'],
                 makeTitle: true,
-                'class': 'repository-baseurl deb',
+                cssClass: 'repository-baseurl deb',
                 type: 'description'
             }, {
                 name: 'enabled',
                 label: i18n['GGBREPO6009M'],
-                'class': 'repository-enabled deb',
+                cssClass: 'repository-enabled deb',
                 type: 'status'
             }, {
                 name: 'config[dist]',
                 label: i18n['GGBREPO6018M'],
-                'class': 'repository-gpgcheck deb'
+                cssClass: 'repository-gpgcheck deb'
             }, {
                 name: 'config[comps]',
                 label: i18n['GGBREPO6019M'],
-                'class': 'repository-gpgcheck deb'
+                cssClass: 'repository-gpgcheck deb'
             }];
         } else {
             gridFields = [{
                 name: 'repo_id',
                 label: i18n['GGBREPO6004M'],
-                'class': 'repository-id',
+                cssClass: 'repository-id',
                 type: 'name'
             }, {
                 name: 'enabled',
                 label: i18n['GGBREPO6009M'],
-                'class': 'repository-enabled',
+                cssClass: 'repository-enabled',
                 type: 'status'
             }, {
                 name: 'baseurl',
                 label: i18n['GGBREPO6006M'],
                 makeTitle: true,
-                'class': 'repository-baseurl',
+                cssClass: 'repository-baseurl',
                 type: 'description'
             }];
         }
@@ -97,6 +121,7 @@ gingerbase.init_update = function() {
                 label: i18n['GGBREPO6012M'],
                 class: 'fa fa-plus-circle',
                 onClick: function(event) {
+                    event.preventDefault();
                     wok.window.open({
                         url: 'plugins/gingerbase/repository-add.html',
                         class: repo_type
@@ -108,16 +133,21 @@ gingerbase.init_update = function() {
                 class: 'fa fa-play-circle-o',
                 disabled: true,
                 onClick: function(event) {
-                    var repository = repositoriesGrid.getSelected();
-                    if (!repository) {
-                        return;
+                    event.preventDefault();
+                    if(!$(this).attr('disabled',true)){
+                        var repository = repositoriesGrid.getSelected();
+                        if (!repository) {
+                            return;
+                        }
+                        var name = repository[0]['repo_id'];
+                        var enable = !repository[0]['enabled'];
+                        $(this).attr('disabled', true);
+                        gingerbase.enableRepository(name, enable, function() {
+                            wok.topic('gingerbase/repositoryUpdated').publish();
+                        });
+                    } else {
+                        return false;
                     }
-                    var name = repository['repo_id'];
-                    var enable = !repository['enabled'];
-                    $(this).prop('disabled', true);
-                    gingerbase.enableRepository(name, enable, function() {
-                        wok.topic('gingerbase/repositoryUpdated').publish();
-                    });
                 }
             }, {
                 id: 'repositories-grid-edit-button',
@@ -125,15 +155,20 @@ gingerbase.init_update = function() {
                 class: 'fa fa-pencil',
                 disabled: true,
                 onClick: function(event) {
-                    var repository = repositoriesGrid.getSelected();
-                    if (!repository) {
-                        return;
+                    event.preventDefault();
+                    if(!$(this).attr('disabled',true)){
+                        var repository = repositoriesGrid.getSelected();
+                        if (!repository) {
+                            return;
+                        }
+                        gingerbase.selectedRepository = repository[0]['repo_id'];
+                        wok.window.open({
+                            url: 'plugins/gingerbase/repository-edit.html',
+                            class: repo_type
+                        });
+                    } else {
+                        return false;
                     }
-                    gingerbase.selectedRepository = repository['repo_id'];
-                    wok.window.open({
-                        url: 'plugins/gingerbase/repository-edit.html',
-                        class: repo_type
-                    });
                 }
             }, {
                 id: 'repositories-grid-remove-button',
@@ -142,50 +177,77 @@ gingerbase.init_update = function() {
                 critical: true,
                 disabled: true,
                 onClick: function(event) {
-                    var repository = repositoriesGrid.getSelected();
-                    if (!repository) {
-                        return;
+                    event.preventDefault();
+                    if(!$(this).attr('disabled',true)){
+                        var repository = repositoriesGrid.getSelected();
+                        if (!repository) {
+                            return;
+                        }
+
+                        if(repository.length > 1) {
+
+                          var settings = {
+                                    title: i18n['GGBREPO6020M'],
+                                    content: i18n['GGBREPO6021M'],
+                                    confirm: i18n['GGBAPI6002M'],
+                                    cancel: i18n['GGBAPI6003M']
+                          };
+
+                        }else {
+
+                            var settings = {
+                                title: i18n['GGBREPO6001M'],
+                                content: i18n['GGBREPO6002M'].replace("%1", '<strong>'+repository[0]['repo_id']+'</strong>'),
+                                confirm: i18n['GGBAPI6002M'],
+                                cancel: i18n['GGBAPI6003M']
+                            };
+
+                        }
+
+                        wok.confirm(settings, function() {
+                            for(var i = 0; i < report.length; i++){
+                              gingerbase.deleteRepository(
+                                repository[i]['repo_id'],
+                                function(result) {
+                                    listRepositories();
+                                    wok.topic('gingerbase/repositoryDeleted').publish(result);
+                                }, function(error) {
+                                    wok.message.error(error.responseJSON.reason);
+                                });
+                                }
+                        });
+                    }else {
+                        return false;
                     }
-
-                    var settings = {
-                        title: i18n['GGBREPO6001M'],
-                        content: i18n['GGBREPO6002M'],
-                        confirm: i18n['GGBAPI6004M'],
-                        cancel: i18n['GGBAPI6003M']
-                    };
-
-                    wok.confirm(settings, function() {
-                        gingerbase.deleteRepository(
-                            repository['repo_id'],
-                            function(result) {
-                                wok.topic('gingerbase/repositoryDeleted').publish(result);
-                            },
-                            function(error) {}
-                        );
-                    });
                 }
             }],
             onRowSelected: function(row) {
                 var repository = repositoriesGrid.getSelected();
+                var actionHtml,actionText,actionIcon ='';
                 if (!repository) {
                     return;
                 }
-                var selectedRow = $('tr',repositoriesGrid.bodyContainer);
-                $('#repositories-grid-remove-button',selectedRow).prop('disabled', false);
-                $('#repositories-grid-edit-button',selectedRow).prop('disabled', false);
-                var enabled = repository['enabled'];
-                var actionHtml,actionText,actionIcon ='';
-                if(enabled){
-                    actionText= i18n['GGBREPO6017M'];
-                    actionIcon = 'fa-pause';
-                }else{
+                if (repository.length <= 0) {
+                    enableRepositoryButtons(false);
                     actionText= i18n['GGBREPO6016M'];
                     actionIcon = 'fa-play-circle-o';
+                    actionHtml = ['<i class="fa',' ',actionIcon,'"></i>',' ',actionText].join('');
+                    $('#repositories-grid-enable-button').html(actionHtml);
+                }else if (repository.length === 1) {
+                    enableRepositoryButtons('all');
+                    var enabled = repository[0]['enabled'];
+                    if(enabled){
+                        actionText= i18n['GGBREPO6017M'];
+                        actionIcon = 'fa-pause';
+                    }else{
+                        actionText= i18n['GGBREPO6016M'];
+                        actionIcon = 'fa-play-circle-o';
+                    }
+                    actionHtml = ['<i class="fa',' ',actionIcon,'"></i>',' ',actionText].join('');
+                    $('#repositories-grid-enable-button').html(actionHtml);
+                } else {
+                    enableRepositoryButtons('some');
                 }
-                actionHtml = ['<i class="fa',' ',actionIcon,'"></i>','',actionText].join('');
-                $('#repositories-grid-enable-button',selectedRow)
-                    .html(actionHtml)
-                    .prop('disabled', false);
             },
             frozenFields: [],
             fields: gridFields,

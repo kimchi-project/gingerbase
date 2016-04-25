@@ -205,7 +205,7 @@ var gingerbase = {
     },
 
     downloadReport: function(settings, suc, err) {
-        window.open(settings['file']);
+        window.open(settings['file'],'_blank');
     },
 
     shutdown: function(settings, suc, err) {

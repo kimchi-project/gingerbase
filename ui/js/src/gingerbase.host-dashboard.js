@@ -31,13 +31,28 @@ gingerbase.init_dashboard = function() {
     var reportGridID = 'available-reports-grid';
     var reportGrid = null;
     var enableReportButtons = function(toEnable) {
-        var buttonID = '#{grid}-{btn}-button';
-        $.each(['rename', 'remove', 'download'], function(i, n) {
-            $(wok.substitute(buttonID, {
-                grid: reportGridID,
-                btn: n
-            })).prop('disabled', !toEnable);
-        });
+        // available-reports-grid-action-group
+        if(toEnable === 'all'){
+            $.each($('#'+reportGridID+'-action-group ul.dropdown-menu .btn'), function(i,button){;
+                $(this).attr('disabled', false);
+            });
+        }else if(toEnable === 'some'){
+            $.each($('#'+reportGridID+'-action-group ul.dropdown-menu .btn'), function(i,button){
+                if($(this).attr('id') === 'available-reports-grid-rename-button'){
+                    $(this).attr('disabled', true);
+                }else {
+                    $(this).attr('disabled', false);
+                }
+            });
+        }else {
+            $.each($('#'+reportGridID+'-action-group ul.dropdown-menu .btn'), function(i,button){
+                if($(this).attr('id') === 'available-reports-grid-generate-button'){
+                    $(this).attr('disabled', false);
+                }else {
+                    $(this).attr('disabled', true);
+                }
+            });
+        }
     };
     var initReportGrid = function(reports) {
         reportGrid = new wok.widget.List({
@@ -48,6 +63,7 @@ gingerbase.init_dashboard = function() {
                 id: reportGridID + '-generate-button',
                 class: 'fa fa-plus-circle',
                 label: i18n['GGBDR6006M'],
+                disabled: false,
                 onClick: function(event) {
                     wok.window.open('plugins/gingerbase/report-add.html');
                 }
@@ -61,8 +77,7 @@ gingerbase.init_dashboard = function() {
                     if (!report) {
                         return;
                     }
-
-                    gingerbase.selectedReport = report['name'];
+                    gingerbase.selectedReport = report[0]['name'];
                     wok.window.open('plugins/gingerbase/report-rename.html');
                 }
             }, {
@@ -76,9 +91,11 @@ gingerbase.init_dashboard = function() {
                         return;
                     }
 
-                    gingerbase.downloadReport({
-                        file: report['uri']
-                    });
+                    for(var i = 0; i < report.length; i++){
+                        gingerbase.downloadReport({
+                            file: report[i]['uri']
+                        });
+                    }
                 }
             }, {
                 id: reportGridID + '-remove-button',
@@ -87,52 +104,70 @@ gingerbase.init_dashboard = function() {
                 critical: true,
                 disabled: true,
                 onClick: function(event) {
-                    var report = reportGrid.getSelected();
-                    if (!report) {
-                        return;
-                    }
+                    event.preventDefault();
+                    if($(this).find('.btn').attr('disabled') !== 'disabled'){
+                        var report = reportGrid.getSelected();
+                        if (!report) {
+                            return;
+                        }
 
-                    var settings = {
-                        title: i18n['GGBAPI6004M'],
-                        content: i18n['GGBDR6001M'],
-                        confirm: i18n['GGBAPI6002M'],
-                        cancel: i18n['GGBAPI6003M']
-                    };
+                        if(report.length > 1) {
 
-                    wok.confirm(settings, function() {
-                        gingerbase.deleteReport({
-                            name: report['name']
-                        }, function(result) {
-                            listDebugReports();
-                        }, function(error) {
-                            wok.message.error(error.responseJSON.reason);
+                            var settings = {
+                                    title: i18n['GGBDR6016M'],
+                                    content: i18n['GGBDR6014M'],
+                                    confirm: i18n['GGBAPI6002M'],
+                                    cancel: i18n['GGBAPI6003M']
+                                };
+
+                        }else {
+
+                            var settings = {
+                                title: i18n['GGBDR6015M'],
+                                content: i18n['GGBDR6001M'].replace("%1", '<strong>'+report[0]['name']+'</strong>'),
+                                confirm: i18n['GGBAPI6002M'],
+                                cancel: i18n['GGBAPI6003M']
+                            };
+
+                        }
+
+                        wok.confirm(settings, function() {
+                            for(var i = 0; i < report.length; i++){
+                              gingerbase.deleteReport({
+                                name: report[i]['name']
+                              }, function(result) {
+                                listDebugReports();
+
+                              }, function(error) {
+                                wok.message.error(error.responseJSON.reason);
+                              });
+                            }
                         });
-                    });
+                    }else {
+                        return false;
+                    }
                 }
             }],
             onRowSelected: function(row) {
                 var report = reportGrid.getSelected();
-                // Only enable report buttons if the selected line is not a
-                // pending report
-                if (report['time'] === i18n['GGBDR6007M']) {
-                    var gridElement = $('#' + reportGridID);
-                    var row = $('tr:contains(' + report['name'] + ')', gridElement);
+                if (report.length <= 0) {
                     enableReportButtons(false);
-                    row.attr('class', '');
+                }else if (report.length === 1) {
+                    enableReportButtons('all');
                 } else {
-                    enableReportButtons(true);
+                    enableReportButtons('some');
                 }
             },
             frozenFields: [],
             fields: [{
                 name: 'name',
                 label: i18n['GGBDR6003M'],
-                'class': 'debug-report-name',
+                cssClass: 'debug-report-name',
                 type: 'name'
             }, {
                 name: 'time',
                 label: i18n['GGBDR6005M'],
-                'class': 'debug-report-time',
+                cssClass: 'debug-report-time',
                 type: 'description'
             }],
             data: reports
@@ -190,20 +225,20 @@ gingerbase.init_dashboard = function() {
                 initReportGrid(allReports);
             }
 
-            if (!allReports.length) {
-                $('#available-reports-grid-btn-group').removeClass('hidden');
-            } else {
-                $('#available-reports-grid-btn-group').addClass('hidden');
-            }
-
             // Set id-debug-img to pending reports
             // It will display a loading icon
             var gridElement = $('#' + reportGridID);
+            var gridButtonContainer = $('#' + reportGridID+'-action-group');
+            // Clean-up selected Item count on mobile
+            $('.mobile-action-count', gridButtonContainer).remove();
             //  "Generating..."
-            $.each($('td:contains(' + i18n['GGBDR6007M'] + ')', gridElement), function(index, row) {
-                console.log(row);
-                $(row).parent().addClass('generating');
-                $(row).parent().find('.dropdown-toggle').addClass('disabled');
+            $.each($('li label span.debug-report-time', gridElement), function(index, row) {
+                if($(row).text() ===  i18n['GGBDR6007M']){
+                    $(row).parent().parent().addClass('generating');
+                    $(row).parent().parent().find('input[type="checkbox"]').prop('disabled', true);
+                }else {
+                    $(row).parent().parent().find('input[type="checkbox"]').prop('disabled', false);
+                }
             });
         }, function(error) {
             if (error['status'] === 403) {
