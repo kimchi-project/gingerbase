@@ -335,7 +335,7 @@ class AptUpdate(object):
     """
     def __init__(self):
         self.update_cmd = {'all': ['apt-get', 'upgrade', '-y'],
-                           'specific': ['apt-get', '--only-upgrade',
+                           'specific': ['apt-get', '-y', '--only-upgrade',
                                         'install']}
         self.logfile = '/var/log/apt/term.log'
         self._apt_cache = getattr(__import__('apt'), 'Cache')()
