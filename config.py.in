@@ -48,7 +48,30 @@ class GingerBaseConfig(PluginConfig):
     def __init__(self):
         super(GingerBaseConfig, self).__init__('gingerbase')
 
-        custom_config = {}
+        custom_config = {
+            '/data/debugreports': {
+                'tools.staticdir.on': True,
+                'tools.staticdir.dir': os.path.join(gingerBasePaths.state_dir,
+                                                    'debugreports'),
+                'tools.nocache.on': False,
+                'tools.wokauth.on': True,
+                'tools.staticdir.content_types': {'xz': 'application/x-xz'}
+            },
+            '/help': {
+                'tools.staticdir.on': True,
+                'tools.staticdir.dir': os.path.join(gingerBasePaths.ui_dir,
+                                                    'pages/help'),
+                'tools.nocache.on': True
+            },
+            '/images': {
+                'tools.staticdir.on': True,
+                'tools.staticdir.dir': os.path.join(gingerBasePaths.ui_dir,
+                                                    'images'),
+                'tools.wokauth.on': False,
+                'tools.nocache.on': False
+            }
+        }
+
         for dirname in ('css', 'js', 'images'):
             custom_config['/' + dirname] = {
                 'tools.staticdir.on': True,
