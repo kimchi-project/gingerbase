@@ -297,3 +297,8 @@ def get_interface_info(iface):
             'netmask': netmask,
             'macaddr': macaddr(iface),
             'module': get_interface_kernel_module(iface)}
+
+
+def get_interfaces_loaded_with_modules(modules):
+    return [iface for iface in all_interfaces() if
+            get_interface_kernel_module(iface) in modules]
