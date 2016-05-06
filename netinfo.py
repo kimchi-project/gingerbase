@@ -302,3 +302,31 @@ def get_interface_info(iface):
 def get_interfaces_loaded_with_modules(modules):
     return [iface for iface in all_interfaces() if
             get_interface_kernel_module(iface) in modules]
+
+
+def is_interface_rdma_capable(interface):
+    rdma_modules = ['mlx5_core', 'mlx5-core']
+    if get_interface_kernel_module(interface) in rdma_modules:
+        return True
+    return False
+
+
+def is_rdma_service_enabled():
+    for rdma_service in ['rdma', 'openibd']:
+        cmd = ['systemctl', 'is-active', rdma_service, '--quiet']
+        _, _, rc = run_command(cmd)
+        if rc == 0:
+            return True
+    return False
+
+
+def is_rdma_enabled(interface):
+    return is_interface_rdma_capable(interface) and is_rdma_service_enabled()
+
+
+def get_rdma_enabled_interfaces():
+    if not is_rdma_service_enabled():
+        return []
+
+    return [iface for iface in all_interfaces() if
+            is_interface_rdma_capable(iface)]
