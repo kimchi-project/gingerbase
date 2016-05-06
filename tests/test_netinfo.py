@@ -90,3 +90,116 @@ class NetinfoTests(unittest.TestCase):
         mock_kernel_mod.assert_has_calls(
             [call('iface1'), call('iface2'), call('iface3'), call('iface4')]
         )
+
+    @mock.patch('wok.plugins.gingerbase.netinfo.get_interface_kernel_module')
+    def test_is_interface_rdma_capable_true(self, mock_kernel_mod):
+        mock_kernel_mod.return_value = 'mlx5_core'
+        self.assertTrue(netinfo.is_interface_rdma_capable('iface1'))
+        mock_kernel_mod.assert_called_once_with('iface1')
+
+    @mock.patch('wok.plugins.gingerbase.netinfo.get_interface_kernel_module')
+    def test_is_interface_rdma_capable_false(self, mock_kernel_mod):
+        mock_kernel_mod.return_value = 'not_mlx5_core'
+        self.assertFalse(netinfo.is_interface_rdma_capable('iface1'))
+        mock_kernel_mod.assert_called_once_with('iface1')
+
+    @mock.patch('wok.plugins.gingerbase.netinfo.run_command')
+    def test_is_rdma_service_enabled_first_service(self, mock_run_cmd):
+        mock_run_cmd.return_value = ['', '', 0]
+        self.assertTrue(netinfo.is_rdma_service_enabled())
+        mock_run_cmd.assert_called_once_with(
+            ['systemctl', 'is-active', 'rdma', '--quiet']
+        )
+
+    @mock.patch('wok.plugins.gingerbase.netinfo.run_command')
+    def test_is_rdma_service_enabled_second_service(self, mock_run_cmd):
+        mock_run_cmd.side_effect = [['', '', 3], ['', '', 0]]
+        self.assertTrue(netinfo.is_rdma_service_enabled())
+        mock_run_cmd.assert_has_calls(
+            [
+               call(['systemctl', 'is-active', 'rdma', '--quiet']),
+               call(['systemctl', 'is-active', 'openibd', '--quiet'])
+            ]
+        )
+
+    @mock.patch('wok.plugins.gingerbase.netinfo.run_command')
+    def test_is_rdma_service_enabled_false(self, mock_run_cmd):
+        mock_run_cmd.side_effect = [['', '', 3], ['', '', 3]]
+        self.assertFalse(netinfo.is_rdma_service_enabled())
+        mock_run_cmd.assert_has_calls(
+            [
+               call(['systemctl', 'is-active', 'rdma', '--quiet']),
+               call(['systemctl', 'is-active', 'openibd', '--quiet'])
+            ]
+        )
+
+    @mock.patch('wok.plugins.gingerbase.netinfo.is_rdma_service_enabled')
+    @mock.patch('wok.plugins.gingerbase.netinfo.is_interface_rdma_capable')
+    def test_is_rdma_enabled_true(self, mock_iface_rdma,
+                                  mock_service_enabled):
+
+        mock_iface_rdma.return_value = True
+        mock_service_enabled.return_value = True
+
+        self.assertTrue(netinfo.is_rdma_enabled('iface1'))
+        mock_iface_rdma.assert_called_once_with('iface1')
+        mock_service_enabled.assert_called_once_with()
+
+    @mock.patch('wok.plugins.gingerbase.netinfo.is_rdma_service_enabled')
+    @mock.patch('wok.plugins.gingerbase.netinfo.is_interface_rdma_capable')
+    def test_is_rdma_enabled_wrong_mod(self, mock_iface_rdma,
+                                       mock_service_enabled):
+
+        mock_iface_rdma.return_value = False
+        mock_service_enabled.return_value = True
+
+        self.assertFalse(netinfo.is_rdma_enabled('iface1'))
+        mock_iface_rdma.assert_called_once_with('iface1')
+        mock_service_enabled.assert_not_called()
+
+    @mock.patch('wok.plugins.gingerbase.netinfo.is_rdma_service_enabled')
+    @mock.patch('wok.plugins.gingerbase.netinfo.is_interface_rdma_capable')
+    def test_is_rdma_enabled_no_service(self, mock_iface_rdma,
+                                        mock_service_enabled):
+
+        mock_iface_rdma.return_value = True
+        mock_service_enabled.return_value = False
+
+        self.assertFalse(netinfo.is_rdma_enabled('iface1'))
+        mock_iface_rdma.assert_called_once_with('iface1')
+        mock_service_enabled.assert_called_once_with()
+
+    @mock.patch('wok.plugins.gingerbase.netinfo.all_interfaces')
+    @mock.patch('wok.plugins.gingerbase.netinfo.is_rdma_service_enabled')
+    @mock.patch('wok.plugins.gingerbase.netinfo.is_interface_rdma_capable')
+    def test_get_rdma_enabled_ifaces(self, mock_iface_rdma,
+                                     mock_service_enabled, mock_all_ifaces):
+        mock_all_ifaces.return_value = [
+            'iface1', 'iface2', 'iface3', 'iface4'
+        ]
+        mock_iface_rdma.side_effect = [True, False, False, True]
+        mock_service_enabled.return_value = True
+
+        self.assertEqual(netinfo.get_rdma_enabled_interfaces(),
+                         ['iface1', 'iface4'])
+
+        mock_service_enabled.assert_called_once_with()
+        mock_all_ifaces.assert_called_once_with()
+
+        mock_iface_rdma.assert_has_calls(
+            [call('iface1'), call('iface2'), call('iface3'), call('iface4')]
+        )
+
+    @mock.patch('wok.plugins.gingerbase.netinfo.all_interfaces')
+    @mock.patch('wok.plugins.gingerbase.netinfo.is_rdma_service_enabled')
+    @mock.patch('wok.plugins.gingerbase.netinfo.is_interface_rdma_capable')
+    def test_get_rdma_enabled_ifaces_no_service(self, mock_iface_rdma,
+                                                mock_service_enabled,
+                                                mock_all_ifaces):
+        mock_service_enabled.return_value = False
+
+        self.assertEqual(netinfo.get_rdma_enabled_interfaces(), [])
+
+        mock_service_enabled.assert_called_once_with()
+        mock_iface_rdma.assert_not_called()
+        mock_all_ifaces.assert_not_called()
