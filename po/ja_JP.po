@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-21 17:28-0300\n"
+"POT-Creation-Date: 2016-05-11 03:50-0500\n"
 "PO-Revision-Date: 2013-07-11 17:32-0400\n"
 "Last-Translator: Crístian Viana <vianac@linux.vnet.ibm.com>\n"
 "Language-Team: English\n"
@@ -127,6 +127,10 @@ msgid "There is no compatible package manager for this system."
 msgstr "このシステム用の互換パッケージ・マネージャーがありません。"
 
 msgid "There is a package manager instance running in the system."
+msgstr ""
+
+#, python-format
+msgid "Error while getting package information. Details: %(err)s"
 msgstr ""
 
 msgid "YUM Repository ID must be one word only string."
@@ -312,6 +316,12 @@ msgstr "ストレージ"
 msgid "Network"
 msgstr " ネットワーク"
 
+msgid "Dashboard"
+msgstr ""
+
+msgid "Updates"
+msgstr ""
+
 msgid "Failed to get application configuration"
 msgstr "アプリケーション構成を取得できませんでした"
 
@@ -435,11 +445,13 @@ msgstr ""
 msgid "Thread(s) per Core"
 msgstr ""
 
-msgid ""
-"Repository will be removed permanently and can't be recovered. Do you want "
-"to continue?"
+msgid "Remove Repository"
 msgstr ""
-"リポジトリーは完全に削除され、リカバリーできなくなります。続行しますか?"
+
+msgid ""
+"Repository %1 will be removed permanently and can't be recovered. Do you "
+"want to continue?"
+msgstr ""
 
 msgid "Repositories"
 msgstr "リポジトリー"
@@ -483,6 +495,20 @@ msgstr "使用可能"
 msgid "Disable"
 msgstr "使用不可"
 
+msgid "Dist"
+msgstr ""
+
+msgid "Comp"
+msgstr ""
+
+msgid "Remove Repositories"
+msgstr ""
+
+msgid ""
+"Repositories will be removed permanently and can't be recovered. Do you want "
+"to continue?"
+msgstr ""
+
 msgid "Software Updates"
 msgstr "ソフトウェア更新"
 
@@ -511,13 +537,15 @@ msgid "Failed to update package(s)."
 msgstr "パッケージを更新できませんでした。"
 
 msgid ""
-"Debug report will be removed permanently and can't be recovered. Do you want "
-"to continue?"
+"Debug report %1 will be removed permanently and can't be recovered. Do you "
+"want to continue?"
 msgstr ""
-"デバッグ・レポートは完全に削除され、リカバリーできなくなります。続行しますか?"
 
 msgid "Debug Reports"
 msgstr "デバッグ・レポート"
+
+msgid "Debug Report name"
+msgstr ""
 
 msgid "Generated Time"
 msgstr "生成時刻"
@@ -543,6 +571,17 @@ msgid "Pending..."
 msgstr "ロードしています..."
 
 msgid "Report name is the same as the original one."
+msgstr ""
+
+msgid ""
+"This will remove all selected debug reports permanently and they can't be "
+"recovered. Do you want to continue?"
+msgstr ""
+
+msgid "Remove Debug Report"
+msgstr ""
+
+msgid "Remove Debug Reports"
 msgstr ""
 
 msgid ""
@@ -723,41 +762,53 @@ msgstr " はい"
 msgid "No"
 msgstr " いいえ"
 
-#~ msgid "Restart"
-#~ msgstr "再始動"
+msgid "Restart"
+msgstr "再始動"
 
-#~ msgid "Shut down"
-#~ msgstr "シャットダウン"
+msgid "Shut down"
+msgstr "シャットダウン"
 
-#~ msgid "Connect"
-#~ msgstr "接続"
+msgid "Connect"
+msgstr "接続"
 
-#~ msgid "CPU"
-#~ msgstr "CPU"
+msgid "CPU"
+msgstr "CPU"
 
-#~ msgid "Memory"
-#~ msgstr "メモリー"
+msgid "Memory"
+msgstr "メモリー"
 
-#~ msgid "Disk I/O"
-#~ msgstr "ディスク入出力"
+msgid "Disk I/O"
+msgstr "ディスク入出力"
 
-#~ msgid "Network I/O"
-#~ msgstr "ネットワーク入出力"
+msgid "Network I/O"
+msgstr "ネットワーク入出力"
 
-#~ msgid "Basic Information"
-#~ msgstr "基本情報"
+msgid "Basic Information"
+msgstr "基本情報"
 
-#~ msgid "OS Distro"
-#~ msgstr "OS ディストリビューション"
+msgid "OS Distro"
+msgstr "OS ディストリビューション"
 
-#~ msgid "OS Version"
-#~ msgstr "OS バージョン"
+msgid "OS Version"
+msgstr "OS バージョン"
 
-#~ msgid "OS Code Name"
-#~ msgstr "OS コード名"
+msgid "OS Code Name"
+msgstr "OS コード名"
 
-#~ msgid "Processor"
-#~ msgstr "プロセッサー"
+msgid "Processor"
+msgstr "プロセッサー"
 
-#~ msgid "Update Progress"
-#~ msgstr "更新の進行状況"
+msgid "CPU(s)"
+msgstr ""
+
+msgid "Core(s)"
+msgstr ""
+
+msgid "LPAR Details"
+msgstr ""
+
+msgid "Hypervisor Details"
+msgstr ""
+
+msgid "Update Progress"
+msgstr "更新の進行状況"

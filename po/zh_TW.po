@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-21 17:28-0300\n"
+"POT-Creation-Date: 2016-05-11 03:50-0500\n"
 "PO-Revision-Date: 2013-07-11 17:32-0400\n"
 "Last-Translator: Crístian Viana <vianac@linux.vnet.ibm.com>\n"
 "Language-Team: English\n"
@@ -123,6 +123,10 @@ msgid "There is no compatible package manager for this system."
 msgstr "沒有此系統的相容套件管理程式。"
 
 msgid "There is a package manager instance running in the system."
+msgstr ""
+
+#, python-format
+msgid "Error while getting package information. Details: %(err)s"
 msgstr ""
 
 msgid "YUM Repository ID must be one word only string."
@@ -298,6 +302,12 @@ msgstr "儲存體"
 msgid "Network"
 msgstr "網路"
 
+msgid "Dashboard"
+msgstr ""
+
+msgid "Updates"
+msgstr ""
+
 msgid "Failed to get application configuration"
 msgstr "無法取得應用程式配置"
 
@@ -418,10 +428,13 @@ msgstr ""
 msgid "Thread(s) per Core"
 msgstr ""
 
+msgid "Remove Repository"
+msgstr ""
+
 msgid ""
-"Repository will be removed permanently and can't be recovered. Do you want "
-"to continue?"
-msgstr "將會永久地移除儲存庫並且無法回復。要繼續嗎？"
+"Repository %1 will be removed permanently and can't be recovered. Do you "
+"want to continue?"
+msgstr ""
 
 msgid "Repositories"
 msgstr "儲存庫"
@@ -465,6 +478,20 @@ msgstr "啟用"
 msgid "Disable"
 msgstr "停用"
 
+msgid "Dist"
+msgstr ""
+
+msgid "Comp"
+msgstr ""
+
+msgid "Remove Repositories"
+msgstr ""
+
+msgid ""
+"Repositories will be removed permanently and can't be recovered. Do you want "
+"to continue?"
+msgstr ""
+
 msgid "Software Updates"
 msgstr "軟體更新"
 
@@ -493,12 +520,15 @@ msgid "Failed to update package(s)."
 msgstr "無法更新套件。"
 
 msgid ""
-"Debug report will be removed permanently and can't be recovered. Do you want "
-"to continue?"
-msgstr "將會永久地移除除錯報告並且無法回復。要繼續嗎？"
+"Debug report %1 will be removed permanently and can't be recovered. Do you "
+"want to continue?"
+msgstr ""
 
 msgid "Debug Reports"
 msgstr "除錯報告"
+
+msgid "Debug Report name"
+msgstr ""
 
 msgid "Generated Time"
 msgstr "產生時間"
@@ -524,6 +554,17 @@ msgid "Pending..."
 msgstr "正在載入..."
 
 msgid "Report name is the same as the original one."
+msgstr ""
+
+msgid ""
+"This will remove all selected debug reports permanently and they can't be "
+"recovered. Do you want to continue?"
+msgstr ""
+
+msgid "Remove Debug Report"
+msgstr ""
+
+msgid "Remove Debug Reports"
 msgstr ""
 
 msgid ""
@@ -700,41 +741,53 @@ msgstr "是"
 msgid "No"
 msgstr "否"
 
-#~ msgid "Restart"
-#~ msgstr "重新啟動"
+msgid "Restart"
+msgstr "重新啟動"
 
-#~ msgid "Shut down"
-#~ msgstr "關閉"
+msgid "Shut down"
+msgstr "關閉"
 
-#~ msgid "Connect"
-#~ msgstr "連接"
+msgid "Connect"
+msgstr "連接"
 
-#~ msgid "CPU"
-#~ msgstr "CPU"
+msgid "CPU"
+msgstr "CPU"
 
-#~ msgid "Memory"
-#~ msgstr "記憶體"
+msgid "Memory"
+msgstr "記憶體"
 
-#~ msgid "Disk I/O"
-#~ msgstr "磁碟 I/O"
+msgid "Disk I/O"
+msgstr "磁碟 I/O"
 
-#~ msgid "Network I/O"
-#~ msgstr "網路 I/O"
+msgid "Network I/O"
+msgstr "網路 I/O"
 
-#~ msgid "Basic Information"
-#~ msgstr "基本資訊"
+msgid "Basic Information"
+msgstr "基本資訊"
 
-#~ msgid "OS Distro"
-#~ msgstr "OS Distro"
+msgid "OS Distro"
+msgstr "OS Distro"
 
-#~ msgid "OS Version"
-#~ msgstr "OS 版本"
+msgid "OS Version"
+msgstr "OS 版本"
 
-#~ msgid "OS Code Name"
-#~ msgstr "OS 程式碼名稱"
+msgid "OS Code Name"
+msgstr "OS 程式碼名稱"
 
-#~ msgid "Processor"
-#~ msgstr "處理器"
+msgid "Processor"
+msgstr "處理器"
 
-#~ msgid "Update Progress"
-#~ msgstr "更新進度"
+msgid "CPU(s)"
+msgstr ""
+
+msgid "Core(s)"
+msgstr ""
+
+msgid "LPAR Details"
+msgstr ""
+
+msgid "Hypervisor Details"
+msgstr ""
+
+msgid "Update Progress"
+msgstr "更新進度"

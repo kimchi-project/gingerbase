@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-21 17:28-0300\n"
+"POT-Creation-Date: 2016-05-11 03:50-0500\n"
 "PO-Revision-Date: 2013-07-11 17:32-0400\n"
 "Last-Translator: Crístian Viana <vianac@linux.vnet.ibm.com>\n"
 "Language-Team: English\n"
@@ -127,6 +127,10 @@ msgid "There is no compatible package manager for this system."
 msgstr "이 시스템에 대해 호환 가능한 패키지 관리자가 없습니다."
 
 msgid "There is a package manager instance running in the system."
+msgstr ""
+
+#, python-format
+msgid "Error while getting package information. Details: %(err)s"
 msgstr ""
 
 msgid "YUM Repository ID must be one word only string."
@@ -303,6 +307,12 @@ msgstr "스토리지"
 msgid "Network"
 msgstr "네트워크"
 
+msgid "Dashboard"
+msgstr ""
+
+msgid "Updates"
+msgstr ""
+
 msgid "Failed to get application configuration"
 msgstr "애플리케이션 구성을 가져오지 못했습니다."
 
@@ -425,10 +435,13 @@ msgstr ""
 msgid "Thread(s) per Core"
 msgstr ""
 
+msgid "Remove Repository"
+msgstr ""
+
 msgid ""
-"Repository will be removed permanently and can't be recovered. Do you want "
-"to continue?"
-msgstr "저장소가 영구적으로 제거되어 복구할 수 없습니다. 계속하시겠습니까?"
+"Repository %1 will be removed permanently and can't be recovered. Do you "
+"want to continue?"
+msgstr ""
 
 msgid "Repositories"
 msgstr "저장소"
@@ -472,6 +485,20 @@ msgstr "사용"
 msgid "Disable"
 msgstr "사용 안함"
 
+msgid "Dist"
+msgstr ""
+
+msgid "Comp"
+msgstr ""
+
+msgid "Remove Repositories"
+msgstr ""
+
+msgid ""
+"Repositories will be removed permanently and can't be recovered. Do you want "
+"to continue?"
+msgstr ""
+
 msgid "Software Updates"
 msgstr "소프트웨어 업데이트"
 
@@ -500,13 +527,15 @@ msgid "Failed to update package(s)."
 msgstr "패키지를 업데이트하지 못했습니다."
 
 msgid ""
-"Debug report will be removed permanently and can't be recovered. Do you want "
-"to continue?"
+"Debug report %1 will be removed permanently and can't be recovered. Do you "
+"want to continue?"
 msgstr ""
-"디버그 보고서가 영구적으로 제거되어 복구할 수 없습니다. 계속하시겠습니까?"
 
 msgid "Debug Reports"
 msgstr "디버그 보고서"
+
+msgid "Debug Report name"
+msgstr ""
 
 msgid "Generated Time"
 msgstr "생성 시간"
@@ -532,6 +561,17 @@ msgid "Pending..."
 msgstr "로드 중..."
 
 msgid "Report name is the same as the original one."
+msgstr ""
+
+msgid ""
+"This will remove all selected debug reports permanently and they can't be "
+"recovered. Do you want to continue?"
+msgstr ""
+
+msgid "Remove Debug Report"
+msgstr ""
+
+msgid "Remove Debug Reports"
 msgstr ""
 
 msgid ""
@@ -711,41 +751,53 @@ msgstr "예"
 msgid "No"
 msgstr "아니오"
 
-#~ msgid "Restart"
-#~ msgstr "다시 시작"
+msgid "Restart"
+msgstr "다시 시작"
 
-#~ msgid "Shut down"
-#~ msgstr "시스템 종료"
+msgid "Shut down"
+msgstr "시스템 종료"
 
-#~ msgid "Connect"
-#~ msgstr "연결"
+msgid "Connect"
+msgstr "연결"
 
-#~ msgid "CPU"
-#~ msgstr "CPU"
+msgid "CPU"
+msgstr "CPU"
 
-#~ msgid "Memory"
-#~ msgstr "메모리"
+msgid "Memory"
+msgstr "메모리"
 
-#~ msgid "Disk I/O"
-#~ msgstr "디스크 I/O"
+msgid "Disk I/O"
+msgstr "디스크 I/O"
 
-#~ msgid "Network I/O"
-#~ msgstr "네트워크 I/O"
+msgid "Network I/O"
+msgstr "네트워크 I/O"
 
-#~ msgid "Basic Information"
-#~ msgstr "기본 정보"
+msgid "Basic Information"
+msgstr "기본 정보"
 
-#~ msgid "OS Distro"
-#~ msgstr "OS Distro"
+msgid "OS Distro"
+msgstr "OS Distro"
 
-#~ msgid "OS Version"
-#~ msgstr "OS 버전"
+msgid "OS Version"
+msgstr "OS 버전"
 
-#~ msgid "OS Code Name"
-#~ msgstr "OS 코드 이름"
+msgid "OS Code Name"
+msgstr "OS 코드 이름"
 
-#~ msgid "Processor"
-#~ msgstr "프로세서"
+msgid "Processor"
+msgstr "프로세서"
 
-#~ msgid "Update Progress"
-#~ msgstr "진행상태 업데이트"
+msgid "CPU(s)"
+msgstr ""
+
+msgid "Core(s)"
+msgstr ""
+
+msgid "LPAR Details"
+msgstr ""
+
+msgid "Hypervisor Details"
+msgstr ""
+
+msgid "Update Progress"
+msgstr "진행상태 업데이트"

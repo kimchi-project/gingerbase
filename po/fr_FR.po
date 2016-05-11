@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-21 17:28-0300\n"
+"POT-Creation-Date: 2016-05-11 03:50-0500\n"
 "PO-Revision-Date: 2014-08-27 21:30+0000\n"
 "Last-Translator: BobSynfig\n"
 "Language-Team: French\n"
@@ -137,6 +137,10 @@ msgid "There is no compatible package manager for this system."
 msgstr "Il n'y a pas de gestionnaire de paquets compatible avec ce système."
 
 msgid "There is a package manager instance running in the system."
+msgstr ""
+
+#, python-format
+msgid "Error while getting package information. Details: %(err)s"
 msgstr ""
 
 msgid "YUM Repository ID must be one word only string."
@@ -321,6 +325,12 @@ msgstr "Stockage"
 msgid "Network"
 msgstr "Réseau"
 
+msgid "Dashboard"
+msgstr ""
+
+msgid "Updates"
+msgstr ""
+
 msgid "Failed to get application configuration"
 msgstr "Échec lors de l'obtention de la configuration de l'application"
 
@@ -446,12 +456,13 @@ msgstr ""
 msgid "Thread(s) per Core"
 msgstr ""
 
-msgid ""
-"Repository will be removed permanently and can't be recovered. Do you want "
-"to continue?"
+msgid "Remove Repository"
 msgstr ""
-"Le dépôt sera retiré de façon permanente et ne pourra être rétabli. Voulez-"
-"vous continuer ?"
+
+msgid ""
+"Repository %1 will be removed permanently and can't be recovered. Do you "
+"want to continue?"
+msgstr ""
 
 msgid "Repositories"
 msgstr "Dépôts"
@@ -495,6 +506,20 @@ msgstr "Activer"
 msgid "Disable"
 msgstr "Désactiver"
 
+msgid "Dist"
+msgstr ""
+
+msgid "Comp"
+msgstr ""
+
+msgid "Remove Repositories"
+msgstr ""
+
+msgid ""
+"Repositories will be removed permanently and can't be recovered. Do you want "
+"to continue?"
+msgstr ""
+
 msgid "Software Updates"
 msgstr "Mises à jour Logiciel"
 
@@ -523,14 +548,15 @@ msgid "Failed to update package(s)."
 msgstr "Échec durant la mise à jour du/des paquet(s)"
 
 msgid ""
-"Debug report will be removed permanently and can't be recovered. Do you want "
-"to continue?"
+"Debug report %1 will be removed permanently and can't be recovered. Do you "
+"want to continue?"
 msgstr ""
-"Le rapport de déboggage sera enlevé de façon permanente et ne pourra être "
-"rétabli. Voulez-vous continuer ?"
 
 msgid "Debug Reports"
 msgstr "Rapports de Déboggage"
+
+msgid "Debug Report name"
+msgstr ""
 
 msgid "Generated Time"
 msgstr "Horodatage de génération"
@@ -559,6 +585,17 @@ msgstr "En attente..."
 
 msgid "Report name is the same as the original one."
 msgstr "Le nom du rapport est le même que celui d'origine."
+
+msgid ""
+"This will remove all selected debug reports permanently and they can't be "
+"recovered. Do you want to continue?"
+msgstr ""
+
+msgid "Remove Debug Report"
+msgstr ""
+
+msgid "Remove Debug Reports"
+msgstr ""
 
 msgid ""
 "This will delete the virtual machine and its virtual disks. This operation "
@@ -747,41 +784,53 @@ msgstr "Oui"
 msgid "No"
 msgstr "Non"
 
-#~ msgid "Restart"
-#~ msgstr "Redémarrer"
+msgid "Restart"
+msgstr "Redémarrer"
 
-#~ msgid "Shut down"
-#~ msgstr "Éteindre"
+msgid "Shut down"
+msgstr "Éteindre"
 
-#~ msgid "Connect"
-#~ msgstr "Connecter"
+msgid "Connect"
+msgstr "Connecter"
 
-#~ msgid "CPU"
-#~ msgstr "CPU"
+msgid "CPU"
+msgstr "CPU"
 
-#~ msgid "Memory"
-#~ msgstr "Mémoire"
+msgid "Memory"
+msgstr "Mémoire"
 
-#~ msgid "Disk I/O"
-#~ msgstr "E/S Disque"
+msgid "Disk I/O"
+msgstr "E/S Disque"
 
-#~ msgid "Network I/O"
-#~ msgstr "E/S Réseau"
+msgid "Network I/O"
+msgstr "E/S Réseau"
 
-#~ msgid "Basic Information"
-#~ msgstr "Informations de Base"
+msgid "Basic Information"
+msgstr "Informations de Base"
 
-#~ msgid "OS Distro"
-#~ msgstr "Distro de l'OS"
+msgid "OS Distro"
+msgstr "Distro de l'OS"
 
-#~ msgid "OS Version"
-#~ msgstr "Version de l'OS"
+msgid "OS Version"
+msgstr "Version de l'OS"
 
-#~ msgid "OS Code Name"
-#~ msgstr "Nom de code de l'OS"
+msgid "OS Code Name"
+msgstr "Nom de code de l'OS"
 
-#~ msgid "Processor"
-#~ msgstr "Processeur"
+msgid "Processor"
+msgstr "Processeur"
 
-#~ msgid "Update Progress"
-#~ msgstr "Progrès de la Mise à Jour"
+msgid "CPU(s)"
+msgstr ""
+
+msgid "Core(s)"
+msgstr ""
+
+msgid "LPAR Details"
+msgstr ""
+
+msgid "Hypervisor Details"
+msgstr ""
+
+msgid "Update Progress"
+msgstr "Progrès de la Mise à Jour"
