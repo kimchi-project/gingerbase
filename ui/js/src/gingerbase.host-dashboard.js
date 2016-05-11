@@ -168,8 +168,10 @@ gingerbase.init_dashboard = function() {
                 name: 'time',
                 label: i18n['GGBDR6005M'],
                 cssClass: 'debug-report-time',
-                type: 'description'
+                type: 'description',
+                converter: 'datetime-locale-converter'
             }],
+            converters: wok.dateTimeLocaleConverters,
             data: reports
         });
     };
@@ -321,10 +323,10 @@ gingerbase.init_dashboard = function() {
         data['logo'] = data['logo'] || '';
         // fetch online and offline memory details
         data['memory']['online'] = wok.formatMeasurement(data['memory']['online'], {
-            fixed: 2
+            fixed: 2, locale: wok.lang.get_locale()
         });
         data['memory']['offline'] = wok.formatMeasurement(data['memory']['offline'], {
-            fixed: 2
+            fixed: 2, locale:wok.lang.get_locale()
         });
         memory =  i18n["GGBHOST6010M"] + ": " + data['memory']['online'] + ", " +
                   i18n["GGBHOST6011M"] + ": " + data['memory']['offline'];
@@ -366,6 +368,7 @@ gingerbase.init_dashboard = function() {
                 u: {
                     type: 'percent',
                     legend: i18n['GGBHOST6002M'],
+                    locale: wok.lang.get_locale(),
                     points: []
                 }
             },
@@ -374,6 +377,7 @@ gingerbase.init_dashboard = function() {
                     type: 'value',
                     base: 2,
                     fixed: 2,
+                    locale: wok.lang.get_locale(),
                     legend: i18n['GGBHOST6003M'],
                     points: []
                 }
@@ -383,6 +387,7 @@ gingerbase.init_dashboard = function() {
                     type: 'value',
                     base: 2,
                     fixed: 2,
+                    locale: wok.lang.get_locale(),
                     unit: 'B/s',
                     legend: i18n['GGBHOST6005M'],
                     'class': 'disk-write',
@@ -392,6 +397,7 @@ gingerbase.init_dashboard = function() {
                     type: 'value',
                     base: 2,
                     fixed: 2,
+                    locale: wok.lang.get_locale(),
                     unit: 'B/s',
                     legend: i18n['GGBHOST6004M'],
                     points: []
@@ -402,6 +408,7 @@ gingerbase.init_dashboard = function() {
                     type: 'value',
                     base: 2,
                     fixed: 2,
+                    locale: wok.lang.get_locale(),
                     unit: 'B/s',
                     legend: i18n['GGBHOST6007M'],
                     'class': 'network-sent',
@@ -411,12 +418,14 @@ gingerbase.init_dashboard = function() {
                     type: 'value',
                     base: 2,
                     fixed: 2,
+                    locale: wok.lang.get_locale(),
                     unit: 'B/s',
                     legend: i18n['GGBHOST6006M'],
                     points: []
                 }
             }
         };
+
         var SIZE = 20;
         var cursor = SIZE;
 
@@ -471,7 +480,8 @@ gingerbase.init_dashboard = function() {
                     base: obj['base'],
                     unit: obj['unit'],
                     fixed: obj['fixed'],
-                    legend: obj['legend']
+                    legend: obj['legend'],
+                    locale: obj['locale']
                 };
                 if (obj['max']) {
                     line['max'] = obj['max'];
@@ -541,6 +551,7 @@ gingerbase.init_dashboard = function() {
                     }
                 }
             };
+            result.cpu.u['v'] = result.cpu.u['v'].toLocaleString(wok.lang.get_locale())
             if (Array.isArray(stats['memory'])) {
                 result.memory.u['v'] = [];
                 result.memory.u['max'] = -Infinity;
