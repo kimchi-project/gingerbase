@@ -25,12 +25,12 @@ from wok.control.utils import UrlSubNode
 
 
 DEBUGREPORTS_ACTIVITY = {
-    'POST': {'default': "Create host debug report '%(name)s'"},
+    'POST': {'default': "GGBDR0001L"},
 }
 
 DEBUGREPORT_ACTIVITY = {
-    'PUT':  {'default': "Update host debug report '%(ident)s'"},
-    'DELETE':  {'default': "Remove host debug report '%(ident)s'"},
+    'PUT':  {'default': "GGBDR0002L"},
+    'DELETE':  {'default': "GGBDR0003L"},
 }
 
 

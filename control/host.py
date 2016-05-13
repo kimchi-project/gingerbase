@@ -29,22 +29,22 @@ from wok.plugins.gingerbase.control.packagesupdate import SwUpdateProgress
 
 HOST_ACTIVITY = {
     'POST': {
-        'reboot': "Host reboot",
-        'shutdown': "Host shutdown",
-        'swupdate': "Host software update",
+        'reboot': "GGBHOST0001L",
+        'shutdown': "GGBHOST0002L",
+        'swupdate': "GGBPKGUPD0001L",
     },
 }
 
 REPOSITORIES_ACTIVITY = {
-    'POST': {'default': "Add host software repository '%(repo_id)s'"},
+    'POST': {'default': "GGBREPOS0001L"},
 }
 
 REPOSITORY_ACTIVITY = {
-    'PUT': {'default': "Update host software repository '%(ident)s'"},
-    'DELETE': {'default': "Remove host software repository '%(ident)s'"},
+    'PUT': {'default': "GGBREPOS0002L"},
+    'DELETE': {'default': "GGBREPOS0003L"},
     'POST': {
-        'enable': "Enable host software repository '%(ident)s'",
-        'disable': "Disable host software repository '%(ident)s'",
+        'enable': "GGBREPOS0004L",
+        'disable': "GGBREPOS0005L",
     },
 }
 

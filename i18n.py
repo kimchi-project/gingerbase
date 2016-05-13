@@ -97,5 +97,18 @@ messages = {
 
     "GGBDISK00001E": _("Error while accessing dev mapper device, %(err)s"),
     "GGBDISK00002E": _("Block device not found."),
-    "GGBDISK00003E": _("Block device %(device)s not found.")
+    "GGBDISK00003E": _("Block device %(device)s not found."),
+
+    # These messages (ending with L) are for user log purposes
+    "GGBDR0001L": _("Create host debug report '%(name)s'"),
+    "GGBDR0002L": _("Update host debug report '%(ident)s'"),
+    "GGBDR0003L": _("Remove host debug report '%(ident)s'"),
+    "GGBHOST0001L": _("Host reboot"),
+    "GGBHOST0002L": _("Host shutdown"),
+    "GGBPKGUPD0001L": _("Host software update"),
+    "GGBREPOS0001L": _("Add host software repository '%(repo_id)s'"),
+    "GGBREPOS0002L": _("Update host software repository '%(ident)s'"),
+    "GGBREPOS0003L": _("Remove host software repository '%(ident)s'"),
+    "GGBREPOS0004L": _("Enable host software repository '%(ident)s'"),
+    "GGBREPOS0005L": _("Disable host software repository '%(ident)s'"),
 }
