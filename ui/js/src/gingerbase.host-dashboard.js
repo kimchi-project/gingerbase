@@ -171,7 +171,7 @@ gingerbase.init_dashboard = function() {
                 type: 'description',
                 converter: 'datetime-locale-converter'
             }],
-            converters: wok.dateTimeLocaleConverters,
+            converters: wok.localeConverters,
             data: reports
         });
     };
@@ -323,10 +323,10 @@ gingerbase.init_dashboard = function() {
         data['logo'] = data['logo'] || '';
         // fetch online and offline memory details
         data['memory']['online'] = wok.formatMeasurement(data['memory']['online'], {
-            fixed: 2, locale: wok.lang.get_locale()
+            fixed: 2, converter: wok.localeConverters["number-locale-converter"]
         });
         data['memory']['offline'] = wok.formatMeasurement(data['memory']['offline'], {
-            fixed: 2, locale:wok.lang.get_locale()
+            fixed: 2, converter: wok.localeConverters["number-locale-converter"]
         });
         memory =  i18n["GGBHOST6010M"] + ": " + data['memory']['online'] + ", " +
                   i18n["GGBHOST6011M"] + ": " + data['memory']['offline'];
@@ -368,8 +368,8 @@ gingerbase.init_dashboard = function() {
                 u: {
                     type: 'percent',
                     legend: i18n['GGBHOST6002M'],
-                    locale: wok.lang.get_locale(),
-                    points: []
+                    points: [],
+                    converter: 'number-locale-converter'
                 }
             },
             memory: {
@@ -379,7 +379,8 @@ gingerbase.init_dashboard = function() {
                     fixed: 2,
                     locale: wok.lang.get_locale(),
                     legend: i18n['GGBHOST6003M'],
-                    points: []
+                    points: [],
+                    converter: 'number-locale-converter'
                 }
             },
             diskIO: {
@@ -391,7 +392,8 @@ gingerbase.init_dashboard = function() {
                     unit: 'B/s',
                     legend: i18n['GGBHOST6005M'],
                     'class': 'disk-write',
-                    points: []
+                    points: [],
+                    converter: 'number-locale-converter'
                 },
                 r: {
                     type: 'value',
@@ -400,7 +402,8 @@ gingerbase.init_dashboard = function() {
                     locale: wok.lang.get_locale(),
                     unit: 'B/s',
                     legend: i18n['GGBHOST6004M'],
-                    points: []
+                    points: [],
+                    converter: 'number-locale-converter'
                 }
             },
             networkIO: {
@@ -412,7 +415,8 @@ gingerbase.init_dashboard = function() {
                     unit: 'B/s',
                     legend: i18n['GGBHOST6007M'],
                     'class': 'network-sent',
-                    points: []
+                    points: [],
+                    converter: 'number-locale-converter'
                 },
                 r: {
                     type: 'value',
@@ -421,7 +425,8 @@ gingerbase.init_dashboard = function() {
                     locale: wok.lang.get_locale(),
                     unit: 'B/s',
                     legend: i18n['GGBHOST6006M'],
-                    points: []
+                    points: [],
+                    converter: 'number-locale-converter'
                 }
             }
         };
@@ -480,14 +485,16 @@ gingerbase.init_dashboard = function() {
                     base: obj['base'],
                     unit: obj['unit'],
                     fixed: obj['fixed'],
-                    legend: obj['legend'],
-                    locale: obj['locale']
+                    legend: obj['legend']
                 };
                 if (obj['max']) {
                     line['max'] = obj['max'];
                 }
                 if (obj['class']) {
                     line['class'] = obj['class'];
+                }
+                if (obj['converter']) {
+                    line['converter'] = obj['converter'];
                 }
                 var ps = obj['points'];
                 var numStats = ps.length;
@@ -551,7 +558,7 @@ gingerbase.init_dashboard = function() {
                     }
                 }
             };
-            result.cpu.u['v'] = result.cpu.u['v'].toLocaleString(wok.lang.get_locale())
+
             if (Array.isArray(stats['memory'])) {
                 result.memory.u['v'] = [];
                 result.memory.u['max'] = -Infinity;
@@ -616,22 +623,26 @@ gingerbase.init_dashboard = function() {
             cpu: new wok.widget.LineChart({
                 id: 'chart-cpu',
                 node: 'container-chart-cpu',
-                type: 'percent'
+                type: 'percent',
+                converters: wok.localeConverters
             }),
             memory: new wok.widget.LineChart({
                 id: 'chart-memory',
                 node: 'container-chart-memory',
-                type: 'value'
+                type: 'value',
+                converters: wok.localeConverters
             }),
             diskIO: new wok.widget.LineChart({
                 id: 'chart-disk-io',
                 node: 'container-chart-disk-io',
-                type: 'value'
+                type: 'value',
+                converters: wok.localeConverters
             }),
             networkIO: new wok.widget.LineChart({
                 id: 'chart-network-io',
                 node: 'container-chart-network-io',
-                type: 'value'
+                type: 'value',
+                converters: wok.localeConverters
             })
         };
 
