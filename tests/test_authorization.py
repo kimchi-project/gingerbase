@@ -60,11 +60,11 @@ class AuthorizationTests(unittest.TestCase):
     def test_nonroot_access(self):
         # Non-root users can access static host information
         resp = self.request('/plugins/gingerbase/host', '{}', 'GET')
-        self.assertEquals(403, resp.status)
+        self.assertEquals(200, resp.status)
 
         # Non-root users can access host stats
         resp = self.request('/plugins/gingerbase/host/stats', '{}', 'GET')
-        self.assertEquals(403, resp.status)
+        self.assertEquals(200, resp.status)
 
         # Non-root users can not reboot/shutdown host system
         resp = self.request('/plugins/gingerbase/host/reboot', '{}', 'POST')

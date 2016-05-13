@@ -54,7 +54,7 @@ class Host(Resource):
     def __init__(self, model, id=None):
         super(Host, self).__init__(model, id)
         self.role_key = 'dashboard'
-        self.admin_methods = ['GET', 'POST']
+        self.admin_methods = ['POST']
         self.uri_fmt = '/host/%s'
         self.reboot = self.generate_action_handler('reboot')
         self.shutdown = self.generate_action_handler('shutdown')
@@ -76,7 +76,6 @@ class HostStats(Resource):
     def __init__(self, model, id=None):
         super(HostStats, self).__init__(model, id)
         self.role_key = 'dashboard'
-        self.admin_methods = ['GET']
         self.history = HostStatsHistory(self.model)
 
     @property
