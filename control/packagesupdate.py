@@ -22,6 +22,9 @@
 from wok.control.base import AsyncResource, Collection, Resource
 
 
+PACKAGEUPDATE_ACTIVITY = {'POST': {'upgrade': "GGBPKGUPD0002L"}}
+
+
 class PackagesUpdate(Collection):
     def __init__(self, model):
         super(PackagesUpdate, self).__init__(model)
@@ -36,6 +39,7 @@ class PackageUpdate(Resource):
         self.role_key = 'updates'
         self.admin_methods = ['GET', 'POST']
         self.upgrade = self.generate_action_handler_task('upgrade')
+        self.log_map = PACKAGEUPDATE_ACTIVITY
 
     @property
     def data(self):

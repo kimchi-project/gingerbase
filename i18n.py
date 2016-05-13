@@ -106,6 +106,7 @@ messages = {
     "GGBHOST0001L": _("Host rebooted"),
     "GGBHOST0002L": _("Host shutdown"),
     "GGBPKGUPD0001L": _("Host software updated"),
+    "GGBPKGUPD0002L": _("Updated package '%(ident)s'"),
     "GGBREPOS0001L": _("Added host software repository '%(repo_id)s'"),
     "GGBREPOS0002L": _("Updated host software repository '%(ident)s'"),
     "GGBREPOS0003L": _("Removed host software repository '%(ident)s'"),
