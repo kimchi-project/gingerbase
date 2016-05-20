@@ -44,7 +44,7 @@
 #container-chart-cpu{
 
     .line-chart polyline {
-        stroke: map-get($colors, administration);
+        stroke: $administration-color;
     }
 
     .line-chart path {

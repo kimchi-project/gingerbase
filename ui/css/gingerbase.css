@@ -1065,6 +1065,10 @@
   stroke-linejoin: round;
 }
 
+#container-chart-cpu .line-chart polyline {
+  stroke: #d9182d;
+}
+
 #container-chart-cpu .line-chart path {
   fill: url(#patternbg);
 }
