@@ -25,7 +25,7 @@ import glob
 import os
 
 from distutils.spawn import find_executable
-from wok.utils import encode_value, run_command, wok_log
+from wok.utils import encode_value, run_command
 
 NET_PATH = '/sys/class/net'
 NIC_PATH = '/sys/class/net/*/device'
@@ -99,9 +99,8 @@ def ovs_bridges():
     if ovs_cmd is None:
         return []
 
-    out, error, rc = run_command([ovs_cmd, 'list-br'])
+    out, error, rc = run_command([ovs_cmd, 'list-br'], silent=True)
     if rc != 0:
-        wok_log.info("Error listing OVS bridges")
         return []
 
     return [x.strip() for x in out.rstrip('\n').split('\n') if x.strip()]
@@ -118,9 +117,8 @@ def ovs_bridge_ports(ovsbr):
     if ovs_cmd is None:
         return []
 
-    out, error, rc = run_command([ovs_cmd, 'list-ports', ovsbr])
+    out, error, rc = run_command([ovs_cmd, 'list-ports', ovsbr], silent=True)
     if rc != 0:
-        wok_log.info("Error listing OVS bridge ports for %s" % str(ovsbr))
         return []
 
     return [x.strip() for x in out.rstrip('\n').split('\n') if x.strip()]
