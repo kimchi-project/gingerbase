@@ -523,27 +523,35 @@ class CapabilitiesModel(object):
     __metaclass__ = Singleton
 
     def __init__(self, **kargs):
-        pass
+        wok_log.info("*** Ginger Base: Running capabilities tests ***")
+        self.report_tool = self.has_report_tool()
+        wok_log.info("System Report Tool ...: %s" % str(self.report_tool))
 
-    def lookup(self, *ident):
-        report_tool = DebugReportsModel.get_system_report_tool()
         try:
             SoftwareUpdate()
         except Exception:
-            update_tool = False
+            self.update_tool = False
         else:
-            update_tool = True
+            self.update_tool = True
+        wok_log.info("System Update Tool ...: %s" % str(self.update_tool))
 
         try:
             repo = Repositories()
         except Exception:
-            repo_mngt_tool = None
+            self.repo_mngt_tool = None
         else:
-            repo_mngt_tool = repo._pkg_mnger.TYPE
+            self.repo_mngt_tool = repo._pkg_mnger.TYPE
+        wok_log.info("Repo Management Tool .: %s" % str(self.repo_mngt_tool))
+        wok_log.info("*** Ginger Base: Capabilities tests completed ***")
 
-        return {'system_report_tool': bool(report_tool),
-                'update_tool': update_tool,
-                'repo_mngt_tool': repo_mngt_tool}
+    def has_report_tool(self):
+        return bool(DebugReportsModel.get_system_report_tool())
+
+    def lookup(self, *ident):
+        self.report_tool = self.has_report_tool()
+        return {'system_report_tool': self.report_tool,
+                'update_tool': self.update_tool,
+                'repo_mngt_tool': self.repo_mngt_tool}
 
 
 class RepositoriesModel(object):
