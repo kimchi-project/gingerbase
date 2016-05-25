@@ -108,7 +108,7 @@ class NetinfoTests(unittest.TestCase):
         mock_run_cmd.return_value = ['', '', 0]
         self.assertTrue(netinfo.is_rdma_service_enabled())
         mock_run_cmd.assert_called_once_with(
-            ['systemctl', 'is-active', 'rdma', '--quiet']
+            ['systemctl', 'is-active', 'rdma', '--quiet'], silent=True
         )
 
     @mock.patch('wok.plugins.gingerbase.netinfo.run_command')
@@ -117,8 +117,10 @@ class NetinfoTests(unittest.TestCase):
         self.assertTrue(netinfo.is_rdma_service_enabled())
         mock_run_cmd.assert_has_calls(
             [
-               call(['systemctl', 'is-active', 'rdma', '--quiet']),
-               call(['systemctl', 'is-active', 'openibd', '--quiet'])
+               call(['systemctl', 'is-active', 'rdma', '--quiet'],
+                    silent=True),
+               call(['systemctl', 'is-active', 'openibd', '--quiet'],
+                    silent=True)
             ]
         )
 
@@ -128,8 +130,10 @@ class NetinfoTests(unittest.TestCase):
         self.assertFalse(netinfo.is_rdma_service_enabled())
         mock_run_cmd.assert_has_calls(
             [
-               call(['systemctl', 'is-active', 'rdma', '--quiet']),
-               call(['systemctl', 'is-active', 'openibd', '--quiet'])
+               call(['systemctl', 'is-active', 'rdma', '--quiet'],
+                    silent=True),
+               call(['systemctl', 'is-active', 'openibd', '--quiet'],
+                    silent=True)
             ]
         )
 

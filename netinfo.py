@@ -312,7 +312,7 @@ def is_interface_rdma_capable(interface):
 def is_rdma_service_enabled():
     for rdma_service in ['rdma', 'openibd']:
         cmd = ['systemctl', 'is-active', rdma_service, '--quiet']
-        _, _, rc = run_command(cmd)
+        _, _, rc = run_command(cmd, silent=True)
         if rc == 0:
             return True
     return False
