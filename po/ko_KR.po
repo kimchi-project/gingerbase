@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-11 03:50-0500\n"
+"POT-Creation-Date: 2016-05-25 15:36+0530\n"
 "PO-Revision-Date: 2013-07-11 17:32-0400\n"
 "Last-Translator: Crístian Viana <vianac@linux.vnet.ibm.com>\n"
 "Language-Team: English\n"
@@ -279,6 +279,51 @@ msgstr ""
 msgid "Block device %(device)s not found."
 msgstr ""
 
+#, python-format
+msgid "Created host debug report '%(name)s'"
+msgstr ""
+
+#, python-format
+msgid "Updated host debug report '%(ident)s'"
+msgstr ""
+
+#, python-format
+msgid "Removed host debug report '%(ident)s'"
+msgstr ""
+
+msgid "Host rebooted"
+msgstr ""
+
+msgid "Host shutdown"
+msgstr ""
+
+msgid "Host software updated"
+msgstr ""
+
+#, python-format
+msgid "Updated package '%(ident)s'"
+msgstr ""
+
+#, python-format
+msgid "Added host software repository '%(repo_id)s'"
+msgstr ""
+
+#, python-format
+msgid "Updated host software repository '%(ident)s'"
+msgstr ""
+
+#, python-format
+msgid "Removed host software repository '%(ident)s'"
+msgstr ""
+
+#, python-format
+msgid "Enabled host software repository '%(ident)s'"
+msgstr ""
+
+#, python-format
+msgid "Disabled host software repository '%(ident)s'"
+msgstr ""
+
 msgid "The username or password you entered is incorrect. Please try again."
 msgstr ""
 "입력한 사용자 이름 또는 비밀번호가 올바르지 않습니다. 다시 시도하십시오."
@@ -433,6 +478,9 @@ msgid "Core(s) per Socket"
 msgstr ""
 
 msgid "Thread(s) per Core"
+msgstr ""
+
+msgid "B/s"
 msgstr ""
 
 msgid "Remove Repository"

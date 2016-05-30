@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-11 10:06+0200\n"
+"POT-Creation-Date: 2016-05-25 15:36+0530\n"
 "PO-Revision-Date: 2014-08-28 17:32+0000\n"
 "Last-Translator: Aline Manera <aline.manera@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -283,6 +283,51 @@ msgstr ""
 msgid "Block device %(device)s not found."
 msgstr ""
 
+#, python-format
+msgid "Created host debug report '%(name)s'"
+msgstr ""
+
+#, python-format
+msgid "Updated host debug report '%(ident)s'"
+msgstr ""
+
+#, python-format
+msgid "Removed host debug report '%(ident)s'"
+msgstr ""
+
+msgid "Host rebooted"
+msgstr ""
+
+msgid "Host shutdown"
+msgstr ""
+
+msgid "Host software updated"
+msgstr ""
+
+#, python-format
+msgid "Updated package '%(ident)s'"
+msgstr ""
+
+#, python-format
+msgid "Added host software repository '%(repo_id)s'"
+msgstr ""
+
+#, python-format
+msgid "Updated host software repository '%(ident)s'"
+msgstr ""
+
+#, python-format
+msgid "Removed host software repository '%(ident)s'"
+msgstr ""
+
+#, python-format
+msgid "Enabled host software repository '%(ident)s'"
+msgstr ""
+
+#, python-format
+msgid "Disabled host software repository '%(ident)s'"
+msgstr ""
+
 msgid "The username or password you entered is incorrect. Please try again."
 msgstr "Указано неверное имя пользователя или пароль. Введите еще раз."
 
@@ -311,6 +356,9 @@ msgid "Network"
 msgstr "Сеть"
 
 msgid "Dashboard"
+msgstr ""
+
+msgid "Updates"
 msgstr ""
 
 msgid "Failed to get application configuration"
@@ -435,6 +483,9 @@ msgid "Core(s) per Socket"
 msgstr ""
 
 msgid "Thread(s) per Core"
+msgstr ""
+
+msgid "B/s"
 msgstr ""
 
 msgid "Remove Repository"
