@@ -113,7 +113,7 @@
                 }
             },
             "additionalProperties": false,
-            "error": "KCHAPI0001E"
+            "error": "GGBAPI0001E"
         },
         "repository_update": {
             "type": "object",

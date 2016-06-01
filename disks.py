@@ -237,7 +237,7 @@ def vgs():
 
     out, err, rc = run_command(cmd)
     if rc != 0:
-        raise OperationFailed("KCHLVM0001E", {'err': err})
+        raise OperationFailed("GGBDISK00004E", {'err': err})
 
     if not out:
         return []
@@ -271,7 +271,7 @@ def lvs(vgname=None):
 
     out, err, rc = run_command(cmd)
     if rc != 0:
-        raise OperationFailed("KCHLVM0001E", {'err': err})
+        raise OperationFailed("GGBDISK00004E", {'err': err})
 
     if not out:
         return []
@@ -311,7 +311,7 @@ def pvs(vgname=None):
 
     out, err, rc = run_command(cmd)
     if rc != 0:
-        raise OperationFailed("KCHLVM0001E", {'err': err})
+        raise OperationFailed("GGBDISK00004E", {'err': err})
 
     if not out:
         return []

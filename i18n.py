@@ -98,6 +98,7 @@ messages = {
     "GGBDISK00001E": _("Error while accessing dev mapper device, %(err)s"),
     "GGBDISK00002E": _("Block device not found."),
     "GGBDISK00003E": _("Block device %(device)s not found."),
+    "GGBDISK00004E": _("Unable to retrieve LVM information. Details: %(err)s"),
 
     # These messages (ending with L) are for user log purposes
     "GGBDR0001L": _("Created host debug report '%(name)s'"),
