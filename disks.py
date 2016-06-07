@@ -47,7 +47,9 @@ def _get_dev_node_path(maj_min):
     return "/dev/%s" % data["DEVNAME"]
 
 
-def _get_lsblk_devs(keys, devs=[]):
+def _get_lsblk_devs(keys, devs=None):
+    if devs is None:
+        devs = []
     out, err, returncode = run_command(
         ["lsblk", "-Pbo"] + [','.join(keys)] + devs
     )

@@ -56,11 +56,13 @@ class PackageUpdateModel(object):
 
         return self.host_swupdate.getUpdate(name)
 
-    def _resolve_dependencies(self, package=None, dep_list=[]):
+    def _resolve_dependencies(self, package=None, dep_list=None):
         """
         Resolve the dependencies for a given package from the dictionary of
         eligible packages to be upgraded.
         """
+        if dep_list is None:
+            dep_list = []
         if package is None:
             return []
         dep_list.append(package)
