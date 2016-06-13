@@ -89,10 +89,19 @@ def is_bridge(iface):
     return encode_value(iface) in map(encode_value, bridges())
 
 
+def is_openvswitch_running():
+    cmd = ['systemctl', 'is-active', 'openvswitch', '--quiet']
+    _, _, rc = run_command(cmd, silent=True)
+    return rc == 0
+
+
 # In some distributions, like Fedora, the files bridge and brif are not created
 # under /sys/class/net/<ovsbridge> for OVS bridges. These specific functions
 # allows one to differentiate OVS bridges from other types of bridges.
 def ovs_bridges():
+    if not is_openvswitch_running():
+        return []
+
     ovs_cmd = find_executable("ovs-vsctl")
 
     # openvswitch not installed: there is no OVS bridge configured
@@ -111,6 +120,9 @@ def is_ovs_bridge(iface):
 
 
 def ovs_bridge_ports(ovsbr):
+    if not is_openvswitch_running():
+        return []
+
     ovs_cmd = find_executable("ovs-vsctl")
 
     # openvswitch not installed: there is no OVS bridge configured
