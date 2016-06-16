@@ -19,6 +19,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
+"""Network utilities module."""
 
 import ethtool
 import glob
@@ -44,32 +45,85 @@ KERNEL_MODULE_LINK = '/sys/class/net/%s/device/driver/module'
 
 
 def wlans():
+    """Get all wlans declared in /sys/class/net/*/wireless.
+
+    Returns:
+        List[str]: a list with the wlans found.
+
+    """
     return [b.split('/')[-2] for b in glob.glob(WLAN_PATH)]
 
 
 def is_wlan(iface):
+    """Checks if iface is a wlan.
+
+    Args:
+        iface (str): interface to be checked.
+
+    Returns:
+        bool: True if iface is a wlan, False otherwise.
+
+    """
     return encode_value(iface) in map(encode_value, wlans())
 
 
-# FIXME if we do not want to list usb nic
 def nics():
+    """Get all nics of the host.
+
+    This function returns every nic, including those
+    that might be loaded from an usb port.
+
+    Returns:
+        List[str]: a list with the nics found.
+
+    """
     return list(set([b.split('/')[-2] for b in glob.glob(NIC_PATH)]) -
                 set(wlans()))
 
 
 def is_nic(iface):
+    """Checks if iface is a nic.
+
+    Args:
+        iface (str): name of the interface.
+
+    Returns:
+        bool: True if iface is a nic, False otherwise.
+
+    """
     return encode_value(iface) in map(encode_value, nics())
 
 
 def bondings():
+    """Get all bondings of the host.
+
+    Returns:
+        List[str]: a list with the bonds found.
+
+    """
     return [b.split('/')[-2] for b in glob.glob(BONDING_PATH)]
 
 
 def is_bonding(iface):
+    """Checks if iface is a bond.
+
+    Args:
+        iface (str): name of the interface.
+
+    Returns:
+        bool: True if iface is a bond, False otherwise.
+
+    """
     return encode_value(iface) in map(encode_value, bondings())
 
 
 def vlans():
+    """Get all vlans of the host.
+
+    Returns:
+        List[str]: a list with the vlans found.
+
+    """
     return list(set([b.split('/')[-1]
                      for b in glob.glob(NET_PATH + '/*')]) &
                 set([b.split('/')[-1]
@@ -77,28 +131,66 @@ def vlans():
 
 
 def is_vlan(iface):
+    """Checks if iface is a vlan.
+
+    Args:
+        iface (str): name of the interface.
+
+    Returns:
+        bool: True if iface is a vlan, False otherwise.
+
+    """
     return encode_value(iface) in map(encode_value, vlans())
 
 
 def bridges():
+    """Get all bridges of the host.
+
+    Returns:
+        List[str]: a list with the bridges found.
+
+    """
     return list(set([b.split('/')[-2] for b in glob.glob(BRIDGE_PATH)] +
                     ovs_bridges()))
 
 
 def is_bridge(iface):
+    """Checks if iface is a bridge.
+
+    Args:
+        iface (str): name of the interface.
+
+    Returns:
+        bool: True if iface is a bridge, False otherwise.
+
+    """
     return encode_value(iface) in map(encode_value, bridges())
 
 
 def is_openvswitch_running():
+    """Checks if the openvswitch service is running in the host.
+
+    Returns:
+        bool: True if openvswitch service is running, False otherwise.
+
+    """
     cmd = ['systemctl', 'is-active', 'openvswitch', '--quiet']
-    _, _, rc = run_command(cmd, silent=True)
-    return rc == 0
+    _, _, r_code = run_command(cmd, silent=True)
+    return r_code == 0
 
 
-# In some distributions, like Fedora, the files bridge and brif are not created
-# under /sys/class/net/<ovsbridge> for OVS bridges. These specific functions
-# allows one to differentiate OVS bridges from other types of bridges.
 def ovs_bridges():
+    """Get the OVS Bridges of the host.
+
+    In some distributions, like Fedora, the files bridge and brif are
+    not created under /sys/class/net/<ovsbridge> for OVS bridges.
+    These specific functions allows one to differentiate OVS bridges
+    from other types of bridges.
+
+    Returns:
+        List[str]: a list with the OVS bridges found.
+
+    """
     if not is_openvswitch_running():
         return []
 
@@ -108,18 +200,46 @@ def ovs_bridges():
     if ovs_cmd is None:
         return []
 
-    out, error, rc = run_command([ovs_cmd, 'list-br'], silent=True)
-    if rc != 0:
+    out, _, r_code = run_command([ovs_cmd, 'list-br'], silent=True)
+    if r_code != 0:
         return []
 
     return [x.strip() for x in out.rstrip('\n').split('\n') if x.strip()]
 
 
 def is_ovs_bridge(iface):
+    """Checks if iface is an OVS bridge.
+
+    In some distributions, like Fedora, the files bridge and brif are
+    not created under /sys/class/net/<ovsbridge> for OVS bridges.
+    These specific functions allows one to differentiate OVS bridges
+    from other types of bridges.
+
+    Args:
+        iface (str): name of the interface.
+
+    Returns:
+        bool: True if iface is an OVS bridge, False otherwise.
+
+    """
     return iface in ovs_bridges()
 
 
 def ovs_bridge_ports(ovsbr):
+    """Get the ports of a OVS bridge.
+
+    In some distributions, like Fedora, the files bridge and brif are
+    not created under /sys/class/net/<ovsbridge> for OVS bridges.
+    These specific functions allows one to differentiate OVS bridges
+    from other types of bridges.
+
+    Args:
+        ovsbr (str): name of the OVS bridge
+
+    Returns:
+        List[str]: a list with the ports of this bridge.
+
+    """
     if not is_openvswitch_running():
         return []
 
@@ -129,24 +249,48 @@ def ovs_bridge_ports(ovsbr):
     if ovs_cmd is None:
         return []
 
-    out, error, rc = run_command([ovs_cmd, 'list-ports', ovsbr], silent=True)
-    if rc != 0:
+    out, _, r_code = run_command([ovs_cmd, 'list-ports', ovsbr], silent=True)
+    if r_code != 0:
         return []
 
     return [x.strip() for x in out.rstrip('\n').split('\n') if x.strip()]
 
 
 def all_interfaces():
+    """Returns all interfaces of the host.
+
+    Returns:
+        List[str]: a list with all interfaces of the host.
+
+    """
     return [d.rsplit("/", 1)[-1] for d in glob.glob(NET_PATH + '/*')]
 
 
 def slaves(bonding):
+    """Get all slaves from a bonding.
+
+    Args:
+        bonding (str): the name of the bond.
+
+    Returns:
+        List[str]: a list with all slaves.
+
+    """
     with open(BONDING_SLAVES % bonding) as bonding_file:
         res = bonding_file.readline().split()
     return res
 
 
 def ports(bridge):
+    """Get all ports from a bridge.
+
+    Args:
+        bridge (str): the name of the OVS bridge.
+
+    Returns:
+        List[str]: a list with all ports.
+
+    """
     if bridge in ovs_bridges():
         return ovs_bridge_ports(bridge)
 
@@ -154,6 +298,15 @@ def ports(bridge):
 
 
 def is_brport(nic):
+    """Checks if nic is a port of a bridge.
+
+    Args:
+        iface (str): name of the interface.
+
+    Returns:
+        bool: True if iface is a port of a bridge, False otherwise.
+
+    """
     ovs_brports = []
 
     for ovsbr in ovs_bridges():
@@ -163,12 +316,30 @@ def is_brport(nic):
 
 
 def is_bondlave(nic):
+    """Checks if nic is a bond slave.
+
+    Args:
+        iface (str): name of the interface.
+
+    Returns:
+        bool: True if iface is a bond slave, False otherwise.
+
+    """
     return os.path.exists(NET_MASTER % nic)
 
 
 def operstate(dev):
+    """Get the operstate status of a device.
 
+    Args:
+        dev (str): name of the device.
+
+    Returns:
+        str: "up" or "down"
+
+    """
     def operstate_status(dev):
+        """"Read operstate file in the filesystem."""
         # try to read interface operstate (link) status
         try:
             with open(NET_STATE % dev) as dev_file:
@@ -182,6 +353,15 @@ def operstate(dev):
 
 
 def link_detected(dev):
+    """Get the carrier status of a device.
+
+    Args:
+        dev (str): name of the device.
+
+    Returns:
+        str: "yes" or "no" or "n/a"
+
+    """
     # try to read interface carrier (link) status
     try:
         with open(NET_CARRIER_STATE % dev) as dev_file:
@@ -196,6 +376,16 @@ def link_detected(dev):
 
 
 def macaddr(dev):
+    """Get the mac address of a device.
+
+    Args:
+        dev (str): name of the device.
+
+    Returns:
+        str: the mac address of the device.
+
+    """
+
     try:
         with open(MAC_ADDRESS % dev) as dev_file:
             hwaddr = dev_file.readline().strip()
@@ -205,7 +395,15 @@ def macaddr(dev):
 
 
 def get_vlan_device(vlan):
-    """ Return the device of the given VLAN. """
+    """ Return the device of the given VLAN.
+
+    Args:
+        vlan (str): the vlan name.
+
+    Returns:
+        str: the device of the VLAN.
+
+    """
     dev = None
 
     if os.path.exists(PROC_NET_VLAN + vlan):
@@ -218,36 +416,67 @@ def get_vlan_device(vlan):
 
 
 def get_bridge_port_device(bridge):
-    """Return the nics list that belongs to bridge."""
+    """Return the nics list that belongs to a port of 'bridge'.
+
+    Args:
+        bridge (str): the bridge name.
+
+    Returns:
+        List[str]: the nic list.
+
+    """
     #   br  --- v  --- bond --- nic1
     if encode_value(bridge) not in map(encode_value, bridges()):
         raise ValueError('unknown bridge %s' % bridge)
-    nics = []
+    nics_list = []
     for port in ports(bridge):
         if encode_value(port) in map(encode_value, vlans()):
             device = get_vlan_device(port)
             if encode_value(device) in map(encode_value, bondings()):
-                nics.extend(slaves(device))
+                nics_list.extend(slaves(device))
             else:
-                nics.append(device)
+                nics_list.append(device)
         if encode_value(port) in map(encode_value, bondings()):
-            nics.extend(slaves(port))
+            nics_list.extend(slaves(port))
         else:
-            nics.append(port)
-    return nics
+            nics_list.append(port)
+    return nics_list
 
 
 def aggregated_bridges():
+    """Get the list of aggregated bridges of the host.
+
+    Returns:
+        List[str]: the aggregated bridges list.
+
+    """
     return [bridge for bridge in bridges() if
             (set(get_bridge_port_device(bridge)) & set(nics()))]
 
 
 def bare_nics():
-    "The nic is not a port of a bridge or a slave of bond."
+    """Get the list of bare nics of the host.
+
+    A nic is called bare when it is not a port of a bridge
+    or a slave of bond.
+
+    Returns:
+        List[str]: the list of bare nics of the host.
+
+    """
     return [nic for nic in nics() if not (is_brport(nic) or is_bondlave(nic))]
 
 
 def is_bare_nic(iface):
+    """Checks if iface is a bare nic.
+
+    Args:
+        iface (str): name of the interface.
+
+    Returns:
+        bool: True if iface is a bare nic, False otherwise.
+
+    """
     return encode_value(iface) in map(encode_value, bare_nics())
 
 
@@ -255,10 +484,29 @@ def is_bare_nic(iface):
 #  a slave of bond.
 #  The bridge will not be exposed when all it's port are tap.
 def all_favored_interfaces():
+    """Get the list of all favored interfaces of the host.
+
+    The nic will not be exposed when it is a port of a bridge or
+    a slave of bond. The bridge will not be exposed when all its
+    port are tap.
+
+    Returns:
+        List[str]: the list of favored interfaces.
+
+   """
     return aggregated_bridges() + bare_nics() + bondings()
 
 
 def get_interface_kernel_module(iface):
+    """Get the kernel module that loaded the interface.
+
+    Args:
+        iface (str): the interface name.
+
+    Returns:
+        str: the kernel module that loaded iface.
+
+    """
     link_path = KERNEL_MODULE_LINK % iface
     try:
         link_target = os.readlink(link_path)
@@ -314,12 +562,12 @@ def get_mlx5_nic_type(mlx5_iface):
     bus_id = get_mlx5_nic_bus_id(mlx5_iface)
 
     lspci_cmd = ['lspci', '-s', bus_id]
-    out, err, rc = run_command(lspci_cmd)
+    out, err, r_code = run_command(lspci_cmd)
 
-    if rc == 0 and 'Virtual Function' in out:
+    if r_code == 0 and 'Virtual Function' in out:
         return 'virtual'
 
-    if rc != 0:
+    if r_code != 0:
         wok_log.error('Error while getting nic type of '
                       'interface: %s' % err)
 
@@ -353,9 +601,18 @@ def get_nic_type(iface, iface_kernel_mod=None):
 
 
 def get_interface_type(iface):
-    # FIXME if we want to get more device type
-    # just support nic, bridge, bondings and vlan, for we just
-    # want to expose this 4 kinds of interface
+    """Get the interface type of iface.
+
+    Types supported: nic, bonding, bridge, vlan. If the type
+    can't be verified, 'unknown' is returned.
+
+    Args:
+        iface (str): the interface name.
+
+    Returns:
+        str: the interface type.
+
+    """
     try:
         if is_nic(iface):
             return "nic"
@@ -371,6 +628,27 @@ def get_interface_type(iface):
 
 
 def get_interface_info(iface):
+    """Returns information about the interface iface.
+
+    Args:
+        iface (str): the interface name.
+
+    Returns:
+        dict: a dict containing the interface info. Format:
+            {
+                'device': (str),
+                'name': (str),
+                'type': (str),
+                'status': (str),
+                'link_detected': (str),
+                'ipaddr': (str),
+                'netmask': (str),
+                'macaddr': (str),
+                'module': (str),
+                'nic_type': (str)
+            }
+
+    """
     if encode_value(iface) not in map(encode_value, ethtool.get_devices()):
         raise ValueError('unknown interface: %s' % iface)
 
@@ -399,12 +677,35 @@ def get_interface_info(iface):
             'nic_type': nic_type}
 
 
-def get_interfaces_loaded_with_modules(modules):
+def get_interfaces_with_modules(modules):
+    """Returns all interfaces loaded with the 'modules' list.
+
+    Args:
+        modules (List[str]): a list of modules.
+
+    Returns:
+        List[str]: a list with all interfaces loaded with the
+            modules contained in the 'modules' list.
+
+    """
     return [iface for iface in all_interfaces() if
             get_interface_kernel_module(iface) in modules]
 
 
 def is_interface_rdma_capable(interface):
+    """Checks if 'interface' is RDMA capable.
+
+    Current implementation only supports RDMA in ConnectX-4
+    cards.
+
+    Args:
+        interface (str): the name of the interface.
+
+
+    Returns:
+        bool: True if interface is RDMA capable. False otherwise.
+
+    """
     rdma_modules = ['mlx5_core', 'mlx5-core']
     if get_interface_kernel_module(interface) in rdma_modules:
         return True
@@ -412,19 +713,49 @@ def is_interface_rdma_capable(interface):
 
 
 def is_rdma_service_enabled():
+    """Checks if any RDMA service is enabled in the host.
+
+    The RDMA services considered in this function are 'rdma'
+    and 'openibd'.
+
+    Returns:
+        bool: True if any RDMA service is enabled. False otherwise.
+
+    """
     for rdma_service in ['rdma', 'openibd']:
         cmd = ['systemctl', 'is-active', rdma_service, '--quiet']
-        _, _, rc = run_command(cmd, silent=True)
-        if rc == 0:
+        _, _, r_code = run_command(cmd, silent=True)
+        if r_code == 0:
             return True
     return False
 
 
 def is_rdma_enabled(interface):
+    """Check if the interface has RDMA enabled at the moment.
+
+    Note that this depends on whether the interface has RDMA
+    support and if there is a RDMA service running in the host.
+
+    Args:
+        interface (str): the name of the interface.
+
+    Returns:
+        bool: True if RDMA is enabled in 'interface', False otherwise.
+
+    """
     return is_interface_rdma_capable(interface) and is_rdma_service_enabled()
 
 
 def get_rdma_enabled_interfaces():
+    """Get a list of all RDMA capable interfaces in the host.
+
+    Note that this depends on whether the interfaces have RDMA
+    support and if there is a RDMA service running in the host.
+
+    Returns:
+        List[str]: a list of all RDMA interfaces in the host.
+
+    """
     if not is_rdma_service_enabled():
         return []
 
