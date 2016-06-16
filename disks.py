@@ -26,7 +26,7 @@ from parted import Device as PDevice
 from parted import Disk as PDisk
 
 from wok.exception import NotFoundError, OperationFailed
-from wok.utils import run_command, wok_log
+from wok.utils import encode_value, run_command, wok_log
 
 
 def _get_dev_node_path(maj_min):
@@ -81,8 +81,13 @@ def _get_dev_major_min(name):
     return maj_min
 
 
-def _is_dev_leaf(devNodePath):
+def _is_dev_leaf(devNodePath, name=None, devs=None):
     try:
+        if devs:
+            for dev in devs:
+                if encode_value(name) == dev['pkname']:
+                    return True
+            return False
         # By default, lsblk prints a device information followed by children
         # device information
         childrenCount = len(
@@ -165,17 +170,21 @@ def _get_vgname(devNodePath):
     return re.findall(r"LVM2_VG_NAME='([^\']*)'", out)[0]
 
 
-def _is_available(name, devtype, fstype, mountpoint, majmin):
+def _is_available(name, devtype, fstype, mountpoint, majmin, devs=None):
     devNodePath = _get_dev_node_path(majmin)
     # Only list unmounted and unformated and leaf and (partition or disk)
     # leaf means a partition, a disk has no partition, or a disk not held
     # by any multipath device. Physical volume belongs to no volume group
     # is also listed. Extended partitions should not be listed.
+    if fstype == 'LVM2_member':
+        has_VG = True
+    else:
+        has_VG = False
     if (devtype in ['part', 'disk', 'mpath'] and
             fstype in ['', 'LVM2_member'] and
             mountpoint == "" and
-            _get_vgname(devNodePath) == "" and
-            _is_dev_leaf(devNodePath) and
+            not has_VG and
+            _is_dev_leaf(devNodePath, name, devs) and
             not _is_dev_extended_partition(devtype, devNodePath)):
         return True
     return False
@@ -252,6 +261,24 @@ def vgs():
                           'size': long(l[1]),
                           'free': long(l[2])},
                [fields.split() for fields in vgs])
+
+
+def fetch_disks_partitions():
+    dev_details = {}
+    keys = ["NAME", "TYPE", "FSTYPE", "SIZE",
+            "MOUNTPOINT", "MAJ:MIN", "PKNAME"]
+    devs = _get_lsblk_devs(keys)
+    part_list = []
+    for dev in devs:
+        dev_details = dev
+        majmin = dev['maj:min']
+        dev_details['path'] = _get_dev_node_path(majmin)
+        dev_details['available'] = _is_available(dev['name'], dev['type'],
+                                                 dev['fstype'],
+                                                 dev['mountpoint'], majmin,
+                                                 devs)
+        part_list.append(dev_details)
+    return part_list
 
 
 def lvs(vgname=None):
