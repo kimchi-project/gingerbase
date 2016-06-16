@@ -25,7 +25,7 @@ import glob
 import os
 
 from distutils.spawn import find_executable
-from wok.utils import encode_value, run_command
+from wok.utils import encode_value, run_command, wok_log
 
 NET_PATH = '/sys/class/net'
 NIC_PATH = '/sys/class/net/*/device'
@@ -268,6 +268,90 @@ def get_interface_kernel_module(iface):
     return module
 
 
+def get_mlx5_nic_bus_id(mlx5_iface):
+    """Reads the /sys filesystem to retrieve the bus id
+    of a given interface loaded by the mlx5_core driver.
+
+    Args:
+        mlx5_iface (str): interface loaded by the mlx5_core driver.
+
+    Returns:
+        str: the PCI bus id for mlx5_iface. If an error occurs,
+            'unknown' is returned.
+
+    """
+    try:
+        link_path = '/sys/class/net/%s/device' % mlx5_iface
+        bus_id = os.readlink(link_path).split("/")[-1]
+    except OSError:
+        bus_id = 'unknown'
+
+    return bus_id
+
+
+def get_mlx5_nic_type(mlx5_iface):
+    """Checks lspci output to see if mlx5_iface is a physical or
+    virtual nic interface.
+
+    This is the lspci output this function is expecting for a mlx5 virtual
+    nic interface:
+
+    'Ethernet controller: Mellanox Technologies MT27700 Family
+     [ConnectX-4 Virtual Function]'
+
+    Verification will be done by checking for the 'Virtual Function'
+    string in the output. Any other lspci output format or any other
+    error will make this function return the default value 'physical'.
+
+    Args:
+        mlx5_iface (str): interface loaded by the mlx5_core driver.
+
+    Returns:
+        str: 'virtual' if mlx5_iface is a virtual function/nic,
+            'physical' otherwise.
+
+    """
+    bus_id = get_mlx5_nic_bus_id(mlx5_iface)
+
+    lspci_cmd = ['lspci', '-s', bus_id]
+    out, err, rc = run_command(lspci_cmd)
+
+    if rc == 0 and 'Virtual Function' in out:
+        return 'virtual'
+
+    if rc != 0:
+        wok_log.error('Error while getting nic type of '
+                      'interface: %s' % err)
+
+    return 'physical'
+
+
+def get_nic_type(iface, iface_kernel_mod=None):
+    """Get the nic type for an given nic interface iface.
+
+    This function will return 'physical' for any iface that
+    is not loaded by mlx5_core driver. For mlx5_cards a
+    verification will be made to see if iface is a virtual
+    function (VF).
+
+    Args:
+        iface (str): a nic interface.
+        iface_kernel_mod(Optional[str]): the kernel driver that
+            loaded this interface.
+
+    Returns:
+        (str): 'physical' or 'virtual'.
+
+    """
+    if iface_kernel_mod is None:
+        iface_kernel_mod = get_interface_kernel_module(iface)
+
+    if iface_kernel_mod not in ['mlx5_core', 'mlx5-core']:
+        return 'physical'
+
+    return get_mlx5_nic_type(iface)
+
+
 def get_interface_type(iface):
     # FIXME if we want to get more device type
     # just support nic, bridge, bondings and vlan, for we just
@@ -298,15 +382,21 @@ def get_interface_info(iface):
     except IOError:
         pass
 
+    kernel_module = get_interface_kernel_module(iface)
+    iface_type = get_interface_type(iface)
+    nic_type = 'N/A' if iface_type is not 'nic' \
+        else get_nic_type(iface, kernel_module)
+
     return {'device': iface,
             'name': iface,
-            'type': get_interface_type(iface),
+            'type': iface_type,
             'status': operstate(iface),
             'link_detected': link_detected(iface),
             'ipaddr': ipaddr,
             'netmask': netmask,
             'macaddr': macaddr(iface),
-            'module': get_interface_kernel_module(iface)}
+            'module': kernel_module,
+            'nic_type': nic_type}
 
 
 def get_interfaces_loaded_with_modules(modules):
