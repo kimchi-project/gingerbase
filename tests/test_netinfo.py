@@ -38,7 +38,7 @@ class NetinfoTests(unittest.TestCase):
         module = 'mod1'
 
         self.assertEqual(
-            netinfo.get_interfaces_loaded_with_modules([module]),
+            netinfo.get_interfaces_with_modules([module]),
             ['iface1', 'iface3']
         )
         mock_all_ifaces.assert_called_once_with()
@@ -61,7 +61,7 @@ class NetinfoTests(unittest.TestCase):
         ]
 
         self.assertEqual(
-            netinfo.get_interfaces_loaded_with_modules(modules),
+            netinfo.get_interfaces_with_modules(modules),
             ['iface2', 'iface4']
         )
         mock_all_ifaces.assert_called_once_with()
@@ -84,7 +84,7 @@ class NetinfoTests(unittest.TestCase):
         ]
 
         self.assertEqual(
-            netinfo.get_interfaces_loaded_with_modules(modules), []
+            netinfo.get_interfaces_with_modules(modules), []
         )
         mock_all_ifaces.assert_called_once_with()
         mock_kernel_mod.assert_has_calls(
@@ -207,3 +207,70 @@ class NetinfoTests(unittest.TestCase):
         mock_service_enabled.assert_called_once_with()
         mock_iface_rdma.assert_not_called()
         mock_all_ifaces.assert_not_called()
+
+    @mock.patch('os.readlink')
+    def test_get_mlx5_nic_bus_id(self, mock_readlink):
+        mock_readlink.return_value = '.../../../../0001:01.1'
+
+        bus_id = netinfo.get_mlx5_nic_bus_id('iface1')
+        mock_readlink.assert_called_once_with(
+            '/sys/class/net/%s/device' % 'iface1'
+        )
+        self.assertEqual(bus_id, '0001:01.1')
+
+    @mock.patch('wok.plugins.gingerbase.netinfo.run_command')
+    @mock.patch('wok.plugins.gingerbase.netinfo.get_mlx5_nic_bus_id')
+    def test_get_mlx5_nic_type_virtual(self, mock_bus_id, mock_run_cmd):
+        mock_bus_id.return_value = '0001:01.1'
+        lspci_output = 'Ethernet controller: Mellanox Technologies ' \
+            'MT27700 Family [ConnectX-4 Virtual Function]'
+        mock_run_cmd.return_value = [lspci_output, '', 0]
+
+        nic_type = netinfo.get_mlx5_nic_type('iface1')
+
+        mock_bus_id.assert_called_once_with('iface1')
+        mock_run_cmd.assert_called_once_with(
+            ['lspci', '-s', '0001:01.1']
+        )
+        self.assertEqual(nic_type, 'virtual')
+
+    @mock.patch('wok.plugins.gingerbase.netinfo.run_command')
+    @mock.patch('wok.plugins.gingerbase.netinfo.get_mlx5_nic_bus_id')
+    def test_get_mlx5_nic_type_physical(self, mock_bus_id, mock_run_cmd):
+        mock_bus_id.return_value = '0001:01.1'
+        lspci_output = 'Ethernet controller: Mellanox Technologies ' \
+            'MT27700 Family [ConnectX-4]'
+        mock_run_cmd.return_value = [lspci_output, '', 0]
+
+        nic_type = netinfo.get_mlx5_nic_type('iface1')
+
+        mock_bus_id.assert_called_once_with('iface1')
+        mock_run_cmd.assert_called_once_with(
+            ['lspci', '-s', '0001:01.1']
+        )
+        self.assertEqual(nic_type, 'physical')
+
+    @mock.patch('wok.plugins.gingerbase.netinfo.get_interface_kernel_module')
+    @mock.patch('wok.plugins.gingerbase.netinfo.get_mlx5_nic_type')
+    def test_get_nic_type_non_mlx5(self, mock_mlx5_nic_type,
+                                   mock_kernel_mod):
+        mock_kernel_mod.return_value = 'any_driver'
+
+        nic_type = netinfo.get_nic_type('iface1')
+
+        mock_kernel_mod.assert_called_once_with('iface1')
+        mock_mlx5_nic_type.assert_not_called()
+        self.assertEqual(nic_type, 'physical')
+
+    @mock.patch('wok.plugins.gingerbase.netinfo.get_interface_kernel_module')
+    @mock.patch('wok.plugins.gingerbase.netinfo.get_mlx5_nic_type')
+    def test_get_nic_type_mlx5_virtual(self, mock_mlx5_nic_type,
+                                       mock_kernel_mod):
+        mock_kernel_mod.return_value = 'mlx5_core'
+        mock_mlx5_nic_type.return_value = 'virtual'
+
+        nic_type = netinfo.get_nic_type('iface1')
+
+        mock_kernel_mod.assert_called_once_with('iface1')
+        mock_mlx5_nic_type.assert_called_once_with('iface1')
+        self.assertEqual(nic_type, 'virtual')
