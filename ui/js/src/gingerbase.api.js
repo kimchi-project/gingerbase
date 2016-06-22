@@ -106,6 +106,7 @@ var gingerbase = {
         wok.requestJSON({
             url : 'plugins/gingerbase/tasks/' + encodeURIComponent(taskId),
             type : 'GET',
+            async: false,
             contentType : 'application/json',
             dataType : 'json',
             success : suc,
@@ -272,7 +273,47 @@ var gingerbase = {
         });
     },
 
-    updateSoftware : function(suc, err, progress) {
+    updateSoftware : function(pack, suc, err, progress) {
+        var taskID = -1;
+        var onResponse = function(data) {
+            taskID = data['id'];
+            trackTask();
+        };
+
+        var trackTask = function() {
+            gingerbase.getTask(taskID, onTaskResponse, err);
+        };
+
+        var onTaskResponse = function(result) {
+            var taskStatus = result['status'];
+            switch(taskStatus) {
+            case 'running':
+                progress();
+                setTimeout(function() {
+                    trackTask();
+                }, 1000);
+                break;
+            case 'finished':
+            case 'failed':
+                suc(result);
+                break;
+            default:
+                break;
+            }
+        };
+
+        wok.requestJSON({
+            url : 'plugins/gingerbase/host/packagesupdate/' + pack + '/upgrade',
+            type : "POST",
+            async: false,
+            contentType : "application/json",
+            dataType : "json",
+            success : onResponse,
+            error : err
+        });
+    },
+
+    updateAllSoftware : function(suc, err, progress) {
         var taskID = -1;
         var onResponse = function(data) {
             taskID = data['id'];
@@ -290,7 +331,7 @@ var gingerbase = {
                 progress && progress(result);
                 setTimeout(function() {
                     trackTask();
-                }, 200);
+                }, 700);
                 break;
             case 'finished':
             case 'failed':

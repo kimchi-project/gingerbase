@@ -16,8 +16,9 @@
  * limitations under the License.
  */
 gingerbase.host = {};
-
+gingerbase.arrayOfPackagesToKeepIcon = [];
 gingerbase.host_update = function() {
+
   gingerbase.getCapabilities(function(result) {
     gingerbase.capabilities = result;
     gingerbase.init_update();
@@ -286,119 +287,61 @@ gingerbase.init_update = function() {
     var softwareUpdatesGridID = 'software-updates-grid';
     var softwareUpdatesGrid = null;
     var progressAreaID = 'software-updates-progress-textarea';
+    var textMessage = "";
     var reloadProgressArea = function(result) {
+        $("#update-accordion").show(500);
         var progressArea = $('#' + progressAreaID)[0];
-        $(progressArea).text(result['message']);
+        textMessage += result['message'];
+        if (result['status'] == 'finished') {
+            textMessage += i18n['GGBUPD6015M'];
+        }
+        $(progressArea).text(textMessage);
         var scrollTop = $(progressArea).prop('scrollHeight');
         $(progressArea).prop('scrollTop', scrollTop);
     };
 
-    var initSoftwareUpdatesGrid = function(softwareUpdates) {
-        softwareUpdatesGrid = new wok.widget.Grid({
-            container: 'software-updates-grid-container',
-            id: softwareUpdatesGridID,
-            title: i18n['GGBUPD6001M'],
-            rowSelection: 'disabled',
-            toolbarButtons: [{
-                id: softwareUpdatesGridID + '-update-button',
-                label: i18n['GGBUPD6006M'],
-                disabled: true,
-                onClick: function(event) {
-                    var updateButton = $(this);
-                    var progressArea = $('#' + progressAreaID)[0];
-                    $('#software-updates-progress-container').removeClass('hidden');
-                    $(progressArea).text('');
-                    !wok.isElementInViewport(progressArea) &&
-                        progressArea.scrollIntoView();
-                    $(updateButton).text(i18n['GGBUPD6007M']).prop('disabled', true);
-
-                    gingerbase.updateSoftware(function(result) {
-                        reloadProgressArea(result);
-                        $(updateButton).text(i18n['GGBUPD6006M']).prop('disabled', false);
-                        wok.topic('gingerbase/softwareUpdated').publish({
-                            result: result
-                        });
-                    }, function(error) {
-                        var message = error && error['responseJSON'] && error['responseJSON']['reason'];
-                        wok.message.error(message || i18n['GGBUPD6009M']);
-                        $(updateButton).text(i18n['GGBUPD6006M']).prop('disabled', false);
-                    }, reloadProgressArea);
-                }
-            }],
-            frozenFields: [],
-            fields: [{
-                name: 'package_name',
-                label: i18n['GGBUPD6002M'],
-                'class': 'software-update-name'
-            }, {
-                name: 'version',
-                label: i18n['GGBUPD6003M'],
-                'class': 'software-update-version'
-            }, {
-                name: 'arch',
-                label: i18n['GGBUPD6004M'],
-                'class': 'software-update-arch'
-            }, {
-                name: 'repository',
-                label: i18n['GGBUPD6005M'],
-                'class': 'software-update-repos'
-            }],
-            data: listSoftwareUpdates
-        });
-    };
+    $("#update-all-packages").click(function() {
+        $("#update-all-packages").prop('disabled', true);
+        $("#update-accordion").show(500);
+        $("#software-updates-progress-textarea").text("Processing...");
+        gingerbase.updateAllSoftware(function(result) {
+        $("#update-all-packages").prop('disabled', true);
+            reloadProgressArea(result);
+            wok.topic('gingerbase/softwareUpdated').publish({
+                result: result
+            });
+            $("#update-all-packages").prop('disabled', false);
+        }, function(error) {
+            var message = error && error['responseJSON'] && error['responseJSON']['reason'];
+            wok.message.error(message || i18n['GGBUPD6009M']);
+            $("#update-all-packages").prop('disabled', false);
+        }, reloadProgressArea);
+    });
 
     var startSoftwareUpdateProgress = function() {
         var progressArea = $('#' + progressAreaID)[0];
         $('#software-updates-progress-container').removeClass('hidden');
         $(progressArea).text('');
-        !wok.isElementInViewport(progressArea) &&
-            progressArea.scrollIntoView();
-
-        gingerbase.softwareUpdateProgress(function(result) {
-            reloadProgressArea(result);
-            wok.topic('gingerbase/softwareUpdated').publish({
-                result: result
-            });
-            wok.message.warn(i18n['GGBUPD6010M']);
-        }, function(error) {
-            wok.message.error(i18n['GGBUPD6011M']);
-        }, reloadProgressArea);
-    };
-
-    var listSoftwareUpdates = function(gridCallback) {
-        gingerbase.listSoftwareUpdates(function(softwareUpdates) {
-            if ($.isFunction(gridCallback)) {
-                gridCallback(softwareUpdates);
-            } else {
-                if (softwareUpdatesGrid) {
-                    softwareUpdatesGrid.setData(softwareUpdates);
+        var filter = 'status=running&target_uri=' + encodeURIComponent('^/plugins/gingerbase/host/swupdate/*');
+            gingerbase.getTasksByFilter(filter, function(tasks) {
+                var result = {};
+                if (tasks.length > 0) {
+                    gingerbase.getTask(tasks[0].id, function(task){
+                        result = task;
+                    }, function(error){});
+                }
+                if (result['status'] == 'running') {
+                    reloadProgressArea(result);
+                    $(".wok-mask").fadeOut(300, function() {});
                 } else {
-                    initSoftwareUpdatesGrid(softwareUpdates);
+                    gingerbase.init_update_packages();
                 }
-            }
-
-            var updateButton = $('#' + softwareUpdatesGridID + '-update-button');
-            $(updateButton).prop('disabled', softwareUpdates.length === 0);
-        }, function(error) {
-            var message = error && error['responseJSON'] && error['responseJSON']['reason'];
-
-            // cannot get the list of packages because there is another
-            // package manager instance running, so follow that instance updates
-            if (message.indexOf("GGBPKGUPD0005E") !== -1) {
-                startSoftwareUpdateProgress();
-                if ($.isFunction(gridCallback)) {
-                    gridCallback([]);
-                }
-                return;
-            }
-
-            if ($.isFunction(gridCallback)) {
-                gridCallback([]);
-            }
-            softwareUpdatesGrid &&
-                softwareUpdatesGrid.showMessage(message || i18n['GGBUPD6008M']);
-        });
+            }, function(error) {
+                wok.message.error(i18n['GGBUPD6011M']);
+            }, reloadProgressArea);
     };
+
+    startSoftwareUpdateProgress();
 
     var initPage = function() {
 
@@ -423,9 +366,6 @@ gingerbase.init_update = function() {
 
             if (gingerbase.capabilities['update_tool']) {
                 $('#software-update-section').removeClass('hidden');
-                initSoftwareUpdatesGrid();
-                wok.topic('gingerbase/softwareUpdated')
-                    .subscribe(listSoftwareUpdates);
             }
 
         };
@@ -470,7 +410,269 @@ gingerbase.init_update = function() {
         }
 
         softwareUpdatesGrid && softwareUpdatesGrid.destroy();
-        wok.topic('gingerbase/softwareUpdated').unsubscribe(listSoftwareUpdates);
-
     });
+};
+
+gingerbase.isDependOnPackageList = function(depend, packageList) {
+    var result = false;
+    $.each(packageList, function(index, pack){
+        if (pack == depend) {
+            result = true;
+            return false;
+        }
+    });
+    return result;
+};
+
+gingerbase.findDependsListFromPackage = function(packa, packageList) {
+    var dependList = [];
+    $.each(packageList, function(index, pack) {
+        if (pack.package_name === packa) {
+            dependList = pack.depends;
+        }
+    })
+    return dependList;
+};
+
+gingerbase.setUpdateStatusIcon = function(arrayPackages) {
+    if (arrayPackages == undefined) {
+        arrayPackages = gingerbase.arrayOfPackagesToKeepIcon;
+    }
+    $.each(arrayPackages, function(index, value){
+        var pacakgeNameEscaped = (value.package).replace(/\./g, '\\.');
+        if(value.status == 'finished') {
+            $("#grid-basic tr[data-row-id=" + pacakgeNameEscaped + "]").on('click', function(){return false});
+            $("#grid-basic tr[data-row-id=" + pacakgeNameEscaped + "] td:nth-child(1) input").attr("disabled", true);
+            $("#grid-basic tr[data-row-id=" + pacakgeNameEscaped + "] td:nth-child(3)").empty();
+            $("#grid-basic tr[data-row-id=" + pacakgeNameEscaped + "] td:nth-child(3)").append('<span class="specialClass"><i class="fa fa-check" aria-hidden="true" data-toggle="tooltip" title="'+ i18n['GGBUPD6013M'] +'"></i></span>');
+            gingerbase.setUpdateStatusIconForDependecies(value.dependsNotSelected, 'finished');
+        } else if (value.status == 'failed') {
+            $("#grid-basic tr[data-row-id=" + pacakgeNameEscaped + "]").on('click', function(){return false});
+            $("#grid-basic tr[data-row-id=" + pacakgeNameEscaped + "] td:nth-child(1) input").attr("disabled", true);
+            $("#grid-basic tr[data-row-id=" + pacakgeNameEscaped + "] td:nth-child(3)").empty();
+            $("#grid-basic tr[data-row-id=" + pacakgeNameEscaped + "] td:nth-child(3)").append('<span class="specialClass"><i class="fa fa-times" aria-hidden="true" data-toggle="tooltip" title="'+ i18n['GGBUPD6011M'] +'"></i></span>');
+            gingerbase.setUpdateStatusIconForDependecies(value.dependsNotSelected, 'failed');
+        } else if(value.status == 'running'){
+            $("#update-packages").prop('disabled', true);
+            $("#update-all-packages").prop('disabled', true);
+            $("#grid-basic tr[data-row-id=" + pacakgeNameEscaped + "]").on('click', function(){return false});
+            $("#grid-basic tr[data-row-id=" + pacakgeNameEscaped + "] td:nth-child(1) input").attr("disabled", true);
+            $("#grid-basic tr[data-row-id=" + pacakgeNameEscaped + "] td:nth-child(3)").empty();
+            $("#grid-basic tr[data-row-id=" + pacakgeNameEscaped + "] td:nth-child(3)").append('<span class="specialClass"><i class="fa fa-spinner fa-spin fa-fw" aria-hidden="true" data-toggle="tooltip" title="'+ i18n['GGBUPD6012M'] +'"></i></span>');
+            gingerbase.setUpdateStatusIconForDependecies(value.dependsNotSelected, 'running');
+            $('[data-toggle="tooltip"]').tooltip();
+        }
+    });
+    $('[data-toggle="tooltip"]').tooltip();
+};
+
+gingerbase.setUpdateStatusIconForDependecies = function(arrayDependecies, status) {
+    $.each(arrayDependecies, function(index, value){
+        var dependencieNameEscaped = (value).replace(/\./g, '\\.');
+        if(status == 'finished') {
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "]").on('click', function(){return false});
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "] td:nth-child(1) input").prop("checked", true);
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "] td:nth-child(1) input").attr("disabled", true);
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "] td:nth-child(3)").empty();
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "] td:nth-child(3)").append('<span class="specialClass"><i class="fa fa-check" aria-hidden="true" data-toggle="tooltip" title="'+ i18n['GGBUPD6013M'] +'"></i></span>');
+        } else if(status == 'failed') {
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "]").on('click', function(){return false});
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "] td:nth-child(1) input").prop("checked", true);
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "] td:nth-child(1) input").attr("disabled", true);
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "] td:nth-child(3)").empty();
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "] td:nth-child(3)").append('<span class="specialClass"><i class="fa fa-times" aria-hidden="true" data-toggle="tooltip" title="'+ i18n['GGBUPD6011M'] +'"></i></span>');
+        } else if(status == 'running') {
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "]").on('click', function(){return false});
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "] td:nth-child(1) input").prop("checked", true);
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "] td:nth-child(1) input").attr("disabled", true);
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "] td:nth-child(3)").empty();
+            $("#grid-basic tr[data-row-id=" + dependencieNameEscaped + "] td:nth-child(3)").append('<span class="specialClass"><i class="fa fa-spinner fa-spin fa-fw" aria-hidden="true" data-toggle="tooltip" title="'+ i18n['GGBUPD6012M'] +'"></i></span>');
+        }
+    });
+    $('[data-toggle="tooltip"]').tooltip();
+}
+
+gingerbase.message = '';
+gingerbase.syncUpdatePackages = function(arrayPackages, position) {
+    setTimeout(function(){
+        gingerbase.arrayOfPackagesToKeepIcon = arrayPackages;
+        var count = position + 1;
+        $("#update-packages").prop('disabled', true);
+        $("#update-all-packages").prop('disabled', true);
+        if (arrayPackages.length !== position) {
+            if (!arrayPackages[position].isDepend) {
+                gingerbase.updateSoftware(arrayPackages[position].package, function(result){
+                    $("#update-packages").prop('disabled', true);
+                    $("#update-all-packages").prop('disabled', true);
+                    arrayPackages[position].status = result['status'];
+                    if (result['status'] == 'failed') {
+                        $("#update-packages").prop('disabled', true);
+                        $("#update-all-packages").prop('disabled', true);
+                        $("#update-accordion").show(500);
+                        gingerbase.message += arrayPackages[position].package + '   ' + result['message'];
+                        $("#software-updates-progress-textarea").text(gingerbase.message);
+                    }
+                    gingerbase.arrayOfPackagesToKeepIcon = arrayPackages;
+                    gingerbase.setUpdateStatusIcon(arrayPackages);
+                    gingerbase.syncUpdatePackages(arrayPackages, count);
+                    $("#update-packages").prop('disabled', false);
+                    $("#update-all-packages").prop('disabled', false);
+                }, function(err){
+                    wok.message.error(err.responseJSON.reason);
+                }, gingerbase.setUpdateStatusIcon);
+            } else {
+                gingerbase.arrayOfPackagesToKeepIcon = arrayPackages;
+                gingerbase.setUpdateStatusIcon(arrayPackages);
+                gingerbase.syncUpdatePackages(arrayPackages, count);
+                $("#update-packages").prop('disabled', false);
+                $("#update-all-packages").prop('disabled', false);
+            }
+        } else {
+            $("#update-all-packages").prop('disabled', false);
+            gingerbase.arrayOfPackagesToKeepIcon = [];
+            gingerbase.init_update_packages();
+        };
+    },1000);
+};
+
+gingerbase.init_update_packages = function(){
+        $("#update-packages").unbind("click");
+        $(".wok-mask").fadeIn(300, function() {});
+        var packageList = [];
+        var packageListNames = [];
+        var packagesSelected = [];
+        $("#grid-basic tbody tr").remove();
+        gingerbase.listSoftwareUpdates(function(softwareUpdates) {
+            $(".wok-mask").fadeOut(300, function() {});
+            $("#update-packages").prop('disabled', true);
+            packageList = softwareUpdates;
+            var htmlRow = "";
+            $.each( softwareUpdates, function( key, value ) {
+                htmlRow += "<tr><td>" + value.package_name + "</td><td></td><td>" + value.version + "</td><td>" + value.arch + "</td><td>" + value.repository + "</td></tr>";
+                packageListNames.push(value.package_name);
+            });
+            $("#grid-basic").bootgrid('destroy');
+            $("#grid-basic tbody").html(htmlRow);
+            $("#grid-basic").bootgrid('destroy');
+            $("#grid-basic").bootgrid({
+                selection: true,
+                multiSelect: true,
+                rowSelect: true,
+                keepSelection: true,
+                sorting: true,
+                multiSort: true,
+                css: {
+                  iconDown: "fa fa-sort-desc",
+                  iconUp: "fa fa-sort-asc",
+                  center: "text-center"
+                },
+                labels: {
+                  search: i18n['WOKSETT0008M'],
+                  infos: i18n['WOKSETT0009M']
+                }
+            }).on("loaded.rs.jquery.bootgrid", function(e) {
+                $('.input-group .glyphicon-search').remove();
+                $(".pagination li a").click(function() {
+                    setTimeout(function() {
+                        gingerbase.setUpdateStatusIcon(gingerbase.arrayOfPackagesToKeepIcon);
+                    }, 700);
+                });
+            }).on("selected.rs.jquery.bootgrid", function(e, rows){
+                for (var i = 0; i < rows.length; i++) {
+                    packagesSelected.push(rows[i].package_name);
+                }
+                if (packagesSelected.length > 0) {
+                    $("#update-packages").prop('disabled', false);
+                } else {
+                    $("#update-packages").prop('disabled', true);
+                }
+            }).on("deselected.rs.jquery.bootgrid", function(e, rows){
+                packagesSelected = $.grep(packagesSelected, function(value) {
+                    return value != rows[0].package_name;
+                });
+                if (packagesSelected.length > 0) {
+                    $("#update-packages").prop('disabled', false);
+                } else {
+                    $("#update-packages").prop('disabled', true);
+                }
+            });
+
+            $("#grid-basic thead .select-box").remove();
+        }, function(error){
+            wok.message.error(error.responseJSON.reason, '#message-container-area');
+        });
+
+        $("#update-packages").on("click", function(evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            var resultList = [];
+            $.each(packagesSelected, function( indice, pack ) {
+                var resultObject = {
+                        package: pack,
+                        status: 'running',
+                        dependsNotSelected: [],
+                        isDepend: false,
+                        loopFlag: false
+                    }
+                $.each(gingerbase.findDependsListFromPackage(pack, packageList), function(index, depend){
+                    if (gingerbase.isDependOnPackageList(depend, packagesSelected)) {
+
+                    } else if (gingerbase.isDependOnPackageList(depend, packageListNames)) {
+                        resultObject.dependsNotSelected.push(depend);
+                    }
+                });
+                    resultList.push(resultObject);
+            });
+
+            $.each(resultList, function(index, packObj){
+                packObj.loopFlag = true;
+                $.each(gingerbase.findDependsListFromPackage(packObj.package, packageList), function(index2, depend){
+                    if (gingerbase.isDependOnPackageList(depend, packagesSelected)) {
+                        $.each(resultList, function(index3, packObj2){
+                            if (packObj2.package == depend && !packObj2.loopFlag) {
+                                packObj2.isDepend = true;
+                            }
+                        });
+                    }
+                });
+            });
+
+            var content = '';
+            var modalFlag = false;
+            $.each(resultList, function(index, value){
+                var len = value.dependsNotSelected.length;
+                if (len > 0) {
+                    modalFlag = true;
+                    content += '<b>' + value.package + ': </b>';
+                    $.each(value.dependsNotSelected, function(index2, value2){
+                        content += value2;
+                        if (index2 != len - 1) {
+                            content += ", ";
+                        }
+                    });
+                    content += '<br />';
+                }
+            });
+            if (modalFlag) {
+                var settings = {
+                    title : i18n['GGBUPD6014M'],
+                    content : content,
+                    confirm : 'Yes',
+                    cancel : 'No'
+                };
+                wok.confirm(settings, function() {
+                    wok.window.close();
+                    setTimeout(function() {
+                        gingerbase.message = '';
+                        gingerbase.setUpdateStatusIcon(resultList);
+                        gingerbase.syncUpdatePackages(resultList, 0);
+                    }, 400);
+
+                },function(){});
+            } else if(packagesSelected.length > 0) {
+                gingerbase.message = '';
+                gingerbase.setUpdateStatusIcon(resultList);
+                gingerbase.syncUpdatePackages(resultList, 0);
+            }
+        });
 };
