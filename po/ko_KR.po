@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-25 15:36+0530\n"
+"POT-Creation-Date: 2016-06-24 09:42-0300\n"
 "PO-Revision-Date: 2013-07-11 17:32-0400\n"
 "Last-Translator: Crístian Viana <vianac@linux.vnet.ibm.com>\n"
 "Language-Team: English\n"
@@ -277,6 +277,10 @@ msgstr ""
 
 #, python-format
 msgid "Block device %(device)s not found."
+msgstr ""
+
+#, python-format
+msgid "Unable to retrieve LVM information. Details: %(err)s"
 msgstr ""
 
 #, python-format
@@ -574,6 +578,24 @@ msgstr ""
 msgid "Failed to update package(s)."
 msgstr "패키지를 업데이트하지 못했습니다."
 
+msgid "Finished"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Running"
+msgstr ""
+
+msgid "Success"
+msgstr ""
+
+msgid "There are some dependencies not selected. Do you want to proceed?"
+msgstr ""
+
+msgid "UPDATE PACKAGES FINSHED"
+msgstr ""
+
 msgid ""
 "Debug report %1 will be removed permanently and can't be recovered. Do you "
 "want to continue?"
@@ -847,5 +869,17 @@ msgstr ""
 msgid "Hypervisor Details"
 msgstr ""
 
-msgid "Update Progress"
-msgstr "진행상태 업데이트"
+msgid "Update"
+msgstr ""
+
+msgid "Update Status"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Arch"
+msgstr ""
+
+#~ msgid "Update Progress"
+#~ msgstr "진행상태 업데이트"
