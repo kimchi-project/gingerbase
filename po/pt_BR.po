@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-25 15:36+0530\n"
+"POT-Creation-Date: 2016-06-24 09:54-0300\n"
 "PO-Revision-Date: 2015-03-23 12:57+0000\n"
 "Last-Translator: Crístian Deives dos Santos Viana <cristiandeives@gmail."
 "com>\n"
@@ -295,6 +295,10 @@ msgstr ""
 #, python-format
 msgid "Block device %(device)s not found."
 msgstr ""
+
+#, python-format
+msgid "Unable to retrieve LVM information. Details: %(err)s"
+msgstr "Não foi possível carregar as informações de LVM. Detalhes: '%(err)s'"
 
 #, python-format
 msgid "Created host debug report '%(name)s'"
@@ -594,6 +598,24 @@ msgstr "Não foi possível recuperar as informações de atualização de pacoat
 msgid "Failed to update package(s)."
 msgstr "Erro ao atualizar pacote(s)."
 
+msgid "Finished"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Running"
+msgstr ""
+
+msgid "Success"
+msgstr ""
+
+msgid "There are some dependencies not selected. Do you want to proceed?"
+msgstr ""
+
+msgid "UPDATE PACKAGES FINSHED"
+msgstr ""
+
 msgid ""
 "Debug report %1 will be removed permanently and can't be recovered. Do you "
 "want to continue?"
@@ -885,5 +907,17 @@ msgstr ""
 msgid "Hypervisor Details"
 msgstr ""
 
-msgid "Update Progress"
-msgstr "Progresso da atualização"
+msgid "Update"
+msgstr "Atualizar"
+
+msgid "Update Status"
+msgstr "Status da atualização"
+
+msgid "Status"
+msgstr ""
+
+msgid "Arch"
+msgstr ""
+
+#~ msgid "Update Progress"
+#~ msgstr "Progresso da atualização"
