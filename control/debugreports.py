@@ -41,7 +41,10 @@ class DebugReports(AsyncCollection):
         self.resource = DebugReport
         self.role_key = 'dashboard'
         self.admin_methods = ['GET', 'POST']
+
+        # set user log messages and make sure all parameters are present
         self.log_map = DEBUGREPORTS_ACTIVITY
+        self.log_args.update({'name': ''})
 
     def _get_resources(self, filter_params):
         res_list = super(DebugReports, self)._get_resources(filter_params)

@@ -104,7 +104,10 @@ class Repositories(Collection):
         self.role_key = 'updates'
         self.admin_methods = ['GET', 'POST']
         self.resource = Repository
+
+        # set user log messages and make sure all parameters are present
         self.log_map = REPOSITORIES_ACTIVITY
+        self.log_args.update({'repo_id': ''})
 
 
 class Repository(Resource):
