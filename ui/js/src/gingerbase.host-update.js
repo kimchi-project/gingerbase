@@ -353,6 +353,12 @@ gingerbase.init_update = function() {
 
             if ((gingerbase.capabilities['repo_mngt_tool']) && (gingerbase.capabilities['repo_mngt_tool'] !== "None")) {
                 initRepositoriesGrid(gingerbase.capabilities['repo_mngt_tool']);
+                $('div#repositories-grid-section').removeClass('panel panel-default').addClass('panel-group accordion');
+                $('div#repositories-grid-section').prepend($('h3.panel-title'));
+                $('h3.panel-title').removeClass('panel-title').wrapInner('<span class="accordion-text" id="repositories-header"></span>').wrapInner('<a role="button" data-toggle="collapse" data-parent="#repositories-grid-section" href="#content-repositories-grid" aria-expanded="false" aria-controls="content-repositories-grid" />');
+                $('div#repositories-grid-section .panel-heading').remove();
+                $('div#repositories-grid-section .accordion-text').before('<span class="accordion-icon" />');
+                $('div#content-repositories-grid').removeClass('panel-body').addClass('panel-collapse collapse');
                 $('#repositories-section').switchClass('hidden', gingerbase.capabilities['repo_mngt_tool']);
                 $('#content-sys-info').removeClass('col-md-12', gingerbase.capabilities['repo_mngt_tool']);
                 $('#content-sys-info').addClass('col-md-4', gingerbase.capabilities['repo_mngt_tool']);
