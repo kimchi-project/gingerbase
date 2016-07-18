@@ -376,6 +376,11 @@ class HostModel(object):
             # Ignore any error and assume there is no vm running in the host
             return []
 
+        libvirtd_running = ['systemctl', 'is-active', 'libvirtd', '--quiet']
+        _, _, rcode = run_command(libvirtd_running, silent=True)
+        if rcode != 0:
+            return []
+
         try:
             conn = libvirt_mod.open(None)
             return [dom.name().decode('utf-8')

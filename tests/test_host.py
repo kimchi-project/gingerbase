@@ -21,18 +21,22 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
 import json
+import mock
 import os
 import platform
 import psutil
 import tempfile
 import time
 import unittest
+
 from functools import partial
+from mock import patch
 
 from tests.utils import get_free_port, patch_auth, request
 from tests.utils import run_server, wait_task
 
 from wok.plugins.gingerbase.mockmodel import MockModel
+from wok.plugins.gingerbase.model.host import HostModel
 
 
 test_server = None
@@ -195,3 +199,17 @@ class HostTests(unittest.TestCase):
         self.assertEquals(200, resp.status)
         self.assertEqual(task['status'], 'finished')
         time.sleep(1)
+
+    def test_get_vmlist_bystate_import_error(self):
+        with patch.dict('sys.modules', {}):
+            vms = HostModel(objstore=None).get_vmlist_bystate()
+            self.assertEqual(vms, [])
+
+    @mock.patch('wok.plugins.gingerbase.model.host.run_command')
+    def test_vmlist_bystate_libvirtd_not_running(self, mock_run_cmd):
+        mock_run_cmd.return_value = ['', '', 3]
+        with patch.dict('sys.modules', {'libvirt': 0}):
+            vms = HostModel(objstore=None).get_vmlist_bystate()
+            self.assertEqual(vms, [])
+            cmd = ['systemctl', 'is-active', 'libvirtd', '--quiet']
+            mock_run_cmd.assert_called_once_with(cmd, silent=True)
