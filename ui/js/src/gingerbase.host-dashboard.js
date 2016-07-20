@@ -272,22 +272,23 @@ gingerbase.init_dashboard = function() {
                 $(restartButtonID).prop('disabled', false);
                 return;
             }, function(error) {
-              var status= error.status;
-               if(status===502){
-                //gateway server is not able to get a valid response from upstream server.
-                wok.message.error(i18n['GGBHOST6002E']);
-                setTimeout(function(){
-                  location.reload(true);
-                },1000);
-              }else{
-                // Looks like VMs are running.
-                if(status!==0){
-                   wok.message.error(i18n['GGBHOST6001E']);
+                var status = error.status;
+                if(status===502) {
+                    // Gateway server is not able to get a valid
+                    // response from upstream server.
+                    wok.message.error(i18n['GGBHOST6002E']);
+                    setTimeout(function() {
+                        location.reload(true);
+                    },1000);
+                } else {
+                    // Looks like VMs are running.
+                    if(status !== 0){
+                        wok.message.error(i18n['GGBHOST6001E']);
+                    }
                 }
-             }
-            $(shutdownButtonID).prop('disabled', false);
-            $(restartButtonID).prop('disabled', false);
-        });
+                $(shutdownButtonID).prop('disabled', false);
+                $(restartButtonID).prop('disabled', false);
+            });
         }, function() {
         });
     };
