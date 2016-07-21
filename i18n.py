@@ -51,7 +51,6 @@ messages = {
     "GGBPKGUPD0002E": _("Package %(name)s is not marked to be updated."),
     "GGBPKGUPD0003E": _("Error while getting packages marked to be updated. Details: %(err)s"),
     "GGBPKGUPD0004E": _("There is no compatible package manager for this system."),
-    "GGBPKGUPD0005E": _("There is a package manager instance running in the system."),
     "GGBPKGUPD0006E": _("Error while getting package information. Details: %(err)s"),
 
     "GGBREPOS0001E": _("YUM Repository ID must be one word only string."),

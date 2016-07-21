@@ -23,6 +23,7 @@ import fcntl
 import os
 import signal
 import subprocess
+import threading
 import time
 from configobj import ConfigObj, ConfigObjError
 from psutil import pid_exists, process_iter
@@ -31,10 +32,11 @@ from wok.basemodel import Singleton
 from wok.exception import NotFoundError, OperationFailed
 from wok.utils import run_command, wok_log
 
-from wok.plugins.gingerbase.config import gingerBaseLock
 from wok.plugins.gingerbase.yumparser import get_dnf_package_info
 from wok.plugins.gingerbase.yumparser import get_yum_package_info
 from wok.plugins.gingerbase.yumparser import get_yum_packages_list_update
+
+swupdateLock = threading.RLock()
 
 
 class SoftwareUpdate(object):
@@ -72,24 +74,43 @@ class SoftwareUpdate(object):
 
     def getUpdates(self):
         """
-        Return a list of packages eligigle to be updated in the system.
+        Return a list of packages eligible to be updated in the system.
         """
-        return [pkg for pkg in self._pkg_mnger.getPackagesList()]
+        swupdateLock.acquire()
+        try:
+            pkgs = [pkg for pkg in self._pkg_mnger.getPackagesList()]
+            return pkgs
+        except:
+            raise
+        finally:
+            swupdateLock.release()
 
     def getUpdate(self, name):
         """
         Return a dictionary with all info from a given package name.
         """
-        package = self._pkg_mnger.getPackageInfo(name)
-        if not package:
-            raise NotFoundError('GGBPKGUPD0002E', {'name': name})
-        return package
+        swupdateLock.acquire()
+        try:
+            package = self._pkg_mnger.getPackageInfo(name)
+            if not package:
+                raise NotFoundError('GGBPKGUPD0002E', {'name': name})
+            return package
+        except:
+            raise
+        finally:
+            swupdateLock.release()
 
     def getNumOfUpdates(self):
         """
         Return the number of packages to be updated.
         """
-        return len(self.getUpdates())
+        swupdateLock.acquire()
+        try:
+            return len(self.getUpdates())
+        except:
+            raise
+        finally:
+            swupdateLock.release()
 
     def preUpdate(self):
         """
@@ -156,6 +177,8 @@ class SoftwareUpdate(object):
         """
         Execute the update
         """
+        swupdateLock.acquire()
+        wok_log.info('doUpdate - swupdate lock acquired')
         # reset messages
         cb('')
 
@@ -177,6 +200,9 @@ class SoftwareUpdate(object):
         msgs.extend(proc.stdout.readlines())
 
         retcode = proc.poll()
+
+        swupdateLock.release()
+        wok_log.info('doUpdate - swupdate lock released')
         if retcode == 0:
             return cb(''.join(msgs), True)
 
@@ -184,7 +210,22 @@ class SoftwareUpdate(object):
         return cb(''.join(msgs), False)
 
 
-class YumUpdate(object):
+class GenericUpdate(object):
+    def getPackagesList(self):
+        return
+
+    def getPackageInfo(self, pkg_name):
+        return
+
+    def isRunning(self):
+        return False
+
+    def wait_pkg_manager_available(self):
+        while self.isRunning():
+            time.sleep(1)
+
+
+class YumUpdate(GenericUpdate):
     """
     Class to represent and operate with YUM software update system.
     It's loaded only on those systems listed at YUM_DISTROS and loads necessary
@@ -215,18 +256,11 @@ class YumUpdate(object):
         """
         Return a list of packages eligible to be updated by Yum.
         """
-        if self.isRunning():
-            raise OperationFailed('GGBPKGUPD0005E')
-
-        pkgs = []
+        self.wait_pkg_manager_available()
         try:
-            gingerBaseLock.acquire()
-            pkgs = get_yum_packages_list_update()
+            return get_yum_packages_list_update()
         except Exception, e:
             raise OperationFailed('GGBPKGUPD0003E', {'err': str(e)})
-        finally:
-            gingerBaseLock.release()
-        return pkgs
 
     def getPackageInfo(self, pkg_name):
         """
@@ -240,18 +274,11 @@ class YumUpdate(object):
                    'depends': <list>
                   }
         """
-        if self.isRunning():
-            raise OperationFailed('GGBPKGUPD0005E')
-
-        package = {}
+        self.wait_pkg_manager_available()
         try:
-            gingerBaseLock.acquire()
-            package = get_yum_package_info(pkg_name)
+            return get_yum_package_info(pkg_name)
         except Exception, e:
             raise NotFoundError('GGBPKGUPD0003E', {'err': str(e)})
-        finally:
-            gingerBaseLock.release()
-        return package
 
     def isRunning(self):
         """
@@ -296,18 +323,11 @@ class DnfUpdate(YumUpdate):
                    'depends': <list>
                   }
         """
-        if self.isRunning():
-            raise OperationFailed('GGBPKGUPD0005E')
-
-        package = {}
+        self.wait_pkg_manager_available()
         try:
-            gingerBaseLock.acquire()
-            package = get_dnf_package_info(pkg_name)
+            return get_dnf_package_info(pkg_name)
         except Exception, e:
             raise NotFoundError('GGBPKGUPD0003E', {'err': str(e)})
-        finally:
-            gingerBaseLock.release()
-        return package
 
     def isRunning(self):
         """
@@ -327,7 +347,7 @@ class DnfUpdate(YumUpdate):
         return pid_exists(pid)
 
 
-class AptUpdate(object):
+class AptUpdate(GenericUpdate):
     """
     Class to represent and operate with APT software update system.
     It's loaded only on those systems listed at APT_DISTROS and loads necessary
@@ -344,18 +364,13 @@ class AptUpdate(object):
         """
         Return a list of packages eligible to be updated by apt-get.
         """
-        if self.isRunning():
-            raise OperationFailed('GGBPKGUPD0005E')
-
-        gingerBaseLock.acquire()
+        self.wait_pkg_manager_available()
         try:
             self._apt_cache.update()
             self._apt_cache.upgrade()
             pkgs = self._apt_cache.get_changes()
         except Exception, e:
             raise OperationFailed('GGBPKGUPD0003E', {'err': e.message})
-        finally:
-            gingerBaseLock.release()
 
         return [pkg.shortname for pkg in pkgs]
 
@@ -371,18 +386,14 @@ class AptUpdate(object):
                    'depends': <list>
                   }
         """
-        if self.isRunning():
-            raise OperationFailed('GGBPKGUPD0005E')
+        self.wait_pkg_manager_available()
 
         package = {}
-        gingerBaseLock.acquire()
         try:
             self._apt_cache.upgrade()
             pkgs = self._apt_cache.get_changes()
         except Exception, e:
             raise OperationFailed('GGBPKGUPD0006E', {'err': e.message})
-        finally:
-            gingerBaseLock.release()
 
         pkg = next((x for x in pkgs if x.shortname == pkg_name), None)
         if not pkg:
@@ -414,7 +425,7 @@ class AptUpdate(object):
         return False
 
 
-class ZypperUpdate(object):
+class ZypperUpdate(GenericUpdate):
     """
     Class to represent and operate with Zypper software update system.
     It's loaded only on those systems listed at ZYPPER_DISTROS and loads
@@ -431,10 +442,8 @@ class ZypperUpdate(object):
         """
         Return a list of packages eligible to be updated by Zypper.
         """
-        if self.isRunning():
-            raise OperationFailed('GGBPKGUPD0005E')
+        self.wait_pkg_manager_available()
 
-        gingerBaseLock.acquire()
         packages = []
         cmd = ["zypper", "list-updates"]
         (stdout, stderr, returncode) = run_command(cmd)
@@ -445,7 +454,6 @@ class ZypperUpdate(object):
         for line in stdout.split('\n'):
             if line.startswith('v |'):
                 packages.append(line.split(' | ')[2].strip())
-        gingerBaseLock.release()
         return packages
 
     def getPackageInfo(self, pkg_name):
@@ -460,10 +468,8 @@ class ZypperUpdate(object):
                    'depends': <list>
                   }
         """
-        if self.isRunning():
-            raise OperationFailed('GGBPKGUPD0005E')
+        self.wait_pkg_manager_available()
 
-        gingerBaseLock.acquire()
         cmd = ["zypper", "info", "--requires", pkg_name]
         (stdout, stderr, returncode) = run_command(cmd)
 
@@ -502,7 +508,6 @@ class ZypperUpdate(object):
             pkg_dep.append(line.split()[0])
         pkg_dep = list(set(pkg_dep))
         package['depends'] = pkg_dep
-        gingerBaseLock.release()
         return package
 
     def isRunning(self):
