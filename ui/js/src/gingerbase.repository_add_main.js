@@ -84,15 +84,28 @@ gingerbase.repository_add_main = function() {
 
         gingerbase.createRepository(formData, function() {
             wok.topic('gingerbase/repositoryAdded').publish();
+            $("#repositories-grid-enable-button").attr('disabled', true);
+            $("#repositories-grid-edit-button").attr('disabled', true);
+            $("#repositories-grid-remove-button").attr('disabled', true);
             wok.window.close();
         }, function(jqXHR, textStatus, errorThrown) {
             var reason = jqXHR &&
                 jqXHR['responseJSON'] &&
                 jqXHR['responseJSON']['reason'];
-            wok.message.error(reason);
+            wok.message.error(reason, '#alert-modal-container');
         });
         return false;
     };
 
-    $(addForm).on('submit', addRepository);
+    $(addForm).on('submit', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        addRepository();
+    });
+
+    $(addButton).on('click',function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $(addForm).submit();
+    });
 };

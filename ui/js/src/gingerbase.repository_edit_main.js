@@ -60,6 +60,9 @@ gingerbase.repository_edit_main = function() {
 
         gingerbase.updateRepository(gingerbase.selectedRepository, formData, function() {
             wok.topic('gingerbase/repositoryUpdated').publish();
+            $("#repositories-grid-enable-button").attr('disabled', true);
+            $("#repositories-grid-edit-button").attr('disabled', true);
+            $("#repositories-grid-remove-button").attr('disabled', true);
             wok.window.close();
         }, function(jqXHR, textStatus, errorThrown) {
             var reason = jqXHR &&

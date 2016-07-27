@@ -135,14 +135,14 @@ gingerbase.init_update = function() {
                 disabled: true,
                 onClick: function(event) {
                     event.preventDefault();
-                    if(!$(this).attr('disabled',true)){
+                    if(!$("#repositories-grid-enable-button").prop("disabled")){
                         var repository = repositoriesGrid.getSelected();
                         if (!repository) {
                             return;
                         }
                         var name = repository[0]['repo_id'];
                         var enable = !repository[0]['enabled'];
-                        $(this).attr('disabled', true);
+                        enableRepositoryButtons(false);
                         gingerbase.enableRepository(name, enable, function() {
                             wok.topic('gingerbase/repositoryUpdated').publish();
                         });
@@ -157,7 +157,7 @@ gingerbase.init_update = function() {
                 disabled: true,
                 onClick: function(event) {
                     event.preventDefault();
-                    if(!$(this).attr('disabled',true)){
+                    if(!$("#repositories-grid-edit-button").prop("disabled")){
                         var repository = repositoriesGrid.getSelected();
                         if (!repository) {
                             return;
@@ -179,7 +179,7 @@ gingerbase.init_update = function() {
                 disabled: true,
                 onClick: function(event) {
                     event.preventDefault();
-                    if(!$(this).attr('disabled',true)){
+                    if(!$("#repositories-grid-remove-button").prop('disabled')){
                         var repository = repositoriesGrid.getSelected();
                         if (!repository) {
                             return;
@@ -206,7 +206,7 @@ gingerbase.init_update = function() {
                         }
 
                         wok.confirm(settings, function() {
-                            for(var i = 0; i < report.length; i++){
+                            for(var i = 0; i < repository.length; i++){
                               gingerbase.deleteRepository(
                                 repository[i]['repo_id'],
                                 function(result) {
@@ -216,6 +216,7 @@ gingerbase.init_update = function() {
                                     wok.message.error(error.responseJSON.reason);
                                 });
                                 }
+                                enableRepositoryButtons(false);
                         });
                     }else {
                         return false;

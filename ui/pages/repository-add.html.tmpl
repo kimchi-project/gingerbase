@@ -28,6 +28,7 @@
         <h4 class="modal-title">$_("Add a Repository")</h4>
     </div>
     <div class="modal-body">
+        <span id="alert-modal-container"></span>
         <form id="form-repository-add">
                 <div class="form-group yum">
                         <label for="repo_id">$_("Identifier")</label>
@@ -63,7 +64,7 @@
         </form>
     </div>
     <div class="modal-footer">
-                <button type="submit" id="button-repository-add" class="btn btn-default" disabled="disabled">$_("Add")</button>
+                <button type="button" id="button-repository-add" class="btn btn-default" disabled="disabled">$_("Add")</button>
                 <button type="button" id="button-repository-close" data-dismiss="modal" class="btn btn-default">$_("Cancel")</button>
     </div>
 </div>
