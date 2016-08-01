@@ -290,6 +290,8 @@ def sosreport_collection(name):
     """
     path_sosreport = '/var/tmp/'
     sosreport_file = None
+    if '_' in name:
+        raise InvalidParameter("GGBDR0013E", {'name': name})
     command = ['sosreport', '--batch', '--name=%s' % name,
                '--tmp-dir=%s' % path_sosreport]
     output, error, retcode = run_command(command)
