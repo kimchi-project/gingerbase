@@ -29,7 +29,7 @@ gingerbase.report_add_main = function() {
             return false;
         }
         var reportName = nameTextbox.val();
-        var validator = RegExp("^[_A-Za-z0-9-]*$");
+        var validator = RegExp("^[A-Za-z0-9-]*$");
         if (!validator.test(reportName)) {
             wok.message.error.code('GGBDR6011M','#alert-modal-debugreportadd-container', true);
             return false;

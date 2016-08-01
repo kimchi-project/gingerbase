@@ -34,7 +34,7 @@ gingerbase.report_rename_main = function() {
         return false;
         }
 
-        var validator = RegExp("^[_A-Za-z0-9-]*$");
+        var validator = RegExp("^[A-Za-z0-9-]*$");
         if (!validator.test(reportName)) {
             wok.message.error.code('GGBDR6011M','#alert-modal-debugreportrename-container', true);
             return false;
