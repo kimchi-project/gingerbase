@@ -341,24 +341,24 @@ gingerbase.init_dashboard = function() {
         data['memory']['offline'] = wok.formatMeasurement(data['memory']['offline'], {
             fixed: 2, converter: wok.localeConverters["number-locale-converter"]
         });
-        memory =  i18n["GGBHOST6010M"] + ": " + data['memory']['online'] + ", " +
-                  i18n["GGBHOST6011M"] + ": " + data['memory']['offline'];
+        memory =  i18n["GGBHOST6010M"] + data['memory']['online'] + "\xa0\xa0\xa0\xa0" +
+                  i18n["GGBHOST6011M"] + data['memory']['offline'];
         // fetch online and offline cpu details
-        cpus = i18n["GGBHOST6010M"] + ": " + data['cpus']['online'] + ", " +
-               i18n["GGBHOST6011M"] + ": " + data['cpus']['offline'];
+        cpus = i18n["GGBHOST6010M"] + data['cpus']['online'] + "\xa0\xa0\xa0\xa0" +
+               i18n["GGBHOST6011M"] + data['cpus']['offline'];
         // fetch socket(s), core(s) per socket and thread(s) per core details
-        cpu_threads = i18n["GGBHOST6015M"] + ": " + data['cpu_threads']['sockets'] + ", " +
-                      i18n["GGBHOST6016M"] + ": " + data['cpu_threads']['cores_per_socket'] + ", " +
-                      i18n["GGBHOST6017M"] + ": " + data['cpu_threads']['threads_per_core'];
+        cpu_threads = i18n["GGBHOST6015M"] + data['cpu_threads']['sockets'] + "\xa0\xa0\xa0\xa0" +
+                      i18n["GGBHOST6016M"] + data['cpu_threads']['cores_per_socket'] + "\xa0\xa0\xa0\xa0" +
+                      i18n["GGBHOST6017M"] + data['cpu_threads']['threads_per_core'];
         // This code is only for s390x architecture where hypervisor details required.
         if (data['architecture'] == 's390x'){
             // cores_info is total shared and dedicated cpu cores for s390x
-            data['cores_info'] = i18n["GGBHOST6012M"] + ": " + data['cpus']['shared'] + ", " +
-                                 i18n["GGBHOST6013M"] + ": " + data['cpus']['dedicated'];
+            data['cores_info'] = i18n["GGBHOST6012M"] + data['cpus']['shared'] + "\xa0\xa0\xa0\xa0" +
+                                 i18n["GGBHOST6013M"] + data['cpus']['dedicated'];
             //prepend book(s) details to cpu_threads
-            cpu_threads = i18n["GGBHOST6014M"] + ": " + data['cpu_threads']['books'] + ", " + cpu_threads
-            data['lpar_details'] = 'Name: ' + data['virtualization']['lpar_name'] + ', ID: ' + data['virtualization']['lpar_number'];
-            data['hypervisor_details'] = 'Name: ' + data['virtualization']['hypervisor'] + ', Vendor :' + data['virtualization']['hypervisor_vendor'];
+            cpu_threads = i18n["GGBHOST6014M"] + data['cpu_threads']['books'] + "\xa0\xa0\xa0\xa0" + cpu_threads
+            data['lpar_details'] = i18n["GGBHOST6019M"] + data['virtualization']['lpar_name'] + '\xa0\xa0\xa0\xa0' + i18n["GGBHOST6020M"] + data['virtualization']['lpar_number'];
+            data['hypervisor_details'] = i18n["GGBHOST6019M"] + data['virtualization']['hypervisor'] + '\xa0\xa0\xa0\xa0' + i18n["GGBHOST6021M"] + data['virtualization']['hypervisor_vendor'];
         }
         data['memory'] = memory
         data['cpus'] = cpus
