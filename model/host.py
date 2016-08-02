@@ -34,6 +34,7 @@ from wok.exception import OperationFailed
 from wok.utils import add_task, run_command, wok_log
 from wok.model.tasks import TaskModel
 
+from wok.plugins.gingerbase.config import config
 from wok.plugins.gingerbase.i18n import messages
 from wok.plugins.gingerbase.lscpu import LsCpu
 from wok.plugins.gingerbase.model.debugreports import DebugReportsModel
@@ -397,11 +398,20 @@ class HostStatsModel(object):
 
     def __init__(self, **kargs):
         self.host_stats = defaultdict(list)
-        self.host_stats_thread = BackgroundTask(HOST_STATS_INTERVAL,
-                                                self._update_host_stats)
-        self.host_stats_thread.start()
+        gbconfig = config.get('gingerbase', {})
+        self.statshistory_on = gbconfig.get('statshistory_on', True)
+
+        # create thread to collect statistcs and cache values only if
+        # statshistory_on is enabled in gingerbase.conf
+        if self.statshistory_on:
+            self.host_stats_thread = BackgroundTask(HOST_STATS_INTERVAL,
+                                                    self.update_host_stats)
+            self.host_stats_thread.start()
 
     def lookup(self, *name):
+        if not self.statshistory_on:
+            self.update_host_stats()
+
         return {'cpu_utilization': self.host_stats['cpu_utilization'][-1],
                 'memory': self.host_stats['memory'][-1],
                 'disk_read_rate': self.host_stats['disk_read_rate'][-1],
@@ -409,7 +419,7 @@ class HostStatsModel(object):
                 'net_recv_rate': self.host_stats['net_recv_rate'][-1],
                 'net_sent_rate': self.host_stats['net_sent_rate'][-1]}
 
-    def _update_host_stats(self):
+    def update_host_stats(self):
         preTimeStamp = self.host_stats['timestamp']
         timestamp = time.time()
         # FIXME when we upgrade psutil, we can get uptime by psutil.uptime
@@ -516,6 +526,10 @@ class HostStatsHistoryModel(object):
         self.history = HostStatsModel(**kargs)
 
     def lookup(self, *name):
+        if not self.history.statshistory_on:
+            # return values of only one execution
+            return self.history.lookup()
+
         return {'cpu_utilization': self.history.host_stats['cpu_utilization'],
                 'memory': self.history.host_stats['memory'],
                 'disk_read_rate': self.history.host_stats['disk_read_rate'],

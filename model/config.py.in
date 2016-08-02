@@ -20,6 +20,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
 
+from wok.plugins.gingerbase.config import config
+
+
 __version__ = "@gingerbaseversion@"
 __release__ = "@gingerbaserelease@"
 
@@ -29,4 +32,6 @@ class ConfigModel(object):
         pass
 
     def lookup(self, name):
-        return {'version': "-".join([__version__, __release__])}
+        gbconfig = config.get('gingerbase', {})
+        return {'version': "-".join([__version__, __release__]),
+                'statshistory_on': gbconfig.get('statshistory_on', True)}

@@ -20,6 +20,7 @@
 
 import os
 import threading
+from cherrypy.lib.reprconf import Parser
 
 from wok.config import CACHEEXPIRES, PluginConfig, PluginPaths
 
@@ -33,6 +34,14 @@ def get_debugreports_path():
 def get_object_store():
     return os.path.join(PluginPaths('gingerbase').state_dir,
                         'objectstore')
+
+
+def get_config():
+    plugin_conf = PluginPaths('gingerbase').conf_file
+    return Parser().dict_from_file(plugin_conf)
+
+
+config = get_config()
 
 
 class GingerBasePaths(PluginPaths):
