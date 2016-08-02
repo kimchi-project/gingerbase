@@ -84,6 +84,9 @@ class ConfigTests(unittest.TestCase):
                 'enable': True,
                 'uri': '/plugins/gingerbase'
             },
+            'gingerbase': {
+                'statshistory_on': True,
+            },
             '/': {
                 'tools.trailing_slash.on': False,
                 'request.methods_with_bodies': ('POST', 'PUT'),
