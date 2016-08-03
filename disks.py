@@ -86,8 +86,8 @@ def _is_dev_leaf(devNodePath, name=None, devs=None):
         if devs:
             for dev in devs:
                 if encode_value(name) == dev['pkname']:
-                    return True
-            return False
+                    return False
+            return True
         # By default, lsblk prints a device information followed by children
         # device information
         childrenCount = len(
