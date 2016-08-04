@@ -26,7 +26,8 @@ import glob
 import os
 
 from distutils.spawn import find_executable
-from wok.utils import encode_value, run_command, wok_log
+from wok.stringutils import encode_value
+from wok.utils import run_command, wok_log
 
 NET_PATH = '/sys/class/net'
 NIC_PATH = '/sys/class/net/*/device'

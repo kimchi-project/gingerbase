@@ -26,7 +26,8 @@ from parted import Device as PDevice
 from parted import Disk as PDisk
 
 from wok.exception import NotFoundError, OperationFailed
-from wok.utils import encode_value, run_command, wok_log
+from wok.stringutils import encode_value
+from wok.utils import run_command, wok_log
 
 
 def _get_dev_node_path(maj_min):
