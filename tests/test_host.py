@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
 import json
 import mock
 import os
@@ -200,15 +199,25 @@ class HostTests(unittest.TestCase):
         self.assertEqual(task['status'], 'finished')
         time.sleep(1)
 
-    def test_get_vmlist_bystate_import_error(self):
-        with patch.dict('sys.modules', {}):
+    @mock.patch('wok.plugins.gingerbase.model.host.wok_log')
+    def test_get_vmlist_bystate_import_error(self, mock_woklog):
+
+        def failed_libvirt_import(module, *args, **kwargs):
+            raise ImportError()
+
+        with patch('__builtin__.__import__', failed_libvirt_import):
             vms = HostModel(objstore=None).get_vmlist_bystate()
             self.assertEqual(vms, [])
 
     @mock.patch('wok.plugins.gingerbase.model.host.run_command')
     def test_vmlist_bystate_libvirtd_not_running(self, mock_run_cmd):
+
+        def successful_libvirt_import(module, *args, **kwargs):
+            pass
+
         mock_run_cmd.return_value = ['', '', 3]
-        with patch.dict('sys.modules', {'libvirt': 0}):
+
+        with patch('__builtin__.__import__', successful_libvirt_import):
             vms = HostModel(objstore=None).get_vmlist_bystate()
             self.assertEqual(vms, [])
             cmd = ['systemctl', 'is-active', 'libvirtd', '--quiet']
