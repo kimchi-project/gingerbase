@@ -131,17 +131,30 @@ gingerbase.spec: contrib/gingerbase.spec.fedora contrib/gingerbase.spec.suse
 		/bin/false ;                                        \
 	fi
 
-rpm: dist gingerbase.spec
+check_files:
+	@if [ -d '.git' ]; then                                                                \
+               if [ `git status --porcelain --untracked-files=no | wc -l` -gt 0 ]; then        \
+                       echo "***** Aborting 'make rpm' command *****";                         \
+                       echo "There are some changes not commited in your working \
+directory. To avoid losing them, please commit or stage before run 'make rpm' command.";       \
+                       exit 1;                                                                 \
+               fi                                                                              \
+       fi
+
+rpm: check_files dist gingerbase.spec
 	$(MKDIR_P) rpm/BUILD rpm/RPMS rpm/SOURCES rpm/SPECS rpm/SRPMS
 	cp $(top_srcdir)/gingerbase.spec rpm/SPECS/gingerbase.spec
 	cp $(DIST_ARCHIVES) rpm/SOURCES
 	rpmbuild -ba --define "_topdir `pwd`/rpm" rpm/SPECS/gingerbase.spec
+	@if [ -d '.git' ]; then			\
+                git reset --hard;		\
+        fi
 
-fedora-rpm: contrib/gingerbase.spec.fedora
+fedora-rpm: check_files contrib/gingerbase.spec.fedora
 	ln -sf contrib/gingerbase.spec.fedora gingerbase.spec
 	$(MAKE) rpm
 
-suse-rpm: contrib/gingerbase.spec.suse
+suse-rpm: check_files contrib/gingerbase.spec.suse
 	ln -sf contrib/gingerbase.spec.suse gingerbase.spec
 	$(MAKE) rpm
 
