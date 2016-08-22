@@ -212,7 +212,7 @@ def get_partition_details(name):
     majmin = _get_dev_major_min(name)
     dev_path = _get_dev_node_path(majmin)
 
-    keys = ["TYPE", "FSTYPE", "SIZE", "MOUNTPOINT"]
+    keys = ["TYPE", "FSTYPE", "SIZE", "MOUNTPOINT", "MAJ:MIN", "PKNAME"]
     try:
         dev = _get_lsblk_devs(keys, [dev_path])[0]
     except:
