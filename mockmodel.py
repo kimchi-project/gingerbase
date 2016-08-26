@@ -24,8 +24,9 @@ import os
 import random
 import time
 
+from wok.asynctask import AsyncTask
 from wok.objectstore import ObjectStore
-from wok.utils import add_task, wok_log
+from wok.utils import wok_log
 
 from wok.plugins.gingerbase import config
 from wok.plugins.gingerbase import swupdate
@@ -84,8 +85,8 @@ class MockModel(Model):
         return ET.fromstring(xml)
 
     def _gen_debugreport_file(self, name):
-        return add_task('/plugins/gingerbase/debugreports/%s' % name,
-                        self._create_log, self.objstore, name)
+        return AsyncTask('/plugins/gingerbase/debugreports/%s' % name,
+                         self._create_log, name).id
 
     def _create_log(self, cb, name):
         path = config.get_debugreports_path()
@@ -113,21 +114,19 @@ class MockModel(Model):
 
     def _mock_packageupdate_upgrade(self, pkg_name):
         pkgs_list = [pkg_name] + self._mock_swupdate.pkgs[pkg_name]['depends']
-        taskid = add_task('/plugins/gingerbase/host/packagesupdate/%s/upgrade'
-                          % pkg_name, self._mock_swupdate.doUpdate,
-                          self.objstore, pkgs_list)
+        taskid = AsyncTask('/plugins/gingerbase/host/packagesupdate/%s/upgrade'
+                           % pkg_name, self._mock_swupdate.doUpdate,
+                           pkgs_list).id
         return self.task_lookup(taskid)
 
     def _mock_host_swupdate(self, args=None):
-        task_id = add_task('/plugins/gingerbase/host/swupdate',
-                           self._mock_swupdate.doUpdate,
-                           self.objstore)
+        task_id = AsyncTask('/plugins/gingerbase/host/swupdate',
+                            self._mock_swupdate.doUpdate).id
         return self.task_lookup(task_id)
 
     def _mock_swupdateprogress_lookup(self, *name):
-        task_id = add_task('/plugins/gingerbase/host/swupdateprogress',
-                           self._mock_swupdate.doSlowUpdate,
-                           self.objstore)
+        task_id = AsyncTask('/plugins/gingerbase/host/swupdateprogress',
+                            self._mock_swupdate.doSlowUpdate).id
         return self.task_lookup(task_id)
 
     def _mock_repositories_get_list(self):

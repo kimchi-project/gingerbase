@@ -28,10 +28,11 @@ from cherrypy.process.plugins import BackgroundTask
 from collections import defaultdict
 import glob
 
+from wok.asynctask import AsyncTask
 from wok.basemodel import Singleton
 from wok.exception import InvalidOperation
 from wok.exception import OperationFailed
-from wok.utils import add_task, run_command, wok_log
+from wok.utils import run_command, wok_log
 from wok.model.tasks import TaskModel
 
 from wok.plugins.gingerbase.config import config
@@ -345,9 +346,8 @@ class HostModel(object):
             return {'message': messages['GGBPKGUPD0001E']}
 
         wok_log.debug('Host is going to be updated.')
-        taskid = add_task('/plugins/gingerbase/host/swupdate',
-                          swupdate.doUpdate,
-                          self.objstore, None)
+        taskid = AsyncTask('/plugins/gingerbase/host/swupdate',
+                           swupdate.doUpdate).id
         return self.task.lookup(taskid)
 
     def shutdown(self, args=None):

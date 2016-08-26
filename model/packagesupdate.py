@@ -19,8 +19,9 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
+from wok.asynctask import AsyncTask
 from wok.exception import OperationFailed
-from wok.utils import add_task, wok_log
+from wok.utils import wok_log
 from wok.model.tasks import TaskModel
 
 from wok.plugins.gingerbase.swupdate import SoftwareUpdate
@@ -88,9 +89,8 @@ class PackageUpdateModel(object):
         pkgs_list = self._resolve_dependencies(name)
         msg = 'The following packages will be updated: ' + ', '.join(pkgs_list)
         wok_log.debug(msg)
-        taskid = add_task('/plugins/gingerbase/host/packagesupdate/%s/upgrade'
-                          % name, self.host_swupdate.doUpdate,
-                          self.objstore, pkgs_list)
+        taskid = AsyncTask('/plugins/gingerbase/host/packagesupdate/%s/upgrade'
+                           % name, self.host_swupdate.doUpdate, pkgs_list).id
         return self.task.lookup(taskid)
 
 
@@ -105,6 +105,6 @@ class SwUpdateProgressModel(object):
         except:
             raise OperationFailed('GGBPKGUPD0004E')
 
-        taskid = add_task('/plugins/gingerbase/host/swupdateprogress',
-                          swupdate.tailUpdateLogs, self.objstore, None)
+        taskid = AsyncTask('/plugins/gingerbase/host/swupdateprogress',
+                           swupdate.tailUpdateLogs).id
         return self.task.lookup(taskid)

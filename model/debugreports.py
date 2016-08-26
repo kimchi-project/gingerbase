@@ -27,9 +27,10 @@ import subprocess
 import time
 
 
+from wok.asynctask import AsyncTask
 from wok.exception import InvalidParameter, NotFoundError, OperationFailed
 from wok.exception import WokException
-from wok.utils import add_task, wok_log
+from wok.utils import wok_log
 from wok.utils import run_command
 from wok.model.tasks import TaskModel
 
@@ -65,8 +66,8 @@ class DebugReportsModel(object):
         gen_cmd = self.get_system_report_tool()
 
         if gen_cmd is not None:
-            return add_task('/plugins/gingerbase/debugreports/%s' % name,
-                            gen_cmd, self.objstore, name)
+            return AsyncTask('/plugins/gingerbase/debugreports/%s' % name,
+                             gen_cmd, name).id
 
         raise OperationFailed("GGBDR0002E")
 
