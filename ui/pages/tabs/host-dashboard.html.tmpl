@@ -54,7 +54,8 @@
     </div>
   </div>
 </nav>
-    <div id="host-content-container" class="empty-when-logged-off"></div>
+    <div id="host-content-container" class="empty-when-logged-off">
+    </div>
 </div>
 
 <script id="host-dashboard-tmpl" type="gingerbase/template">
@@ -146,7 +147,11 @@
 <div id="modalWindow" class="modal fade host-modal" tabindex="-1" role="dialog" aria-labelledby="hostsModalLabel" aria-hidden="true">
 </div>
 <script type="text/javascript">
+    // Init host dashboard
     gingerbase.host_dashboard();
 </script>
+#for $script in $data.scripts
+<script type="text/javascript" src="$script"></script>
+#end for
 </body>
 </html>
