@@ -331,3 +331,27 @@ Contains the host capabilities.
 **Actions (POST):**
 
 *No actions defined*
+
+Resource: SMT
+
+**URI:** /plugins/gingerbase/host/smt
+
+**METHODS:**
+
+* **GET**: Retrieves the current and persisted smt status of the host if supported.
+    * current_smt_settings: The dictionary of current SMT settings (/proc/cmdline).
+        * status : The current smt status. Can be either enabled or disabled.
+        * smt : The SMT value
+    * persisted_smt_settings: The dictionary of persisted SMT settings (/etc/zipl.conf).
+        * status : The current smt status. Can be either enabled or disabled.
+        * smt : The SMT value
+
+**Actions (POST):**
+
+**URI:** /plugins/gingerbase/host/smt/enable
+
+* enable: Enables SMT on the host if suppported.
+
+**URI:** /plugins/gingerbase/host/smt/disable
+
+* disable: Disables SMT on the host if suppported.
