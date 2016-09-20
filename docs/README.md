@@ -105,6 +105,9 @@ To install Ginger Base dependencies, follow:
     # If using Fedora, install the following additional packages:
     $ sudo yum install python2-dnf
 
+    # These dependencies are only required if you want to run the tests:
+    $ sudo yum install python-mock
+
 *Note for RHEL users*: Some of the above packages are located in the Red Hat
 EPEL repositories.  See
 [this FAQ](http://fedoraproject.org/wiki/EPEL#How_can_I_use_these_extra_packages.3F)
@@ -117,9 +120,15 @@ channel at RHN Classic or Red Hat Satellite.
 
     $ sudo apt-get install python-apt sosreport python-configobj python-parted
 
+    # These dependencies are only required if you want to run the tests:
+    $ sudo apt-get install python-mock
+
 **For openSUSE:**
 
     $ sudo zypper install rpm-python python-parted python-configobj
+
+    # These dependencies are only required if you want to run the tests:
+    $ sudo zypper install python-mock
 
 *Note for openSUSE users*: Some of the above packages are located in different
 openSUSE repositories. See
