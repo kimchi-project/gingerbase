@@ -35,14 +35,8 @@ class SMTModelTests(unittest.TestCase):
         """
         Unittest to fetch smt status
         """
-        current_info = {
-                        "status": "enabled",
-                        "smt": "2"
-                       }
-        perisistent_info = {
-                        "status": "enabled",
-                        "smt": "2"
-                       }
+        current_info = {"status": "enabled", "smt": "2"}
+        perisistent_info = {"status": "enabled", "smt": "2"}
         mock_smt_suport.return_value = True
         mock_current.return_value = current_info
         mock_persistent.return_value = perisistent_info
@@ -136,15 +130,9 @@ target=/boot
         Unittest for disabling SMT success scenario.
         """
         info = {
-                "persisted_smt_settings": {
-                                           "status": "enabled",
-                                           "smt": "2"
-                                          },
-                "current_smt_settings": {
-                                        "status": "enabled",
-                                        "smt": "nosmt"
-                                       }
-               }
+            "persisted_smt_settings": {"status": "enabled", "smt": "2"},
+            "current_smt_settings": {"status": "enabled", "smt": "nosmt"}
+        }
         name = "dummy"
         mock_get.return_value = info
         mock_is_file.return_value = True
@@ -164,15 +152,9 @@ target=/boot
         Unittest to disable SMT invalid scenario.
         """
         info = {
-                "persisted_smt_settings": {
-                                           "status": "enabled",
-                                           "smt": "2"
-                                          },
-                "current_smt_settings": {
-                                        "status": "disabled",
-                                        "smt": "nosmt"
-                                       }
-               }
+            "persisted_smt_settings": {"status": "enabled", "smt": "2"},
+            "current_smt_settings": {"status": "disabled", "smt": "nosmt"}
+        }
         name = "dummy"
 
         with self.assertRaisesRegexp(OperationFailed, 'GINSMT0005E'):
