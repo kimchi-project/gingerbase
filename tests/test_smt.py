@@ -20,7 +20,7 @@
 import mock
 import unittest
 
-from wok.exception import OperationFailed, InvalidParameter
+from wok.exception import InvalidOperation, InvalidParameter, OperationFailed
 from wok.plugins.gingerbase.model.smt import SmtModel
 
 
@@ -157,7 +157,7 @@ target=/boot
         }
         name = "dummy"
 
-        with self.assertRaisesRegexp(OperationFailed, 'GINSMT0005E'):
+        with self.assertRaisesRegexp(InvalidOperation, 'GINSMT0005E'):
             mock_get.return_value = info
             mock_is_file.return_value = True
             mock_load.return_value = {}

@@ -39,6 +39,7 @@ from wok.plugins.gingerbase.config import config
 from wok.plugins.gingerbase.i18n import messages
 from wok.plugins.gingerbase.lscpu import LsCpu
 from wok.plugins.gingerbase.model.debugreports import DebugReportsModel
+from wok.plugins.gingerbase.model.smt import SmtModel
 from wok.plugins.gingerbase.repositories import Repositories
 from wok.plugins.gingerbase.swupdate import SoftwareUpdate
 
@@ -566,11 +567,19 @@ class CapabilitiesModel(object):
     def has_report_tool(self):
         return bool(DebugReportsModel.get_system_report_tool())
 
+    def has_smt(self):
+        if ARCH.startswith('s390x') and SmtModel().check_smt_support():
+            return True
+        else:
+            return False
+
     def lookup(self, *ident):
         self.report_tool = self.has_report_tool()
+        self.smt = self.has_smt()
         return {'system_report_tool': self.report_tool,
                 'update_tool': self.update_tool,
-                'repo_mngt_tool': self.repo_mngt_tool}
+                'repo_mngt_tool': self.repo_mngt_tool,
+                'smt': self.smt}
 
 
 class RepositoriesModel(object):

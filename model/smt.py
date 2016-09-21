@@ -195,9 +195,8 @@ class SmtModel(object):
         """
         Method to disable SMT for s390x architecture
         """
-        info = self.get_smt_status_s390x()
-        if os.path.isfile(str(ZIPL)):
-            if info['current_smt_settings']['status'] == 'enabled':
+        try:
+            if os.path.isfile(str(ZIPL)):
                 backup_file = ZIPL + "_bak"
                 shutil.copy(ZIPL, backup_file)
                 var = ' ' + NOSMT + '"'
@@ -210,9 +209,11 @@ class SmtModel(object):
                 self.load_smt_s390x(backup_file)
                 wok_log.info("Successfully disabled SMT settings.")
             else:
-                raise OperationFailed("GINSMT0005E")
-        else:
-            raise OperationFailed("GINSMT0012E")
+                raise OperationFailed("GINSMT0012E")
+        except OperationFailed:
+            raise
+        except Exception:
+            raise InvalidOperation("GINSMT0005E")
 
     def recover_ziplfile(self, ziplfile, backupfile):
         """
@@ -271,5 +272,7 @@ class SmtModel(object):
                     ifl_count += 1
             if un_count == 0 and cp_count == 0 and ifl_count > 0:
                 return True
+            else:
+                return False
         except Exception:
             raise OperationFailed("GINSMT0006E")

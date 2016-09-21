@@ -378,7 +378,7 @@ gingerbase.init_dashboard = function() {
     });
 
     var StatsMgr = function() {
-      if(arch == "s390x"){
+      if(gingerbase.capabilities['smt']){
         $('#smt_available').show();
       var smt_status;
         gingerbase.getSMT(function suc(result) {
