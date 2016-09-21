@@ -35,7 +35,7 @@ messages = {
     "GGBDR0006E": _("You should give a name for the debug report file."),
     "GGBDR0007E": _("Debug report name must be a string. Only letters, digits, underscore ('_') and "
                     "hyphen ('-') are allowed."),
-    "GGBDR0008E": _("The debug report with specified name \"%(name)s\" already exists. Please use another one."),
+    "GGBDR0008E": _("The debug report with specified name '%(name)s' already exists. Please use another one."),
     "GGBDR0009E": _("Unable to create dbginfo report with %(retcode)s. Details: %(err)s"),
     "GGBDR0010E": _("Unable to compress the final debug report tar file with %(retcode)s. Details: %(error)s"),
     "GGBDR0011E": _("Unable to generate final debug report %(name)s. Details: %(err)s"),
@@ -84,7 +84,6 @@ messages = {
     "GGBREPOS0028E": _("Configuration items: '%(items)s' are not supported by repository manager"),
     "GGBREPOS0029E": _("Repository metalink must be an http://, ftp:// or file:// URL."),
     "GGBREPOS0030E": _("Cannot specify mirrorlist and metalink at the same time."),
-
 
     "GGBCPUINF0001E": _("The number of vCPUs is too large for this system."),
     "GGBCPUINF0002E": _("Invalid vCPU/topology combination."),
