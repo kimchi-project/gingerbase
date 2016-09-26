@@ -106,7 +106,7 @@ To install Ginger Base dependencies, follow:
     $ sudo yum install python2-dnf
 
     # These dependencies are only required if you want to run the tests:
-    $ sudo yum install python-mock
+    $ sudo yum install python-mock rpmlint
 
 *Note for RHEL users*: Some of the above packages are located in the Red Hat
 EPEL repositories.  See
@@ -128,7 +128,7 @@ channel at RHN Classic or Red Hat Satellite.
     $ sudo zypper install rpm-python python-parted python-configobj
 
     # These dependencies are only required if you want to run the tests:
-    $ sudo zypper install python-mock
+    $ sudo zypper install python-mock rpmlint
 
 *Note for openSUSE users*: Some of the above packages are located in different
 openSUSE repositories. See

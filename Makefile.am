@@ -80,6 +80,9 @@ check-local:
 			'4b825dc642cb6eb9a060e54bf8d69288fbee4904' HEAD ; \
 		echo "IBM copyright year verification ..." ;              \
 		/bin/bash ../../../../check-IBM-license-header.sh ;       \
+	fi;
+	@if [ -f $(RPMLINT) ]; then \
+		./check_spec_errors.sh; \
 	fi
 	@echo "Ok"
 
