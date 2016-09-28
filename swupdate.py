@@ -366,9 +366,11 @@ class AptUpdate(GenericUpdate):
         """
         self.wait_pkg_manager_available()
         try:
+            self._apt_cache.open()
             self._apt_cache.update()
             self._apt_cache.upgrade()
             pkgs = self._apt_cache.get_changes()
+            self._apt_cache.close()
         except Exception, e:
             raise OperationFailed('GGBPKGUPD0003E', {'err': e.message})
 
@@ -390,8 +392,10 @@ class AptUpdate(GenericUpdate):
 
         package = {}
         try:
+            self._apt_cache.open()
             self._apt_cache.upgrade()
             pkgs = self._apt_cache.get_changes()
+            self._apt_cache.close()
         except Exception, e:
             raise OperationFailed('GGBPKGUPD0006E', {'err': e.message})
 
