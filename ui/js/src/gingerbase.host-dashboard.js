@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 gingerbase.host = {};
+var arch;
 
 gingerbase.host_dashboard = function() {
   gingerbase.getCapabilities(function(result) {
@@ -351,6 +352,7 @@ gingerbase.init_dashboard = function() {
                       i18n["GGBHOST6016M"] + data['cpu_threads']['cores_per_socket'] + "\xa0\xa0\xa0\xa0" +
                       i18n["GGBHOST6017M"] + data['cpu_threads']['threads_per_core'];
         // This code is only for s390x architecture where hypervisor details required.
+        arch = data['architecture'];
         if (data['architecture'] == 's390x'){
             // cores_info is total shared and dedicated cpu cores for s390x
             data['cores_info'] = i18n["GGBHOST6012M"] + data['cpus']['shared'] + "\xa0\xa0\xa0\xa0" +
@@ -376,6 +378,16 @@ gingerbase.init_dashboard = function() {
     });
 
     var StatsMgr = function() {
+      if(gingerbase.capabilities['smt']){
+        $('#smt_available').show();
+      var smt_status;
+        gingerbase.getSMT(function suc(result) {
+          smt_status = result['current_smt_settings'];
+          $("#smt_cstatus").text(smt_status['status']);
+        }, function(error) {
+        wok.message.error(error.responseJSON.reason);
+        });
+      }
         var statsArray = {
             cpu: {
                 u: {
@@ -677,4 +689,128 @@ gingerbase.init_dashboard = function() {
         wok.topic('gingerbase/debugReportAdded').unsubscribe(listDebugReports);
         wok.topic('gingerbase/debugReportRenamed').unsubscribe(listDebugReports);
     });
+
 };
+gingerbase.getsmtstatus = function() {
+    $('.selectpicker').selectpicker();
+    $("input.make-switch").bootstrapSwitch();
+    $('#smt-value').show();
+    $('#no-smt-value').hide();
+    $('#smt-submit').prop("disabled", true);
+    gingerbase.getSMT(function suc(result) {
+        var res = result['current_smt_settings'];
+        $("#smtstatus-textbox").text(res['status']);
+        $("#smtvalue-textbox").text(res['smt']);
+        var persist_re = result['persisted_smt_settings'];
+        if (persist_re['status'] == "enabled") {
+            $('#no-smt-value').hide();
+            $('#smt-value').show();
+            $('#smt-status-change').bootstrapSwitch('state', true);
+            $('#smtTypeenabled').selectpicker("val", persist_re['smt']);
+        } else {
+            $('#smt-value').hide();
+            $('#no-smt-value').show();
+            $('#smt-status-change').bootstrapSwitch('state', false);
+            $('#smtTypedisabled').val(persist_re['smt']);
+        }
+    }, function(error) {
+        wok.message.error(error.responseJSON.reason);
+    });
+    $('.selectpicker').on('change', function() {
+        $('#smt-submit').prop("disabled", false);
+    });
+    $('#smt-status-change').on('switchChange.bootstrapSwitch', function(event, state) {
+        $('#smt-submit').prop("disabled", false);
+        if (state) {
+            $('#no-smt-value').hide();
+            $('#smt-value').show();
+        } else {
+            $('#smt-value').hide();
+            $('#no-smt-value').show();
+        }
+    });
+    $('#smt-submit').one('click', function(event) {
+        var smtval = {};
+        if ($('#smt-status-change').bootstrapSwitch('state')) {
+            smtval['smt_val'] = $('#smtTypeenabled').val();
+            var settings = {
+                content: i18n["GGBHSMT0001M"],
+                confirm: i18n["GINNET0015M"]
+            };
+            wok.confirm(settings, function() {
+                gingerbase.enablesmt(smtval, function(result) {
+                    var settings = {
+                        content: i18n["GGBHSMT0002M"],
+                        confirm: i18n["GGBHSMT0003M"],
+                        cancel: i18n["GGBHSMT0004M"]
+                    };
+                    wok.confirm(settings, function() {
+                        var params = {};
+                        params['reboot'] = true;
+                        gingerbase.shutdown(params, function(success) {
+                            wok.message.success(i18n['GGBHOST6009M'])
+                        }, function(error) {
+                            var status = error.status;
+                            if (status === 502) {
+                                wok.message.error(i18n['GGBHOST6002E']);
+                                setTimeout(function() {
+                                    location.reload(true);
+                                }, 1000);
+                            } else {
+                                if (status !== 0) {
+                                    wok.message.error(i18n['GGBHOST6001E']);
+                                }
+                            }
+                        });
+                    }, function() {
+                        $('#smtinfo').modal('hide');
+                    });
+                    $('#smtinfo').modal('hide');
+                    wok.message.success(i18n['GGBHSMT0005M'], '#smt-load-message');
+                }, function(error) {
+                    wok.message.error(error.responseJSON.reason, '#smt-message');
+                });
+            });
+        } else {
+            smtval = {};
+            var settings = {
+                content: i18n["GGBHSMT0006M"],
+                confirm: i18n["GINNET0015M"]
+            };
+            wok.confirm(settings, function() {
+                gingerbase.disablesmt(smtval, function(result) {
+                    var settings = {
+                        content: i18n["GGBHSMT0002M"],
+                        confirm: i18n["GGBHSMT0003M"],
+                        cancel: i18n["GGBHSMT0004M"]
+                    };
+                    wok.confirm(settings, function() {
+                        var params = {};
+                        params['reboot'] = true;
+                        gingerbase.shutdown(params, function(success) {
+                            wok.message.success(i18n['GGBHOST6009M'])
+                        }, function(error) {
+                            var status = error.status;
+                            if (status === 502) {
+                                wok.message.error(i18n['GGBHOST6002E']);
+                                setTimeout(function() {
+                                    location.reload(true);
+                                }, 1000);
+                            } else {
+                                if (status !== 0) {
+                                    wok.message.error(i18n['GGBHOST6001E']);
+                                }
+                            }
+                        });
+                    }, function() {
+                        $('#smtinfo').modal('hide');
+                    });
+                    $('#smtinfo').modal('hide');
+                    wok.message.success(i18n['GGBHSMT0007M'], '#smt-load-message');
+                }, function(error) {
+                    wok.message.error(error.responseJSON.reason, '#smt-message');
+                });
+            });
+        }
+    });
+}

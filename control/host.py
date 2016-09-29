@@ -22,6 +22,7 @@
 from wok.control.base import Collection, Resource
 from wok.control.utils import UrlSubNode
 
+from wok.plugins.gingerbase.control.smt import Smt
 from wok.plugins.gingerbase.control.cpuinfo import CPUInfo
 from wok.plugins.gingerbase.control.packagesupdate import PackagesUpdate
 from wok.plugins.gingerbase.control.packagesupdate import SwUpdateProgress
@@ -64,6 +65,7 @@ class Host(Resource):
         self.swupdate = self.generate_action_handler_task('swupdate')
         self.swupdateprogress = SwUpdateProgress(self.model)
         self.cpuinfo = CPUInfo(self.model)
+        self.smt = Smt(self.model)
         self.capabilities = Capabilities(self.model)
         self.log_map = HOST_ACTIVITY
 

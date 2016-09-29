@@ -439,6 +439,40 @@ var gingerbase = {
             }
         });
     },
-
+    // get smt data
+    getSMT: function(suc, err) {
+        wok.requestJSON({
+            url : 'plugins/gingerbase/host/smt',
+            type : 'GET',
+            resend: true,
+            contentType : 'application/json',
+            dataType : 'json',
+            resend : true,
+            success : suc,
+            error: err
+        });
+    },
+    enablesmt : function(value, suc, err) {
+        wok.requestJSON({
+            url : "plugins/gingerbase/host/smt/enable",
+            type : "POST",
+            contentType : "application/json",
+            data : JSON.stringify(value),
+            dataType : "json",
+            success: suc,
+            error: err
+        });
+    },
+    disablesmt : function(value, suc, err) {
+        wok.requestJSON({
+            url : "plugins/gingerbase/host/smt/disable",
+            type : "POST",
+            contentType : "application/json",
+            data : JSON.stringify(value),
+            dataType : "json",
+            success: suc,
+            error: err
+        });
+    },
     capabilities: undefined
 };

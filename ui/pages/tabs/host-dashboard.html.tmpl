@@ -43,12 +43,12 @@
         <span class="icon-bar"></span>
       </button>
     </div>
-
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="toolbar">
       <ul class="nav navbar-nav navbar-right tools">
         <li><a id="host-button-restart" href="javascript:void(0);" style="display:none"><i class="fa fa-undo"></i><span>$_("Restart")</span></a></li>
         <li><a id="host-button-shutdown" href="javascript:void(0);" style="display:none"><i class="fa fa-ban"></i><span>$_("Shut down")</span></a></li>
+        <!-- <button aria-expanded="false" id="smtinfo" class="btn-primary"><i class="fa fa-pencil"> Edit</i></button> -->
         <!-- <li><a href="javascript:void(0);"><i class="fa fa-desktop"></i><span>$_("Connect")</span></a></li> -->
       </ul>
     </div>
@@ -108,6 +108,14 @@
                     <h3 class="panel-title">$_("Basic Information")</h3>
                 </div>
                 <div class="panel-body">
+                <span id="smt-load-message" style="display:none;"></span>
+                <div id="smt_available" hidden>
+                    <label>$_("SMT")</label>
+                    <label id="smt_cstatus" style="font-weight:bold"></label>
+                    <div class="btn-group">
+                        <button aria-expanded="false" type="submit" data-toggle="modal" data-target="#smtinfo" onClick="gingerbase.getsmtstatus()" class="btn-primary"><i class="fa fa-pencil"> Edit</i></button>
+                    </div>
+                    </div>
                     <dl class="basic-information-list">
                         <dt>{architecture}</dt>
                         <dd>$_("Architecture")</dd>
@@ -146,6 +154,72 @@
 </script>
 <div id="modalWindow" class="modal fade host-modal" tabindex="-1" role="dialog" aria-labelledby="hostsModalLabel" aria-hidden="true">
 </div>
+<div class="modal fade host-modal" id="smtinfo" tabindex="-1" role="dialog" labelledby="addUserModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="smt-current-status">
+            <div class="modal-header">
+                <button type="button" id="stm-info-button-close" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">$_("Simultaneous Multi-Threading")</h4>
+            </div>
+            <hr style="display:block;
+            margin-left:30px;
+            margin-right:30px ;
+            border-color:#73e600 ;
+            border-width:3px;">
+            <div class="modal-body" id="smt-current-status-info">
+                <form id="smt-status-form" class="tab-pane form-horizontal">
+                    <div class="form-group">
+                        <span id="smt-message" style="display:none;"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-group" style="width:auto;height:auto;border:1px dotted black;">
+                            <div class="form-group" style="padding-top:10px;">
+                                <span style="font-size:20px;font-family:arial;padding-left:20px;"><b>Current SMT Settings</b></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-5 col-lg-5" style="padding-left:20px;">$_("SMT Status")</label>
+                                <label id="smtstatus-textbox" class="col-md-7 col-lg-7"></label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-5 col-lg-5" style="padding-left:20px;">$_("SMT Value")</label>
+                                <label id="smtvalue-textbox" class="col-md-7 col-lg-7"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-group" style="width:auto;height:auto;border:1px dotted black;">
+                            <div class="form-group" style="padding-top:10px;">
+                                <span style="font-size:20px;font-family:arial;padding-left:20px;"><b>Persisted SMT Settings</b></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="smtstatus-textbox" class="col-md-5 col-lg-5" style="padding-left:20px;">$_("SMT Status")</label>
+                                <input type="checkbox" checked="true" class="make-switch col-md-7 col-lg-7" id="smt-status-change" />
+                            </div>
+                            <div class="form-group" id="smt-value" hidden>
+                                <label for="smtvalue-textbox" class="col-md-5 col-lg-5" style="padding-left:20px;">$_("SMT Value")</label>
+                                <select id="smtTypeenabled" class="selectpicker col-md-2 col-lg-2" style="margin-top:45px;">
+                                    <option value="1">$_("SMT 1")</option>
+                                    <option value="2">$_("SMT 2")</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="no-smt-value" hidden>
+                                <label for="smtstatus-textbox" class="col-md-5 col-lg-5" style="padding-left:20px;">$_("SMT Value")</label>
+                                <input class="col-md-2 col-lg-2 form-control" style="text-align:center;" type="text" name="status" value="no smt" id="smtTypedisabled" disabled/>
+                            </div>
+                            <p class="help-block">
+                                <i class="fa fa-info-circle" style="padding-left:20px;"></i>$_("changes will be applied only after rebooting the system")
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="smt-submit" class="btn btn-default" disabled>$_("Apply")</button>
+                <button type="button" id="smt-cancel" class="btn btn-default" data-dismiss="modal">$_("Cancel")</button>
+            </div>
+        </div>
 <script type="text/javascript">
     // Init host dashboard
     gingerbase.host_dashboard();
