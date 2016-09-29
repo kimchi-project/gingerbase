@@ -1,7 +1,11 @@
 CHANGELOG
 =========
 
+#### [2.2.1] ####
+ * [82a79fc] Updating VERSION to 2.2.1                                                      (Daniel Henrique Barboza)
+
 #### [2.2.1-rc1] ####
+ * [d8fe260] ChangeLog and VERSION changes for 2.2.1-rc1                                    (Daniel Henrique Barboza)
  * [5fbea64] Issue #108: Update APT packges list after update.                              (Paulo Vital)
  * [4422805] Bug fix: Log message got truncated because of \" on message                    (Aline Manera)
  * [70b7eed] Fix issue #131: Update README to add python-mock as dependency to run tests    (Aline Manera)
