@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-24 09:42-0300\n"
+"POT-Creation-Date: 2016-09-30 10:38-0300\n"
 "PO-Revision-Date: 2014-08-28 17:32+0000\n"
 "Last-Translator: Aline Manera <aline.manera@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -67,11 +67,9 @@ msgstr ""
 
 #, python-format
 msgid ""
-"The debug report with specified name \"%(name)s\" already exists. Please use "
+"The debug report with specified name '%(name)s' already exists. Please use "
 "another one."
 msgstr ""
-"Группа томов с именем %(name)s уже существует. Выберите другое имя для "
-"создания логического пула."
 
 #, python-format
 msgid "Unable to create dbginfo report with %(retcode)s. Details: %(err)s"
@@ -124,9 +122,6 @@ msgstr "Ошибка получения пакетов, помеченных д�
 
 msgid "There is no compatible package manager for this system."
 msgstr "Нет совместимого администратора пакетов для этой системы."
-
-msgid "There is a package manager instance running in the system."
-msgstr ""
 
 #, python-format
 msgid "Error while getting package information. Details: %(err)s"
@@ -287,49 +282,101 @@ msgstr ""
 msgid "Unable to retrieve LVM information. Details: %(err)s"
 msgstr ""
 
-#, python-format
-msgid "Created host debug report '%(name)s'"
+msgid "Error ocurred while fetching current smt settings."
+msgstr ""
+
+msgid "Error occurred while enabling SMT in the zipl file."
 msgstr ""
 
 #, python-format
-msgid "Updated host debug report '%(ident)s'"
+msgid "Execution of command failed with '%(error)s'. "
+msgstr ""
+
+msgid "Failed due to invalid SMT value."
+msgstr ""
+
+msgid "Error occurred while disabling SMT or SMT is already disabled."
+msgstr ""
+
+msgid "Error occurred while checking for SMT support or SMT is not supported."
 msgstr ""
 
 #, python-format
-msgid "Removed host debug report '%(ident)s'"
-msgstr ""
-
-msgid "Host rebooted"
-msgstr ""
-
-msgid "Host shutdown"
-msgstr ""
-
-msgid "Host software updated"
+msgid "SMT %(name)s is supported only for s390x architecture."
 msgstr ""
 
 #, python-format
-msgid "Updated package '%(ident)s'"
+msgid "Error occurred in execution of zipl command '%(error)s'."
 msgstr ""
 
 #, python-format
-msgid "Added host software repository '%(repo_id)s'"
+msgid ""
+"Error occurred in execution of hyptop command while fetching the processor "
+"information '%(error)s'."
+msgstr ""
+
+msgid "Error ocurred in fetching smt status."
+msgstr ""
+
+msgid "Error ocurred in fetching persisted smt settings."
+msgstr ""
+
+msgid "Zipl file does not exist."
 msgstr ""
 
 #, python-format
-msgid "Updated host software repository '%(ident)s'"
+msgid "SMT is not supported on '%(name)s' architecture."
 msgstr ""
 
 #, python-format
-msgid "Removed host software repository '%(ident)s'"
+msgid "Create host debug report '%(name)s'"
 msgstr ""
 
 #, python-format
-msgid "Enabled host software repository '%(ident)s'"
+msgid "Update host debug report '%(ident)s'"
 msgstr ""
 
 #, python-format
-msgid "Disabled host software repository '%(ident)s'"
+msgid "Remove host debug report '%(ident)s'"
+msgstr ""
+
+msgid "Reboot host"
+msgstr ""
+
+msgid "Shutdown host"
+msgstr ""
+
+msgid "Update host software"
+msgstr ""
+
+#, python-format
+msgid "Update package '%(ident)s'"
+msgstr ""
+
+#, python-format
+msgid "Add host software repository '%(repo_id)s'"
+msgstr ""
+
+#, python-format
+msgid "Update host software repository '%(ident)s'"
+msgstr ""
+
+#, python-format
+msgid "Remove host software repository '%(ident)s'"
+msgstr ""
+
+#, python-format
+msgid "Enable host software repository '%(ident)s'"
+msgstr ""
+
+#, python-format
+msgid "Disable host software repository '%(ident)s'"
+msgstr ""
+
+msgid "Enabled SMT."
+msgstr ""
+
+msgid "Disabled SMT."
 msgstr ""
 
 msgid "The username or password you entered is incorrect. Please try again."
@@ -434,6 +481,12 @@ msgstr ""
 "Невозможно завершить работу системы, поскольку в ней работают виртуальные "
 "машины!"
 
+msgid "System is shutdown or rebooted. You will be disconnected now."
+msgstr ""
+
+msgid "System is shutting down/rebooting. Please wait."
+msgstr ""
+
 msgid "Max:"
 msgstr "Макс.:"
 
@@ -465,31 +518,40 @@ msgstr ""
 msgid "The system is going down"
 msgstr ""
 
-msgid "Online"
+msgid "Online: "
 msgstr ""
 
-msgid "Offline"
+msgid "Offline: "
 msgstr ""
 
-msgid "Shared"
+msgid "Shared: "
 msgstr ""
 
-msgid "Dedicated"
+msgid "Dedicated: "
 msgstr ""
 
-msgid "Book(s)"
+msgid "Book(s): "
 msgstr ""
 
-msgid "Socket(s)"
+msgid "Socket(s): "
 msgstr ""
 
-msgid "Core(s) per Socket"
+msgid "Core(s) per Socket: "
 msgstr ""
 
-msgid "Thread(s) per Core"
+msgid "Thread(s) per Core: "
 msgstr ""
 
 msgid "B/s"
+msgstr ""
+
+msgid "Name: "
+msgstr ""
+
+msgid "ID: "
+msgstr ""
+
+msgid "Vendor: "
 msgstr ""
 
 msgid "Remove Repository"
@@ -627,10 +689,8 @@ msgstr "Переименовать"
 msgid "Download"
 msgstr "Загрузить"
 
-msgid ""
-"Report name should contain only letters, digits, underscore ('_') and/or "
-"hyphen ('-')."
-msgstr "Имя отчета должно содержать только буквы, цифры и дефисы ('-')."
+msgid "Report name should contain only letters, digits and/or hyphen ('-')."
+msgstr ""
 
 msgid "Pending..."
 msgstr "Загружается..."
@@ -744,6 +804,30 @@ msgstr ""
 msgid "Affected devices:"
 msgstr ""
 
+msgid "Do you want to enable SMT ?"
+msgstr ""
+
+msgid ""
+"Successful in applying the SMT settings. In order to make SMT settings "
+"effective system reboot required. Click 'Reboot Now' to reboot the system "
+"now otherwise click 'Reboot Later' to reboot the system later."
+msgstr ""
+
+msgid "Reboot Now"
+msgstr ""
+
+msgid "Reboot Later"
+msgstr ""
+
+msgid "Enabled SMT"
+msgstr ""
+
+msgid "Do you want to disable SMT ?"
+msgstr ""
+
+msgid "Disabled SMT"
+msgstr ""
+
 msgid "CDROM path needs to be a valid local/remote path and cannot be blank."
 msgstr ""
 
@@ -758,11 +842,8 @@ msgstr "Имя отчета"
 
 msgid ""
 "The name used to identify the report. If omitted, a name will be chosen "
-"based on current time. Name can contain: letters, digits, underscore (\"_\") "
-"and hyphen (\"-\")."
+"based on current time. Name can contain: letters, digits and hyphen (\"-\")."
 msgstr ""
-"Имя для идентификации отчета. Если не указано, имя будет сформировано на "
-"основе текущего времени. Имя может содержать: буквы, цифры и дефисы (\"-\")."
 
 msgid "Rename a Debug Report"
 msgstr "Создать новый отладочный отчет"
@@ -849,6 +930,9 @@ msgstr "Сетевой ввод-вывод"
 msgid "Basic Information"
 msgstr "Базовая информация"
 
+msgid "SMT"
+msgstr ""
+
 msgid "OS Distro"
 msgstr "Вариант ОС"
 
@@ -871,6 +955,27 @@ msgid "LPAR Details"
 msgstr ""
 
 msgid "Hypervisor Details"
+msgstr ""
+
+msgid "Simultaneous Multi-Threading"
+msgstr ""
+
+msgid "SMT Status"
+msgstr ""
+
+msgid "SMT Value"
+msgstr ""
+
+msgid "SMT 1"
+msgstr ""
+
+msgid "SMT 2"
+msgstr ""
+
+msgid "changes will be applied only after rebooting the system"
+msgstr ""
+
+msgid "Apply"
 msgstr ""
 
 msgid "Update"
