@@ -21,7 +21,7 @@ BuildRequires:	libxslt-tools
 BuildRequires:	python-lxml
 
 %if 0%{?suse_version} == 1100
-Requires:       python-ordereddict
+Requires:	python-ordereddict
 %endif
 
 %if 0%{?suse_version} > 1140
@@ -34,7 +34,7 @@ Ginger Base is an open source base host management plugin for Wok
 common tools for configuring and managing the Linux systems.
 
 %prep
-%setup
+%setup -q
 
 %build
 %configure

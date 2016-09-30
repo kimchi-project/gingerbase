@@ -32,4 +32,3 @@ rpmlint contrib/gingerbase_suse.spec
 # remove links
 rm contrib/gingerbase_fedora.spec
 rm contrib/gingerbase_suse.spec
-

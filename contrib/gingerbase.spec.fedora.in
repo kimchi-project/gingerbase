@@ -31,7 +31,7 @@ Requires:	python2-dnf
 
 %if 0%{?rhel} == 6
 Requires:	python-ordereddict
-BuildRequires:    python-unittest2
+BuildRequires:	python-unittest2
 %endif
 
 %description
@@ -40,7 +40,7 @@ Ginger Base is an open source base host management plugin for Wok
 common tools for configuring and managing the Linux systems.
 
 %prep
-%setup
+%setup -q
 
 %build
 %configure
