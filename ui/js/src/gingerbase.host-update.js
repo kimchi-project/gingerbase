@@ -379,17 +379,7 @@ gingerbase.init_update = function() {
         setupUI();
     };
 
-    gingerbase.getHost(function(data) {
-        var htmlTmpl = $('#host-update-tmpl').html();
-        data['logo'] = data['logo'] || '';
-        data['memory'] = wok.formatMeasurement(data['memory'], {
-            fixed: 2
-        });
-        var templated = wok.substitute(htmlTmpl, data);
-        $('#host-content-container').html(templated);
-
-        initPage();
-    });
+    initPage();
 
     $('#host-root-container').on('remove', function() {
         if (gingerbase.hostTimer) {

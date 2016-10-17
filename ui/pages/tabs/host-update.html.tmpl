@@ -41,35 +41,35 @@
     <div class="host-panel">
         <div class="container">
             <div id="repositories-section" class="row hidden"></div>
-            <div class="row">
-                <div id="" class="panel-group accordion" role="tablist" aria-multiselectable="false">
+            <div id="software-update-section" class="row">
+                <div id="software-update-grid-section" class="panel-group accordion" role="tablist" aria-multiselectable="false">
                     <h3>
-                        <a role="button" data-toggle="collapse" data-parent="#software-update-accordion" href="#software-update-content-area" aria-expanded="false" aria-controls="software-update-content-area" class="">
+                        <a role="button" data-toggle="collapse" data-parent="#software-update-grid-section" href="#content-software-update-grid" aria-expanded="false" aria-controls="content-software-update-grid" class="">
                             <span class="accordion-icon"></span><span class="accordion-text" id="software-update-header">$_("Software Updates")</span>
                         </a>
                     </h3>
-                    <div id="software-update-content-area" class="panel-collapse collapse" role="tabpanel" aria-labelledby="software-update-header">
+                    <div id="content-software-update-grid" class="panel-collapse collapse" role="tabpanel" aria-expanded="false">
                         <span id='message-container-area' style='display: none;'></span>
-                        <div class="row">
+                        <div id="software-update-buttons" class="row">
                             <button id="update-packages" class="btn btn-primary" disabled>$_("Update")</button>
                             <button id="update-all-packages" class="btn btn-primary">$_("Update All")</button>
                         </div>
 
-                        <div class="panel-group accordion" id="update-accordion" role="tablist" aria-multiselectable="true" style="display:none;">
-                                <h3>
-                                    <a role="button" data-toggle="collapse" data-parent="#updates-accordion" href="#updates-content-area" aria-expanded="false" aria-controls="updates-content-area" class="">
-                                        <span class="accordion-icon"></span><span class="accordion-text">$_("Update Status")</span>
-                                    </a>
-                                </h3>
-                                <div id="updates-content-area" class="panel-collapse collapse in"  role="tabpanel">
-                                        <div class="row grid-control">
-                                                <div class="update-alter">
-                                                    <div class="update-inner">
-                                                        <textarea class="collapse in" id="software-updates-progress-textarea" readonly></textarea>
-                                                    </div>
-                                                </div>
+                        <div class="panel-group accordion" id="updates-accordion" role="tablist" aria-multiselectable="true" style="display:none;">
+                            <h3>
+                                <a role="button" data-toggle="collapse" data-parent="#updates-accordion" href="#updates-content-area" aria-expanded="false" aria-controls="updates-content-area" class="">
+                                    <span class="accordion-icon"></span><span class="accordion-text">$_("Update Status")</span>
+                                </a>
+                            </h3>
+                            <div id="updates-content-area" class="panel-collapse collapse in" role="tabpanel">
+                                <div class="row grid-control">
+                                    <div class="update-alter">
+                                        <div class="update-inner">
+                                            <textarea class="collapse in" id="software-updates-progress-textarea" readonly></textarea>
                                         </div>
+                                    </div>
                                 </div>
+                            </div>
                         </div>
                         <table id="grid-basic" class="table table-condensed table-hover table-striped">
                             <thead>
@@ -97,14 +97,6 @@
         </div>
     </div>
 </div>
-
-<script id="host-update-tmpl" type="gingerbase/template">
-<div class="host-panel">
-    <div class="container">
-        <div id="repositories-section" class="hidden"></div>
-    </div>
-</div>
-</script>
 <div id="modalWindow" class="modal fade host-modal" tabindex="-1" role="dialog" aria-labelledby="hostsModalLabel" aria-hidden="true">
 </div>
 <script type="text/javascript">

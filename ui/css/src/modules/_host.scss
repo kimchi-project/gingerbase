@@ -139,19 +139,6 @@
     padding-right: 26px;
 }
 
-#software-update-section {
-    margin: 0 10px 14px 10px;
-    padding-top: 14px;
-}
-
-
-@media (min-width: $screen-md-max) and (max-width: $screen-lg) {
-
-    #software-update-section {
-    margin: 0 0 14px 0;
-    }
-}
-
 #repositories-grid,
 #available-reports-grid {
     .wok-list-content {
