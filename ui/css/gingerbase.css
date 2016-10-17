@@ -893,17 +893,6 @@
   padding-right: 26px;
 }
 
-#software-update-section {
-  margin: 0 10px 14px 10px;
-  padding-top: 14px;
-}
-
-@media (min-width: 1199px) and (max-width: 1200px) {
-  #software-update-section {
-    margin: 0 0 14px 0;
-  }
-}
-
 #repositories-grid .wok-list-content,
 #available-reports-grid .wok-list-content {
   overflow-x: hidden;
