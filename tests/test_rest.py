@@ -97,7 +97,7 @@ class RestTests(unittest.TestCase):
                 '{}', 'DELETE')
 
     def test_create_debugreport(self):
-        req = json.dumps({'name': 'report1'})
+        req = json.dumps({'name': 'test_rest_report1'})
         with RollbackContext() as rollback:
             resp = request(host, ssl_port, '/plugins/gingerbase/debugreports',
                            req, 'POST')
@@ -106,20 +106,24 @@ class RestTests(unittest.TestCase):
             # make sure the debugreport doesn't exist until the
             # the task is finished
             wait_task(self._task_lookup, task['id'])
-            rollback.prependDefer(self._report_delete, 'report2')
-            resp = request(host, ssl_port,
-                           '/plugins/gingerbase/debugreports/report1')
+            rollback.prependDefer(self._report_delete, 'test_rest_report2')
+            resp = request(
+                host, ssl_port,
+                '/plugins/gingerbase/debugreports/test_rest_report1'
+            )
             debugreport = json.loads(resp.read())
-            self.assertEquals("report1", debugreport['name'])
+            self.assertEquals("test_rest_report1", debugreport['name'])
             self.assertEquals(200, resp.status)
-            req = json.dumps({'name': 'report2'})
-            resp = request(host, ssl_port,
-                           '/plugins/gingerbase/debugreports/report1',
-                           req, 'PUT')
+            req = json.dumps({'name': 'test_rest_report2'})
+            resp = request(
+                host, ssl_port,
+                '/plugins/gingerbase/debugreports/test_rest_report1',
+                req, 'PUT'
+            )
             self.assertEquals(303, resp.status)
 
     def test_debugreport_download(self):
-        req = json.dumps({'name': 'report1'})
+        req = json.dumps({'name': 'test_rest_report1'})
         with RollbackContext() as rollback:
             resp = request(host, ssl_port, '/plugins/gingerbase/debugreports',
                            req, 'POST')
@@ -128,17 +132,23 @@ class RestTests(unittest.TestCase):
             # make sure the debugreport doesn't exist until the
             # the task is finished
             wait_task(self._task_lookup, task['id'], 20)
-            rollback.prependDefer(self._report_delete, 'report1')
-            resp = request(host, ssl_port,
-                           '/plugins/gingerbase/debugreports/report1')
+            rollback.prependDefer(self._report_delete, 'test_rest_report1')
+            resp = request(
+                host, ssl_port,
+                '/plugins/gingerbase/debugreports/test_rest_report1'
+            )
             debugreport = json.loads(resp.read())
-            self.assertEquals("report1", debugreport['name'])
+            self.assertEquals("test_rest_report1", debugreport['name'])
             self.assertEquals(200, resp.status)
-            resp = request(host, ssl_port,
-                           '/plugins/gingerbase/debugreports/report1/content')
+            resp = request(
+                host, ssl_port,
+                '/plugins/gingerbase/debugreports/test_rest_report1/content'
+            )
             self.assertEquals(200, resp.status)
-            resp = request(host, ssl_port,
-                           '/plugins/gingerbase/debugreports/report1')
+            resp = request(
+                host, ssl_port,
+                '/plugins/gingerbase/debugreports/test_rest_report1'
+            )
             debugre = json.loads(resp.read())
             resp = request(host, ssl_port, '/' + debugre['uri'])
             self.assertEquals(200, resp.status)
