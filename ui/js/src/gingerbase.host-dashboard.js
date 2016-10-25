@@ -74,7 +74,7 @@ gingerbase.init_dashboard = function() {
                 disabled: true,
                 onClick: function(event) {
                     var report = reportGrid.getSelected();
-                    if (!report) {
+                    if (!report || report.length > 1){
                         return;
                     }
                     gingerbase.selectedReport = report[0]['name'];
