@@ -543,6 +543,9 @@ gingerbase.init_update_packages = function(){
             $(".wok-mask").fadeOut(300, function() {});
             $("#update-packages").prop('disabled', true);
             packageList = softwareUpdates;
+            if (packageList.length == 0) {
+                $("#update-all-packages").prop('disabled', true);
+            }
             var htmlRow = "";
             $.each( softwareUpdates, function( key, value ) {
                 htmlRow += "<tr><td>" + value.package_name + "</td><td></td><td>" + value.version + "</td><td>" + value.arch + "</td><td>" + value.repository + "</td></tr>";
