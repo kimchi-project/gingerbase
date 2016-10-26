@@ -81,8 +81,7 @@ class ConfigTests(unittest.TestCase):
         pluginPrefix = paths.add_prefix(paths.plugin_dir)
         configObj = {
             'wok': {
-                'enable': True,
-                'uri': '/plugins/gingerbase'
+                'enable': True
             },
             'gingerbase': {
                 'statshistory_on': True,
