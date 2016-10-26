@@ -44,7 +44,7 @@
 #container-chart-cpu{
 
     .line-chart polyline {
-        stroke: $administration-color;
+        stroke: #d9182d;
     }
 
     .line-chart path {
@@ -56,7 +56,7 @@
 #container-chart-memory {
 
     .line-chart polyline {
-        stroke: map-get($colors, host);
+        stroke: #008abf;
     }
 
     .line-chart path {
@@ -68,7 +68,7 @@
 #container-chart-disk-io  {
 
     .line-chart polyline {
-        stroke: map-get($colors, templates);
+        stroke: #00a6a0;
 
         &.disk-write {
             stroke: $state-warning-border;
@@ -90,10 +90,10 @@
 #container-chart-network-io {
 
     .line-chart polyline {
-        stroke: map-get($colors, network);
+        stroke: #7f1c7d;
 
         &.network-sent {
-            stroke: map-get($colors, guests);
+            stroke: #8cc63f;
             }
         }
 
