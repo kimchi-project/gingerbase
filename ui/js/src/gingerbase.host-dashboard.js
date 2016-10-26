@@ -294,9 +294,13 @@ gingerbase.init_dashboard = function() {
     };
 
     var initPage = function() {
+        var toolsHtml = '<li><a id="host-button-restart" href="javascript:void(0);">'
+        toolsHtml += '<i class="fa fa-undo"></i><span>' + i18n['GGBHOST6022M'] + '</span></a></li>'
+        toolsHtml += '<li><a id="host-button-shutdown" href="javascript:void(0);">'
+        toolsHtml += '<i class="fa fa-ban"></i><span>' + i18n['GGBHOST6023M'] + '</span></a></li>'
+
         if(wok.tabMode["dashboard"] === "admin") {
-            $("#host-button-restart").attr("style","display");
-            $("#host-button-shutdown").attr("style","display");
+            $('#toolbar ul.tools').html(toolsHtml);
         }
 
         $('#host-button-shutdown').on('click', function(event) {
