@@ -1157,6 +1157,11 @@
   fill: url(#patternbg);
 }
 
+#container-chart-cpu,
+#container-chart-memory {
+  height: 207px !important;
+}
+
 .chart-container,
 .chart-legend-container,
 .chart-label {
@@ -1199,28 +1204,13 @@
 
 #disk-dashboard .legend-wrapper, #network-dashboard .legend-wrapper {
   width: 134px;
-  float: left;
+  height: 74px;
 }
 
 #disk-dashboard span.legend-string, #network-dashboard span.legend-string {
   display: block;
   margin-top: -16px;
   white-space: nowrap;
-}
-
-#disk-dashboard .legend-wrapper:first-child {
-  width: 162px;
-  margin-right: 7px;
-}
-
-#network-dashboard .legend-wrapper {
-  float: right !important;
-  margin-right: 14px;
-}
-
-#network-dashboard .legend-wrapper:first-child {
-  width: 118px;
-  margin-left: 30px;
 }
 
 .chart-legend-container .legend-icon {
