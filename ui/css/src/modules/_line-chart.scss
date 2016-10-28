@@ -104,6 +104,10 @@
                 }
             }
 }
+#container-chart-cpu,
+#container-chart-memory{
+  height: 207px !important;
+}
 
 .chart-container,
 .chart-legend-container,
@@ -149,7 +153,7 @@
 
      .legend-wrapper {
         width: 134px;
-        float: left;
+        height: 74px;
     }
 
      span.legend-string {
@@ -158,21 +162,6 @@
         white-space: nowrap;
      }
 
-}
-
-#disk-dashboard .legend-wrapper:first-child {
-        width: 162px;
-        margin-right: 7px;
-}
-
-#network-dashboard .legend-wrapper {
-    float: right !important;
-    margin-right: 14px;
-}
-
-#network-dashboard .legend-wrapper:first-child {
-    width: 118px;
-    margin-left: 30px;
 }
 
 .chart-legend-container .legend-icon {
