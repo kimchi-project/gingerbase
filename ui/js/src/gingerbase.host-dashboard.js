@@ -696,6 +696,7 @@ gingerbase.init_dashboard = function() {
 
 };
 gingerbase.getsmtstatus = function() {
+    $('#smt-submit').off();
     $('.selectpicker').selectpicker();
     $("input.make-switch").bootstrapSwitch();
     $('#smt-value').show();
@@ -733,7 +734,7 @@ gingerbase.getsmtstatus = function() {
             $('#no-smt-value').show();
         }
     });
-    $('#smt-submit').one('click', function(event) {
+    $('#smt-submit').on('click', function(event) {
         var smtval = {};
         if ($('#smt-status-change').bootstrapSwitch('state')) {
             smtval['smt_val'] = $('#smtTypeenabled').val();
