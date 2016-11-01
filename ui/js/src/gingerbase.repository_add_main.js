@@ -22,6 +22,13 @@ gingerbase.repository_add_main = function() {
     var addForm = $('#form-repository-add');
     var addButton = $('#button-repository-add');
 
+    if(gingerbase.capabilities['repo_mngt_tool']=="yum") {
+        addForm.find('div.deb').hide();
+    }
+    else if(gingerbase.capabilities['repo_mngt_tool']=="deb") {
+        addForm.find('div.yum').hide();
+    }
+
     var validateField = function(event) {
         var valid=($(this).val()!=='');
         $(addButton).prop('disabled', !valid);
