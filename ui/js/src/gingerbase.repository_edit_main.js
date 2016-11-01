@@ -20,14 +20,13 @@
 gingerbase.repository_edit_main = function() {
 
     var editForm = $('#form-repository-edit');
-
     var saveButton = $('#repository-edit-button-save');
 
     if(gingerbase.capabilities['repo_mngt_tool']=="yum") {
-        editForm.find('input.deb').prop('disabled', true);
+        editForm.find('div.deb').hide();
     }
     else if(gingerbase.capabilities['repo_mngt_tool']=="deb") {
-        editForm.find('input.yum').prop('disabled', true);
+        editForm.find('div.yum').hide();
     }
 
     gingerbase.retrieveRepository(gingerbase.selectedRepository, function(repository) {
