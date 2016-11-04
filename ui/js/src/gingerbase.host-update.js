@@ -290,11 +290,12 @@ gingerbase.init_update = function() {
     var progressAreaID = 'software-updates-progress-textarea';
     var textMessage = "";
     var reloadProgressArea = function(result) {
-        $("#update-accordion").show(500);
+        $("#updates-accordion").show(500);
         var progressArea = $('#' + progressAreaID)[0];
         textMessage += result['message'];
         if (result['status'] == 'finished') {
             textMessage += i18n['GGBUPD6015M'];
+            gingerbase.init_update_packages();
         }
         $(progressArea).text(textMessage);
         var scrollTop = $(progressArea).prop('scrollHeight');
@@ -306,7 +307,7 @@ gingerbase.init_update = function() {
         $("#update-accordion").show(500);
         $("#software-updates-progress-textarea").text("Processing...");
         gingerbase.updateAllSoftware(function(result) {
-        $("#update-all-packages").prop('disabled', true);
+            $("#update-all-packages").prop('disabled', true);
             reloadProgressArea(result);
             wok.topic('gingerbase/softwareUpdated').publish({
                 result: result
