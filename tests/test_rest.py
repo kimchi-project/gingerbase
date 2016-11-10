@@ -26,7 +26,7 @@ import time
 import unittest
 from functools import partial
 
-from tests.utils import get_free_port, patch_auth, request
+from tests.utils import patch_auth, request
 from tests.utils import run_server, wait_task
 
 from wok.rollbackcontext import RollbackContext
@@ -36,23 +36,14 @@ from wok.plugins.gingerbase import mockmodel
 
 test_server = None
 model = None
-host = None
-port = None
-ssl_port = None
-cherrypy_port = None
 
 
 def setUpModule():
-    global test_server, model, host, port, ssl_port, cherrypy_port
+    global test_server, model
 
     patch_auth()
     model = mockmodel.MockModel('/tmp/obj-store-test')
-    host = '127.0.0.1'
-    port = get_free_port('http')
-    ssl_port = get_free_port('https')
-    cherrypy_port = get_free_port('cherrypy_port')
-    test_server = run_server(host, port, ssl_port, test_mode=True,
-                             cherrypy_port=cherrypy_port, model=model)
+    test_server = run_server(test_mode=True, model=model)
 
 
 def tearDownModule():
@@ -76,7 +67,7 @@ class RestTests(unittest.TestCase):
         cb('in progress')
 
     def setUp(self):
-        self.request = partial(request, host, ssl_port)
+        self.request = partial(request)
         model.reset()
 
     def _task_lookup(self, taskid):
@@ -89,18 +80,16 @@ class RestTests(unittest.TestCase):
         self.assertEquals(code, resp.status)
 
     def test_debugreports(self):
-        resp = request(host, ssl_port, '/plugins/gingerbase/debugreports')
+        resp = request('/plugins/gingerbase/debugreports')
         self.assertEquals(200, resp.status)
 
     def _report_delete(self, name):
-        request(host, ssl_port, '/plugins/gingerbase/debugreports/%s' % name,
-                '{}', 'DELETE')
+        request('/plugins/gingerbase/debugreports/%s' % name, '{}', 'DELETE')
 
     def test_create_debugreport(self):
         req = json.dumps({'name': 'test_rest_report1'})
         with RollbackContext() as rollback:
-            resp = request(host, ssl_port, '/plugins/gingerbase/debugreports',
-                           req, 'POST')
+            resp = request('/plugins/gingerbase/debugreports', req, 'POST')
             self.assertEquals(202, resp.status)
             task = json.loads(resp.read())
             # make sure the debugreport doesn't exist until the
@@ -108,7 +97,6 @@ class RestTests(unittest.TestCase):
             wait_task(self._task_lookup, task['id'])
             rollback.prependDefer(self._report_delete, 'test_rest_report2')
             resp = request(
-                host, ssl_port,
                 '/plugins/gingerbase/debugreports/test_rest_report1'
             )
             debugreport = json.loads(resp.read())
@@ -116,7 +104,6 @@ class RestTests(unittest.TestCase):
             self.assertEquals(200, resp.status)
             req = json.dumps({'name': 'test_rest_report2'})
             resp = request(
-                host, ssl_port,
                 '/plugins/gingerbase/debugreports/test_rest_report1',
                 req, 'PUT'
             )
@@ -125,8 +112,7 @@ class RestTests(unittest.TestCase):
     def test_debugreport_download(self):
         req = json.dumps({'name': 'test_rest_report1'})
         with RollbackContext() as rollback:
-            resp = request(host, ssl_port, '/plugins/gingerbase/debugreports',
-                           req, 'POST')
+            resp = request('/plugins/gingerbase/debugreports', req, 'POST')
             self.assertEquals(202, resp.status)
             task = json.loads(resp.read())
             # make sure the debugreport doesn't exist until the
@@ -134,23 +120,20 @@ class RestTests(unittest.TestCase):
             wait_task(self._task_lookup, task['id'], 20)
             rollback.prependDefer(self._report_delete, 'test_rest_report1')
             resp = request(
-                host, ssl_port,
                 '/plugins/gingerbase/debugreports/test_rest_report1'
             )
             debugreport = json.loads(resp.read())
             self.assertEquals("test_rest_report1", debugreport['name'])
             self.assertEquals(200, resp.status)
             resp = request(
-                host, ssl_port,
                 '/plugins/gingerbase/debugreports/test_rest_report1/content'
             )
             self.assertEquals(200, resp.status)
             resp = request(
-                host, ssl_port,
                 '/plugins/gingerbase/debugreports/test_rest_report1'
             )
             debugre = json.loads(resp.read())
-            resp = request(host, ssl_port, '/' + debugre['uri'])
+            resp = request('/' + debugre['uri'])
             self.assertEquals(200, resp.status)
 
     def test_repositories(self):
@@ -189,12 +172,3 @@ class RestTests(unittest.TestCase):
         # Delete the repository
         resp = self.request('%s/fedora-fake' % base_uri, '{}', 'DELETE')
         self.assertEquals(204, resp.status)
-
-
-class HttpsRestTests(RestTests):
-    """
-    Run all of the same tests as above, but use https instead
-    """
-    def setUp(self):
-        self.request = partial(request, host, ssl_port)
-        model.reset()

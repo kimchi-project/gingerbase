@@ -23,28 +23,22 @@ import os
 import unittest
 from functools import partial
 
-from tests.utils import get_free_port, patch_auth, request, run_server
+from tests.utils import patch_auth, request, run_server
 
 from wok.plugins.gingerbase import mockmodel
 
 
 test_server = None
 model = None
-host = None
-port = None
-ssl_port = None
 fake_iso = '/tmp/fake.iso'
 
 
 def setUpModule():
-    global test_server, model, host, port, ssl_port
+    global test_server, model
 
     patch_auth(sudo=False)
     model = mockmodel.MockModel('/tmp/obj-store-test')
-    host = '127.0.0.1'
-    port = get_free_port('http')
-    ssl_port = get_free_port('https')
-    test_server = run_server(host, port, ssl_port, test_mode=True, model=model)
+    test_server = run_server(test_mode=True, model=model)
 
 
 def tearDownModule():
@@ -54,7 +48,7 @@ def tearDownModule():
 
 class AuthorizationTests(unittest.TestCase):
     def setUp(self):
-        self.request = partial(request, host, ssl_port)
+        self.request = partial(request)
         model.reset()
 
     def test_nonroot_access(self):
