@@ -252,12 +252,12 @@ gingerbase.init_update = function() {
                 }
             },
             frozenFields: [],
-            fields: gridFields,
-            data: listRepositories
+            fields: gridFields
         });
     };
 
     var listRepositories = function(gridCallback) {
+        repositoriesGrid.maskNode.removeClass('hidden');
         gingerbase.listRepositories(function(repositories) {
                 if ($.isFunction(gridCallback)) {
                     gridCallback(repositories);
@@ -269,8 +269,10 @@ gingerbase.init_update = function() {
                         repositoriesGrid.setData(repositories);
                     }
                 }
+                repositoriesGrid.maskNode.addClass('hidden');
             },
             function(error) {
+                repositoriesGrid.maskNode.addClass('hidden');
                 var message = error && error['responseJSON'] && error['responseJSON']['reason'];
 
                 if ($.isFunction(gridCallback)) {
@@ -343,8 +345,6 @@ gingerbase.init_update = function() {
             }, reloadProgressArea);
     };
 
-    startSoftwareUpdateProgress();
-
     var initPage = function() {
 
         var setupUI = function() {
@@ -353,7 +353,18 @@ gingerbase.init_update = function() {
                 return;
             }
 
+            if (gingerbase.capabilities['update_tool']) {
+                $('#software-update-section').removeClass('hidden');
+                $('#software-update-grid-section').on("shown.bs.collapse", function(){
+                    startSoftwareUpdateProgress();
+                });
+            }
+
             if ((gingerbase.capabilities['repo_mngt_tool']) && (gingerbase.capabilities['repo_mngt_tool'] !== "None")) {
+                $('#repositories-section').on("shown.bs.collapse", function(){
+                    listRepositories();
+                });
+
                 initRepositoriesGrid(gingerbase.capabilities['repo_mngt_tool']);
                 $('div#repositories-grid-section').removeClass('panel panel-default').addClass('panel-group accordion');
                 $('div#repositories-grid-section').prepend($('h3.panel-title'));
@@ -370,12 +381,8 @@ gingerbase.init_update = function() {
                     .subscribe(listRepositories);
                 wok.topic('gingerbase/repositoryDeleted')
                     .subscribe(listRepositories);
-            }
 
-            if (gingerbase.capabilities['update_tool']) {
-                $('#software-update-section').removeClass('hidden');
             }
-
         };
         setupUI();
     };
