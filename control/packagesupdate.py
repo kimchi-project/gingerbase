@@ -19,8 +19,10 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
+from wok import template
 from wok.control.base import AsyncResource, Collection, Resource
 from wok.control.base import SimpleCollection
+from wok.control.utils import get_class_name, model_fn
 
 
 PACKAGEUPDATE_ACTIVITY = {'POST': {'upgrade': "GGBPKGUPD0002L"}}
@@ -32,6 +34,12 @@ class PackagesUpdate(Collection):
         self.role_key = 'updates'
         self.admin_methods = ['GET']
         self.resource = PackageUpdate
+
+    def get(self, filter_params):
+        res_list = []
+        get_list = getattr(self.model, model_fn(self, 'get_list'))
+        res_list = get_list(*self.model_args, **filter_params)
+        return template.render(get_class_name(self), res_list)
 
 
 class PackageUpdate(Resource):

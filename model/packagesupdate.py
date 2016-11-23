@@ -67,8 +67,8 @@ class PackageUpdateModel(object):
         if package is None:
             return []
         dep_list.append(package)
-        deps = self.host_swupdate.getUpdate(package)['depends']
-        for pkg in set(deps).intersection(self.pkgs2update):
+        deps = self.host_swupdate.getPackageDeps(package)
+        for pkg in deps:
             if pkg in dep_list:
                 break
             self._resolve_dependencies(pkg, dep_list)
