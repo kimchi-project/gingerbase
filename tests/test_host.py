@@ -134,6 +134,12 @@ class HostTests(unittest.TestCase):
             info = json.loads(resp.read())
             self.assertEquals(sorted(pkg_keys), sorted(info.keys()))
 
+            # Get dependencies list
+            deps_uri = '/plugins/gingerbase/host/packagesupdate/%s/deps'
+            resp = self.request(deps_uri % name, None, 'GET')
+            info = json.loads(resp.read())
+            self.assertEquals(type(info), list)
+
         # Test system update of specific package. Since package 'ginger' has
         # 'wok' as dependency, both packages must be selected to be updated
         # and, in the end of the process, we have only 3 packages to update.

@@ -359,6 +359,21 @@ def _get_package_info(pkg_name, output=None):
     return package
 
 
+def get_yum_package_deps(pkg_name):
+    cmd = ['yum', '-v', '--assumeno', 'update', pkg_name]
+    out, error, returncode = run_command(cmd, silent=True)
+    if returncode != 1:
+        return []
+
+    # Get the end of the output and parse it
+    out = out.split('\n')
+    out = out[out.index('Dependencies Resolved')+1:]
+    # Remove the useless part of the output
+    out = out[5:out.index('Transaction Summary')]
+
+    return _get_package_info(pkg_name, out).get('depends', [])
+
+
 def get_yum_package_info(pkg_name):
     """
     Returns package information as a dictionary.
@@ -375,6 +390,21 @@ def get_yum_package_info(pkg_name):
     out = out[5:out.index('Transaction Summary')]
 
     return _get_package_info(pkg_name, out)
+
+
+def get_dnf_package_deps(pkg_name):
+    cmd = ['dnf', '-v', '--assumeno', 'update', pkg_name]
+    out, error, returncode = run_command(cmd, silent=True)
+    if returncode != 1:
+        return []
+
+    # Get the end of the output and parse it
+    out = out.split('\n')
+    out = out[out.index('Dependencies resolved.')+1:]
+    # Remove the useless part of the output
+    out = out[3:out.index('Transaction Summary')]
+
+    return _get_package_info(pkg_name, out).get('depends', [])
 
 
 def get_dnf_package_info(pkg_name):
