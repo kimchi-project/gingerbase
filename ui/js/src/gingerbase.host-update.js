@@ -429,16 +429,6 @@ gingerbase.isDependOnPackageList = function(depend, packageList) {
     return result;
 };
 
-gingerbase.findDependsListFromPackage = function(packa, packageList) {
-    var dependList = [];
-    $.each(packageList, function(index, pack) {
-        if (pack.package_name === packa) {
-            dependList = pack.depends;
-        }
-    })
-    return dependList;
-};
-
 gingerbase.setUpdateStatusIcon = function(arrayPackages) {
     if (arrayPackages == undefined) {
         arrayPackages = gingerbase.arrayOfPackagesToKeepIcon;
@@ -614,6 +604,10 @@ gingerbase.init_update_packages = function(){
             evt.preventDefault();
             evt.stopPropagation();
             var resultList = [];
+
+            $("#update-packages").prop('disabled', true);
+            $("#update-all-packages").prop('disabled', true);
+
             $.each(packagesSelected, function( indice, pack ) {
                 var resultObject = {
                         package: pack,
@@ -621,28 +615,34 @@ gingerbase.init_update_packages = function(){
                         dependsNotSelected: [],
                         isDepend: false,
                         loopFlag: false
-                    }
-                $.each(gingerbase.findDependsListFromPackage(pack, packageList), function(index, depend){
-                    if (gingerbase.isDependOnPackageList(depend, packagesSelected)) {
+                }
 
-                    } else if (gingerbase.isDependOnPackageList(depend, packageListNames)) {
-                        resultObject.dependsNotSelected.push(depend);
-                    }
-                });
+                $("#grid-basic tr[data-row-id=" + pack + "] td:nth-child(3)").empty();
+                $("#grid-basic tr[data-row-id=" + pack + "] td:nth-child(3)").append('<span class="specialClass"><i class="fa fa-spinner fa-spin fa-fw" aria-hidden="true" data-toggle="tooltip" title="'+ i18n['GGBUPD6012M'] +'"></i></span>');
+
+                gingerbase.getPackageDeps(pack, function(deplist){
+                    $.each(deplist, function(index, depend){
+                        if (gingerbase.isDependOnPackageList(depend, packageListNames)) {
+                            resultObject.dependsNotSelected.push(depend);
+                        }
+                    });
                     resultList.push(resultObject);
+                }, null);
             });
 
             $.each(resultList, function(index, packObj){
                 packObj.loopFlag = true;
-                $.each(gingerbase.findDependsListFromPackage(packObj.package, packageList), function(index2, depend){
-                    if (gingerbase.isDependOnPackageList(depend, packagesSelected)) {
-                        $.each(resultList, function(index3, packObj2){
-                            if (packObj2.package == depend && !packObj2.loopFlag) {
-                                packObj2.isDepend = true;
-                            }
-                        });
-                    }
-                });
+                gingerbase.getPackageDeps(packObj.package, function(deplist){
+                    $.each(deplist, function(index2, depend){
+                        if (gingerbase.isDependOnPackageList(depend, packagesSelected)) {
+                            $.each(resultList, function(index3, packObj2){
+                                if (packObj2.package == depend && !packObj2.loopFlag) {
+                                    packObj2.isDepend = true;
+                                }
+                            });
+                        }
+                    });
+                }, null);
             });
 
             var content = '';
@@ -676,7 +676,14 @@ gingerbase.init_update_packages = function(){
                         gingerbase.syncUpdatePackages(resultList, 0);
                     }, 400);
 
-                },function(){});
+                },function(){
+                    $.each(packagesSelected, function( indice, pack ) {
+                        $("#grid-basic tr[data-row-id=" + pack + "] td:nth-child(3)").empty();
+                    });
+
+                    $("#update-packages").prop('disabled', false);
+                    $("#update-all-packages").prop('disabled', false);
+                });
             } else if(packagesSelected.length > 0) {
                 gingerbase.message = '';
                 gingerbase.setUpdateStatusIcon(resultList);

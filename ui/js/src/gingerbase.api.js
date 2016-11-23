@@ -234,6 +234,19 @@ var gingerbase = {
         });
     },
 
+    getPackageDeps : function(pkg, suc, err) {
+        var pkg_name = encodeURIComponent(pkg);
+        wok.requestJSON({
+            url : "plugins/gingerbase/host/packagesupdate/" + pkg_name + "/deps",
+            type : 'GET',
+            contentType : 'application/json',
+            dataType : 'json',
+            async: false,
+            success : suc,
+            error : err
+        });
+    },
+
     softwareUpdateProgress : function(suc, err, progress) {
         var taskID = -1;
         var onResponse = function(data) {
