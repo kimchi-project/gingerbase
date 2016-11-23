@@ -245,6 +245,16 @@ Contains the information for a specific package to be updated.
 
     * upgrade: Update/upgrade the package in the system
 
+### Collection: Package Update Dependencies
+
+**URI:** /plugins/gingerbase/host/packagesupdate/*:name*/deps
+
+Return a list of packages that need to be updated when upgrading *:name*
+
+**Methods:**
+
+* **GET**: List of packages that need to be updated when upgrading *:name*
+
 ### Collection: Host Repositories
 
 **URI:** /plugins/gingerbase/host/repositories

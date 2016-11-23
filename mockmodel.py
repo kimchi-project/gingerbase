@@ -112,6 +112,9 @@ class MockModel(Model):
     def _mock_packageupdate_lookup(self, pkg_name):
         return self._mock_swupdate.pkgs[pkg_name]
 
+    def _mock_packagedeps_get_list(self, pkg_name):
+        return self._mock_swupdate.pkgs[pkg_name]['depends']
+
     def _mock_packageupdate_upgrade(self, pkg_name):
         pkgs_list = [pkg_name] + self._mock_swupdate.pkgs[pkg_name]['depends']
         taskid = AsyncTask('/plugins/gingerbase/host/packagesupdate/%s/upgrade'

@@ -94,6 +94,17 @@ class PackageUpdateModel(object):
         return self.task.lookup(taskid)
 
 
+class PackageDepsModel(object):
+    def __init__(self, **kargs):
+        try:
+            self.host_swupdate = SoftwareUpdate()
+        except:
+            self.host_swupdate = None
+
+    def get_list(self, pkg):
+        return self.host_swupdate.getPackageDeps(pkg)
+
+
 class SwUpdateProgressModel(object):
     def __init__(self, **kargs):
         self.task = TaskModel(**kargs)
