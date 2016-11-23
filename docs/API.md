@@ -237,7 +237,6 @@ Contains the information for a specific package to be updated.
     * arch: The architecture of the package
     * version: The version of the package will be installed
     * repository: The repository name from where package will be downloaded
-    * depends: List of packages eligible to update that this depends on
 
 * **POST**: *See Host Package Update Actions*
 

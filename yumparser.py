@@ -331,32 +331,16 @@ def get_yum_packages_list_update(checkupdate_output=None):
     filtered_output = _filter_lines_checkupdate_output(checkupdate_output)
 
     packages = []
+    names = []
     for line in filtered_output:
         line = line.split()
         name, arch = line[0].rsplit('.', 1)
-        packages.append(name)
-    packages = list(set(packages))
+        if name not in names:
+            names.append(name)
+            pkg = {'package_name': name, 'arch': arch, 'version': line[1],
+                   'repository': line[2]}
+        packages.append(pkg)
     return packages
-
-
-def _get_package_info(pkg_name, output=None):
-    if output is None:
-        return {}
-
-    package = {}
-    pkg_dep = []
-    for line in output:
-        line = line.split()
-        if len(line) < 5:
-            continue
-        if line[0] == pkg_name:
-            package = {'package_name': line[0], 'arch': line[1],
-                       'version': line[2], 'repository': line[3]}
-        else:
-            # it's a dependency
-            pkg_dep.append(line[0])
-    package['depends'] = list(set(pkg_dep))
-    return package
 
 
 def get_yum_package_deps(pkg_name):
@@ -371,32 +355,40 @@ def get_yum_package_deps(pkg_name):
     # Remove the useless part of the output
     out = out[5:out.index('Transaction Summary')]
 
-    return _get_package_info(pkg_name, out).get('depends', [])
+    pkg_dep = []
+    for line in out:
+        line = line.split()
+        if len(line) < 5:
+            continue
+        if line[0] != pkg_name:
+            pkg_dep.append(line[0])
+    return list(set(pkg_dep))
 
 
 def get_yum_package_info(pkg_name):
     """
     Returns package information as a dictionary.
     """
-    cmd = ['yum', '-v', '--assumeno', 'update', pkg_name]
+    cmd = ['yum', 'check-update', '-d0', pkg_name]
     out, error, returncode = run_command(cmd, silent=True)
-    if returncode != 1:
-        return []
+    if returncode == 1:
+        return None
 
     # Get the end of the output and parse it
     out = out.split('\n')
-    out = out[out.index('Dependencies Resolved')+1:]
-    # Remove the useless part of the output
-    out = out[5:out.index('Transaction Summary')]
-
-    return _get_package_info(pkg_name, out)
+    for line in out:
+        line = line.split()
+        if len(line) == 3:
+            name, arch = line[0].split('.')
+            return {'package_name': name, 'arch': arch,
+                    'version': line[1], 'repository': line[2]}
 
 
 def get_dnf_package_deps(pkg_name):
     cmd = ['dnf', '-v', '--assumeno', 'update', pkg_name]
     out, error, returncode = run_command(cmd, silent=True)
     if returncode != 1:
-        return []
+        return None
 
     # Get the end of the output and parse it
     out = out.split('\n')
@@ -404,22 +396,11 @@ def get_dnf_package_deps(pkg_name):
     # Remove the useless part of the output
     out = out[3:out.index('Transaction Summary')]
 
-    return _get_package_info(pkg_name, out).get('depends', [])
-
-
-def get_dnf_package_info(pkg_name):
-    """
-    Returns package information as a dictionary.
-    """
-    cmd = ['dnf', '-v', '--assumeno', 'update', pkg_name]
-    out, error, returncode = run_command(cmd, silent=True)
-    if returncode != 1:
-        return []
-
-    # Get the end of the output and parse it
-    out = out.split('\n')
-    out = out[out.index('Dependencies resolved.')+1:]
-    # Remove the useless part of the output
-    out = out[3:out.index('Transaction Summary')]
-
-    return _get_package_info(pkg_name, out)
+    pkg_dep = []
+    for line in out:
+        line = line.split()
+        if len(line) < 5:
+            continue
+        if line[0] != pkg_name:
+            pkg_dep.append(line[0])
+    return list(set(pkg_dep))

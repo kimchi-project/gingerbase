@@ -107,16 +107,16 @@ class MockModel(Model):
         wok_log.info("The host system will be rebooted")
 
     def _mock_packagesupdate_get_list(self):
-        return self._mock_swupdate.pkgs.keys()
+        return self._mock_swupdate.pkgs.values()
 
     def _mock_packageupdate_lookup(self, pkg_name):
         return self._mock_swupdate.pkgs[pkg_name]
 
     def _mock_packagedeps_get_list(self, pkg_name):
-        return self._mock_swupdate.pkgs[pkg_name]['depends']
+        return self._mock_swupdate.deps.get(pkg_name, [])
 
     def _mock_packageupdate_upgrade(self, pkg_name):
-        pkgs_list = [pkg_name] + self._mock_swupdate.pkgs[pkg_name]['depends']
+        pkgs_list = [pkg_name] + self._mock_swupdate.deps.get(pkg_name, [])
         taskid = AsyncTask('/plugins/gingerbase/host/packagesupdate/%s/upgrade'
                            % pkg_name, self._mock_swupdate.doUpdate,
                            pkgs_list).id
@@ -174,33 +174,31 @@ class MockModel(Model):
 
 class MockSoftwareUpdate(object):
     def __init__(self):
+        self._num2update = 5
+
         self.pkgs = {
             'udevmountd': {'repository': 'openSUSE-13.1-Update',
                            'version': '0.81.5-14.1',
                            'arch': 'x86_64',
-                           'package_name': 'udevmountd',
-                           'depends': []},
+                           'package_name': 'udevmountd'},
             'sysconfig-network': {'repository': 'openSUSE-13.1-Extras',
                                   'version': '0.81.5-14.1',
                                   'arch': 'x86_64',
-                                  'package_name': 'sysconfig-network',
-                                  'depends': []},
+                                  'package_name': 'sysconfig-network'},
             'libzypp': {'repository': 'openSUSE-13.1-Update',
                         'version': '13.9.0-10.1',
                         'arch': 'noarch',
-                        'package_name': 'libzypp',
-                        'depends': []},
+                        'package_name': 'libzypp'},
             'wok': {'repository': 'openSUSE-13.1-Update',
                     'version': '2.0.0',
                     'arch': 'noarch',
-                    'package_name': 'wok',
-                    'depends': []},
+                    'package_name': 'wok'},
             'ginger': {'repository': 'openSUSE-13.1-Update',
                        'version': '2.0.0',
                        'arch': 'noarch',
-                       'package_name': 'ginger',
-                       'depends': ['wok']}}
-        self._num2update = 5
+                       'package_name': 'ginger'}}
+
+        self.deps = {'ginger': ['wok']}
 
     def doUpdate(self, cb, params):
         msgs = []

@@ -133,7 +133,7 @@ class HostTests(unittest.TestCase):
         pkgs = json.loads(resp.read())
         self.assertEquals(5, len(pkgs))
 
-        pkg_keys = ['package_name', 'repository', 'arch', 'version', 'depends']
+        pkg_keys = ['package_name', 'repository', 'arch', 'version']
         for p in pkgs:
             name = p['package_name']
             resp = self.request('/plugins/gingerbase/host/packagesupdate/' +
