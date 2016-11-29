@@ -270,6 +270,7 @@ def fetch_disks_partitions():
             "MOUNTPOINT", "MAJ:MIN", "PKNAME"]
     devs = _get_lsblk_devs(keys)
     part_list = []
+    paths_dict = {}
     for dev in devs:
         dev_details = dev
         majmin = dev['maj:min']
@@ -278,6 +279,10 @@ def fetch_disks_partitions():
                                                  dev['fstype'],
                                                  dev['mountpoint'], majmin,
                                                  devs)
+        if dev_details['path'] in paths_dict.keys():
+            continue
+        paths_dict[dev_details['path']] = dev_details['name']
+
         part_list.append(dev_details)
     return part_list
 
