@@ -97,7 +97,7 @@ messages = {
     "GGBDISK00002E": _("Block device not found."),
     "GGBDISK00003E": _("Block device %(device)s not found."),
     "GGBDISK00004E": _("Unable to retrieve LVM information. Details: %(err)s"),
-    "GINSMT0001E": _("Error ocurred while fetching current smt settings."),
+    "GINSMT0001E": _("Error occurred while fetching current smt settings."),
     "GINSMT0002E": _("Error occurred while enabling SMT in the zipl file."),
     "GINSMT0003E": _("Execution of command failed with '%(error)s'. "),
     "GINSMT0004E": _("Failed due to invalid SMT value."),
@@ -107,8 +107,8 @@ messages = {
     "GINSMT0008E": _("Error occurred in execution of zipl command '%(error)s'."),
     "GINSMT0009E": _("Error occurred in execution of hyptop command while"
                      " fetching the processor information '%(error)s'."),
-    "GINSMT0010E": _("Error ocurred in fetching smt status."),
-    "GINSMT0011E": _("Error ocurred in fetching persisted smt settings."),
+    "GINSMT0010E": _("Error occurred in fetching smt status."),
+    "GINSMT0011E": _("Error occurred in fetching persisted smt settings."),
     "GINSMT0012E": _("Zipl file does not exist."),
     "GINSMT0013E": _("SMT is not supported on '%(name)s' architecture."),
 

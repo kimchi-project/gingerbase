@@ -85,8 +85,7 @@ class SmtModel(object):
         output, error, retcode = run_command(command)
         if retcode != 0:
             raise OperationFailed("GINSMT003E", {'error': error})
-        elif (SMT_TWO in output or SMT not in output)\
-                and threads_per_core == 2:
+        elif (SMT_TWO in output or SMT not in output):
             status = "enabled"
             value = 2
         elif SMT_ONE in output and threads_per_core < 2:
