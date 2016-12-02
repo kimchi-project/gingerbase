@@ -361,3 +361,37 @@ def pvs(vgname=None):
                           'size': long(l[1]),
                           'uuid': l[2]},
                [fields.split() for fields in pvs])
+
+
+def pvs_with_vg_list():
+    """
+    lists all physical volumes in the system along with
+    associated volume group if any
+
+    """
+    outlist = []
+    outdict = {}
+    cmd = ['pvs',
+           '--units',
+           'b',
+           '--nosuffix',
+           '--noheading',
+           '--unbuffered',
+           '--options',
+           'pv_name,vg_name']
+
+    out, err, rc = run_command(cmd)
+    if rc != 0:
+        raise OperationFailed("GGBDISK00004E", {'err': err})
+
+    if not out:
+        return []
+    outlines = out.splitlines()[1:]
+    for line in outlines:
+        columns = line.split()
+        if len(columns) == 1:
+            outdict[columns[0]] = "N/A"
+        else:
+            outdict[columns[0]] = columns[1]
+        outlist.append(outdict)
+    return outlist

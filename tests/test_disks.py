@@ -22,6 +22,7 @@ import unittest
 
 from wok.exception import NotFoundError, OperationFailed
 from wok.plugins.gingerbase.disks import _get_lsblk_devs
+from wok.plugins.gingerbase.disks import pvs_with_vg_list
 
 
 class DiskTests(unittest.TestCase):
@@ -49,3 +50,12 @@ class DiskTests(unittest.TestCase):
             _get_lsblk_devs(keys, [valid_dev])
             cmd = ['lsblk', '-Pbo', 'MOUNTPOINT', valid_dev]
             mock_run_command.assert_called_once_with(cmd)
+
+    @mock.patch('wok.plugins.gingerbase.disks.run_command')
+    def test_pvs_with_vg_list(self, mock_run_command):
+        mock_run_command.return_value = ["""
+        /dev/mapper/36005076307ffc6a60000000000001f22 vpoolfclun2
+  /dev/mapper/36005076307ffc6a60000000000001f23 vpoolfclun
+  /dev/dasdb1""", "", 0]
+        outlist = pvs_with_vg_list()
+        self.assertEqual(outlist[0].get('/dev/dasdb1'), 'N/A')
