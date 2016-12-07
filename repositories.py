@@ -348,7 +348,7 @@ class AptRepo(object):
         module = __import__('aptsources.sourceslist', globals(), locals(),
                             ['SourcesList'], -1)
 
-        self._sourceparts_path = '/%s%s' % (
+        self._sourceparts_path = '/%s/%s' % (
             config.get('Dir::Etc'), config.get('Dir::Etc::sourceparts'))
         self._sourceslist = getattr(module, 'SourcesList')
         self.filename = os.path.join(self._sourceparts_path,
