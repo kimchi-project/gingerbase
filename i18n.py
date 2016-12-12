@@ -27,6 +27,8 @@ _ = gettext.gettext
 messages = {
     "GGBAPI0001E": _("Unknown parameter %(value)s"),
 
+    "GGBUTILS0001E": _("Unable to reach %(url)s. Make sure it is accessible and try again."),
+
     "GGBDR0001E": _("Debug report %(name)s does not exist"),
     "GGBDR0002E": _("Debug report tool not found in system"),
     "GGBDR0003E": _("Unable to create debug report %(name)s. Details: %(err)s."),
