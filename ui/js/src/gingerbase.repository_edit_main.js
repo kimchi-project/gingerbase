@@ -41,7 +41,7 @@ gingerbase.repository_edit_main = function() {
 
 
     var editRepository = function(event) {
-        var formData = $(editForm).serializeObject();
+        var formData = $(':input:visible', $(editForm)).serializeObject();
 
         if (formData && formData.config) {
             formData.config.gpgcheck=(String(formData.config.gpgcheck).toLowerCase() === 'true');
