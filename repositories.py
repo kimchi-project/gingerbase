@@ -268,10 +268,10 @@ class YumRepo(object):
 
         entry = repos.get(repo_id)
 
-        baseurl = params.get('baseurl', None)
+        baseurl = params.get('baseurl', entry.baseurl)
         config = params.get('config', {})
-        mirrorlist = config.get('mirrorlist', None)
-        metalink = config.get('metalink', None)
+        mirrorlist = config.get('mirrorlist', entry.mirrorlist)
+        metalink = config.get('metalink', entry.metalink)
 
         if baseurl is not None and len(baseurl.strip()) == 0:
             baseurl = None
