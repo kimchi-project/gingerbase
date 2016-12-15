@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-30 10:38-0300\n"
+"POT-Creation-Date: 2016-12-15 10:21-0200\n"
 "PO-Revision-Date: 2014-08-27 21:30+0000\n"
 "Last-Translator: BobSynfig\n"
 "Language-Team: French\n"
@@ -36,6 +36,10 @@ msgstr ""
 #, python-format
 msgid "Unknown parameter %(value)s"
 msgstr "Paramètre inconnu %(value)s"
+
+#, python-format
+msgid "Unable to reach %(url)s. Make sure it is accessible and try again."
+msgstr ""
 
 #, python-format
 msgid "Debug report %(name)s does not exist"
@@ -295,52 +299,6 @@ msgstr ""
 msgid "Unable to retrieve LVM information. Details: %(err)s"
 msgstr ""
 
-msgid "Error ocurred while fetching current smt settings."
-msgstr ""
-
-msgid "Error occurred while enabling SMT in the zipl file."
-msgstr ""
-
-#, python-format
-msgid "Execution of command failed with '%(error)s'. "
-msgstr ""
-
-msgid "Failed due to invalid SMT value."
-msgstr ""
-
-msgid "Error occurred while disabling SMT or SMT is already disabled."
-msgstr ""
-
-msgid "Error occurred while checking for SMT support or SMT is not supported."
-msgstr ""
-
-#, python-format
-msgid "SMT %(name)s is supported only for s390x architecture."
-msgstr ""
-
-#, python-format
-msgid "Error occurred in execution of zipl command '%(error)s'."
-msgstr ""
-
-#, python-format
-msgid ""
-"Error occurred in execution of hyptop command while fetching the processor "
-"information '%(error)s'."
-msgstr ""
-
-msgid "Error ocurred in fetching smt status."
-msgstr ""
-
-msgid "Error ocurred in fetching persisted smt settings."
-msgstr ""
-
-msgid "Zipl file does not exist."
-msgstr ""
-
-#, python-format
-msgid "SMT is not supported on '%(name)s' architecture."
-msgstr ""
-
 #, python-format
 msgid "Create host debug report '%(name)s'"
 msgstr ""
@@ -384,12 +342,6 @@ msgstr ""
 
 #, python-format
 msgid "Disable host software repository '%(ident)s'"
-msgstr ""
-
-msgid "Enabled SMT."
-msgstr ""
-
-msgid "Disabled SMT."
 msgstr ""
 
 msgid "The username or password you entered is incorrect. Please try again."
@@ -569,6 +521,12 @@ msgstr ""
 
 msgid "Vendor: "
 msgstr ""
+
+msgid "Restart"
+msgstr "Redémarrer"
+
+msgid "Shut down"
+msgstr "Éteindre"
 
 msgid "Remove Repository"
 msgstr ""
@@ -828,30 +786,6 @@ msgstr ""
 msgid "Affected devices:"
 msgstr ""
 
-msgid "Do you want to enable SMT ?"
-msgstr ""
-
-msgid ""
-"Successful in applying the SMT settings. In order to make SMT settings "
-"effective system reboot required. Click 'Reboot Now' to reboot the system "
-"now otherwise click 'Reboot Later' to reboot the system later."
-msgstr ""
-
-msgid "Reboot Now"
-msgstr ""
-
-msgid "Reboot Later"
-msgstr ""
-
-msgid "Enabled SMT"
-msgstr ""
-
-msgid "Do you want to disable SMT ?"
-msgstr ""
-
-msgid "Disabled SMT"
-msgstr ""
-
 msgid "CDROM path needs to be a valid local/remote path and cannot be blank."
 msgstr ""
 "Le chemin de CDROM doit être un chemin local/distant valide et ne peut être "
@@ -932,15 +866,6 @@ msgstr "Oui"
 msgid "No"
 msgstr "Non"
 
-msgid "Restart"
-msgstr "Redémarrer"
-
-msgid "Shut down"
-msgstr "Éteindre"
-
-msgid "Connect"
-msgstr "Connecter"
-
 msgid "CPU"
 msgstr "CPU"
 
@@ -955,9 +880,6 @@ msgstr "E/S Réseau"
 
 msgid "Basic Information"
 msgstr "Informations de Base"
-
-msgid "SMT"
-msgstr ""
 
 msgid "OS Distro"
 msgstr "Distro de l'OS"
@@ -983,27 +905,6 @@ msgstr ""
 msgid "Hypervisor Details"
 msgstr ""
 
-msgid "Simultaneous Multi-Threading"
-msgstr ""
-
-msgid "SMT Status"
-msgstr ""
-
-msgid "SMT Value"
-msgstr ""
-
-msgid "SMT 1"
-msgstr ""
-
-msgid "SMT 2"
-msgstr ""
-
-msgid "changes will be applied only after rebooting the system"
-msgstr ""
-
-msgid "Apply"
-msgstr ""
-
 msgid "Update"
 msgstr ""
 
@@ -1015,6 +916,9 @@ msgstr ""
 
 msgid "Arch"
 msgstr ""
+
+#~ msgid "Connect"
+#~ msgstr "Connecter"
 
 #~ msgid "Update Progress"
 #~ msgstr "Progrès de la Mise à Jour"
