@@ -44,6 +44,14 @@ gingerbase.init_update = function() {
                     $(this).attr('disabled', false);
                 }
             });
+        }else if(toEnable === 'enable'){
+            $.each($('#'+repositoriesGrid.selectButtonContainer[0].id+' ul.dropdown-menu .btn'), function(i,button){
+                if($(this).attr('id') === 'repositories-grid-edit-button'){
+                    $(this).attr('disabled', true);
+                }else {
+                    $(this).attr('disabled', false);
+                }
+            });
         }else {
             $.each($('#'+repositoriesGrid.selectButtonContainer[0].id+' ul.dropdown-menu .btn'), function(i,button){
                 if($(this).attr('id') === 'repositories-grid-add-button'){
@@ -140,11 +148,14 @@ gingerbase.init_update = function() {
                         if (!repository) {
                             return;
                         }
-                        var name = repository[0]['repo_id'];
-                        var enable = !repository[0]['enabled'];
-                        enableRepositoryButtons(false);
-                        gingerbase.enableRepository(name, enable, function() {
-                            wok.topic('gingerbase/repositoryUpdated').publish();
+
+                        $.each(repository, function(index, repo){
+                            var name = repo['repo_id'];
+                            var enable = !repo['enabled'];
+                            enableRepositoryButtons(false);
+                            gingerbase.enableRepository(name, enable, function() {
+                                wok.topic('gingerbase/repositoryUpdated').publish();
+                            });
                         });
                     } else {
                         return false;
@@ -248,7 +259,20 @@ gingerbase.init_update = function() {
                     actionHtml = ['<i class="fa',' ',actionIcon,'"></i>',' ',actionText].join('');
                     $('#repositories-grid-enable-button').html(actionHtml);
                 } else {
-                    enableRepositoryButtons('some');
+                    var repoState = repository[0]['enabled'];
+                    var diff = false;
+                    $.each(repository, function(index, repo){
+                        if (repo['enabled'] != repoState) {
+                            diff = true;
+                            return false;
+                        }
+                    });
+                    if (diff) {
+                        enableRepositoryButtons('some');
+                    }
+                    else {
+                        enableRepositoryButtons('enable');
+                    }
                 }
             },
             frozenFields: [],
