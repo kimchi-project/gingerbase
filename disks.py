@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2015-2016
+# Copyright IBM Corp, 2015-2017
 #
 # Code derived from Project Kimchi
 #
@@ -386,7 +386,7 @@ def pvs_with_vg_list():
 
     if not out:
         return []
-    outlines = out.splitlines()[1:]
+    outlines = out.strip('\n').splitlines()
     for line in outlines:
         columns = line.split()
         if len(columns) == 1:
