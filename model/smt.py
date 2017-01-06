@@ -87,7 +87,7 @@ class SmtModel(object):
             raise OperationFailed("GINSMT003E", {'error': error})
         elif (SMT_TWO in output or SMT not in output):
             status = "enabled"
-            value = 2
+            value = threads_per_core
         elif SMT_ONE in output and threads_per_core < 2:
             status = "enabled"
             value = 1
