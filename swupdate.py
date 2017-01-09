@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2015-2016
+# Copyright IBM Corp, 2015-2017
 #
 # Code derived from Project Kimchi
 #
@@ -51,7 +51,8 @@ class SoftwareUpdate(object):
         # Get the distro of host machine and creates an object related to
         # correct package management system
         self._pkg_mnger = None
-        for module, cls in [('dnf', DnfUpdate), ('yum', YumUpdate), ('apt', AptUpdate), ('portage', PortageUpdate)]:
+        for module, cls in [('dnf', DnfUpdate), ('yum', YumUpdate),
+                            ('apt', AptUpdate), ('portage', PortageUpdate)]:
             try:
                 __import__(module)
                 wok_log.info("Logging %s features." % cls.__name__)
@@ -67,7 +68,7 @@ class SoftwareUpdate(object):
         if self._pkg_mnger is None:
             raise Exception("There is no compatible package "
                             "manager for this system.")
-    
+
     def getUpdates(self):
         """
         Return a list of packages eligible to be updated in the system.
@@ -573,18 +574,19 @@ class ZypperUpdate(GenericUpdate):
 
         return False
 
+
 class PortageUpdate(GenericUpdate):
     """
     Class to represent and operate with Portage software update system.
-    It's loaded only on those systems listed at PORTAGE_DISTROS and loads necessary
-    modules in runtime.
+    It's loaded only on those systems listed at PORTAGE_DISTROS and loads
+    necessary modules in runtime.
     """
     def __init__(self):
         # on purpose empty, not smart to do that over a webui in gentoo
         self.update_cmd = dict()
         # specific updates would require the usage of '=package-$version'
         # not implemented in gingerbase therefore omitted
-        #self.update_cmd = dict.fromkeys(['all', ],
+        # self.update_cmd = dict.fromkeys(['all', ],
         #                                ["emerge", "-u", "@world"])
         self.logfile = self._get_output_log()
 
@@ -644,4 +646,3 @@ class PortageUpdate(GenericUpdate):
 
         # the pidfile exists and it lives in process table
         return pid_exists(pid)
-
