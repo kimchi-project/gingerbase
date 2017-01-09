@@ -36,6 +36,7 @@ from wok.plugins.gingerbase.yumparser import get_dnf_package_deps
 from wok.plugins.gingerbase.yumparser import get_yum_package_deps
 from wok.plugins.gingerbase.yumparser import get_yum_package_info
 from wok.plugins.gingerbase.yumparser import get_yum_packages_list_update
+from wok.plugins.gingerbase import portageparser
 
 swupdateLock = threading.RLock()
 
@@ -49,30 +50,24 @@ class SoftwareUpdate(object):
     def __init__(self):
         # Get the distro of host machine and creates an object related to
         # correct package management system
-        try:
-            __import__('dnf')
-            wok_log.info("Loading DnfUpdate features.")
-            self._pkg_mnger = DnfUpdate()
-        except ImportError:
+        self._pkg_mnger = None
+        for module, cls in [('dnf', DnfUpdate), ('yum', YumUpdate), ('apt', AptUpdate), ('portage', PortageUpdate)]:
             try:
-                __import__('yum')
-                wok_log.info("Loading YumUpdate features.")
-                self._pkg_mnger = YumUpdate()
+                __import__(module)
+                wok_log.info("Logging %s features." % cls.__name__)
+                self._pkg_mnger = cls()
+                break
             except ImportError:
-                try:
-                    __import__('apt')
-                    wok_log.info("Loading AptUpdate features.")
-                    self._pkg_mnger = AptUpdate()
-                except ImportError:
-                    zypper_help = ["zypper", "--help"]
-                    (stdout, stderr, returncode) = run_command(zypper_help)
-                    if returncode == 0:
-                        wok_log.info("Loading ZypperUpdate features.")
-                        self._pkg_mnger = ZypperUpdate()
-                    else:
-                        raise Exception("There is no compatible package "
-                                        "manager for this system.")
-
+                continue
+        zypper_help = ["zypper", "--help"]
+        (stdout, stderr, returncode) = run_command(zypper_help)
+        if returncode == 0:
+            wok_log.info("Loading ZypperUpdate features.")
+            self._pkg_mnger = ZypperUpdate()
+        if self._pkg_mnger is None:
+            raise Exception("There is no compatible package "
+                            "manager for this system.")
+    
     def getUpdates(self):
         """
         Return a list of packages eligible to be updated in the system.
@@ -577,3 +572,76 @@ class ZypperUpdate(GenericUpdate):
             return True
 
         return False
+
+class PortageUpdate(GenericUpdate):
+    """
+    Class to represent and operate with Portage software update system.
+    It's loaded only on those systems listed at PORTAGE_DISTROS and loads necessary
+    modules in runtime.
+    """
+    def __init__(self):
+        # on purpose empty, not smart to do that over a webui in gentoo
+        self.update_cmd = dict()
+        # specific updates would require the usage of '=package-$version'
+        # not implemented in gingerbase therefore omitted
+        #self.update_cmd = dict.fromkeys(['all', ],
+        #                                ["emerge", "-u", "@world"])
+        self.logfile = self._get_output_log()
+
+    def _get_output_log(self):
+        """
+        Return the logfile path
+        """
+        # TODO: find potential custom location in make.conf?
+        return "/var/log/emerge.log"
+
+    def getPackagesList(self):
+        """
+        Return a list of packages eligible to be updated.
+        """
+        self.wait_pkg_manager_available()
+        try:
+            return portageparser.packages_list_update()
+        except Exception, e:
+            raise OperationFailed('GGBPKGUPD0003E', {'err': str(e)})
+
+    def getPackageInfo(self, pkg_name):
+        """
+        Get package information. The return is a dictionary containg the
+        information about a package, in the format:
+
+        package = {'package_name': <string>,
+                   'version': <string>,
+                   'arch': <string>,
+                   'repository': <string>
+                  }
+        """
+        self.wait_pkg_manager_available()
+        try:
+            return portageparser.package_info(pkg_name)
+        except Exception, e:
+            raise NotFoundError('GGBPKGUPD0003E', {'err': str(e)})
+
+    def getPackageDeps(self, pkg_name):
+        try:
+            return portageparser.package_deps(pkg_name)
+        except Exception, e:
+            raise NotFoundError('GGBPKGUPD0003E', {'err': str(e)})
+
+    def isRunning(self):
+        """
+        Return True whether the package manager is already running or
+        False otherwise.
+        """
+        pid = None
+        try:
+            for dnf_proc in process_iter():
+                if 'emerge' in dnf_proc.name():
+                    pid = dnf_proc.pid
+                    break
+        except:
+            return False
+
+        # the pidfile exists and it lives in process table
+        return pid_exists(pid)
+
