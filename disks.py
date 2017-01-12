@@ -82,9 +82,9 @@ def _get_dev_major_min(name):
     return maj_min
 
 
-def _is_dev_leaf(devNodePath, name=None, devs=None):
+def _is_dev_leaf(devNodePath, name=None, devs=None, devtype=None):
     try:
-        if devs:
+        if devs and devtype != 'mpath':
             for dev in devs:
                 if encode_value(name) == dev['pkname']:
                     return False
@@ -185,7 +185,7 @@ def _is_available(name, devtype, fstype, mountpoint, majmin, devs=None):
             fstype in ['', 'LVM2_member'] and
             mountpoint == "" and
             not has_VG and
-            _is_dev_leaf(devNodePath, name, devs) and
+            _is_dev_leaf(devNodePath, name, devs, devtype) and
             not _is_dev_extended_partition(devtype, devNodePath)):
         return True
     return False
