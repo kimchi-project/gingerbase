@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2016
+# Copyright IBM Corp, 2016-2017
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,6 @@ SMT_ACTIVITY = {
 class Smt(Resource):
     def __init__(self, model, id=None):
         super(Smt, self).__init__(model, id)
-        self.role_key = 'administration'
         self.admin_methods = ['GET']
         self.uri_fmt = '/host/smt/%s'
         self.enable = self.generate_action_handler('enable', ['smt_val'])

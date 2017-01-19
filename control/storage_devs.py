@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2016
+# Copyright IBM Corp, 2016-2017
 #
 # Code derived from Project Ginger
 #
@@ -31,5 +31,4 @@ class StorageDevs(SimpleCollection):
 
     def __init__(self, model):
         super(StorageDevs, self).__init__(model)
-        self.role_key = 'host'
         self.admin_methods = ['GET']

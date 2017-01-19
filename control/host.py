@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2015-2016
+# Copyright IBM Corp, 2015-2017
 #
 # Code derived from Project Kimchi
 #
@@ -54,7 +54,6 @@ REPOSITORY_ACTIVITY = {
 class Host(Resource):
     def __init__(self, model, id=None):
         super(Host, self).__init__(model, id)
-        self.role_key = 'dashboard'
         self.admin_methods = ['POST']
         self.uri_fmt = '/host/%s'
         self.reboot = self.generate_action_handler('reboot')
@@ -77,7 +76,6 @@ class Host(Resource):
 class HostStats(Resource):
     def __init__(self, model, id=None):
         super(HostStats, self).__init__(model, id)
-        self.role_key = 'dashboard'
         self.history = HostStatsHistory(self.model)
 
     @property
@@ -103,7 +101,6 @@ class Capabilities(Resource):
 class Repositories(Collection):
     def __init__(self, model):
         super(Repositories, self).__init__(model)
-        self.role_key = 'updates'
         self.admin_methods = ['GET', 'POST']
         self.resource = Repository
 
@@ -115,7 +112,6 @@ class Repositories(Collection):
 class Repository(Resource):
     def __init__(self, model, id):
         super(Repository, self).__init__(model, id)
-        self.role_key = 'updates'
         self.admin_methods = ['GET', 'PUT', 'POST', 'DELETE']
         self.uri_fmt = "/host/repositories/%s"
         self.enable = self.generate_action_handler('enable')

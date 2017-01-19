@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2016
+# Copyright IBM Corp, 2016-2017
 #
 # Code derived from Project Kimchi
 #
@@ -31,7 +31,6 @@ PACKAGEUPDATE_ACTIVITY = {'POST': {'upgrade': "GGBPKGUPD0002L"}}
 class PackagesUpdate(Collection):
     def __init__(self, model):
         super(PackagesUpdate, self).__init__(model)
-        self.role_key = 'updates'
         self.admin_methods = ['GET']
         self.resource = PackageUpdate
 
@@ -45,7 +44,6 @@ class PackagesUpdate(Collection):
 class PackageUpdate(Resource):
     def __init__(self, model, id=None):
         super(PackageUpdate, self).__init__(model, id)
-        self.role_key = 'updates'
         self.admin_methods = ['GET', 'POST']
         self.upgrade = self.generate_action_handler_task('upgrade')
         self.log_map = PACKAGEUPDATE_ACTIVITY
@@ -59,7 +57,6 @@ class PackageUpdate(Resource):
 class PackageDeps(SimpleCollection):
     def __init__(self, model, pkg=None):
         super(PackageDeps, self).__init__(model)
-        self.role_key = 'updates'
         self.admin_methods = ['GET']
         self.pkg = pkg
         self.resource_args = [self.pkg, ]
@@ -69,7 +66,6 @@ class PackageDeps(SimpleCollection):
 class SwUpdateProgress(AsyncResource):
     def __init__(self, model, id=None):
         super(SwUpdateProgress, self).__init__(model, id)
-        self.role_key = 'updates'
         self.admin_methods = ['GET']
 
     @property

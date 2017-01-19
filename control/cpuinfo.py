@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2015-2016
+# Copyright IBM Corp, 2015-2017
 #
 # Code derived from Project Kimchi
 #
@@ -27,7 +27,6 @@ class CPUInfo(Resource):
     def __init__(self, model):
         super(CPUInfo, self).__init__(model)
         self.admin_methods = ['GET']
-        self.role_key = 'host'
         self.uri_fmt = "/host/cpuinfo"
 
     @property

@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2015-2016
+# Copyright IBM Corp, 2015-2017
 #
 # Code derived from Project Kimchi
 #
@@ -39,7 +39,6 @@ class DebugReports(AsyncCollection):
     def __init__(self, model):
         super(DebugReports, self).__init__(model)
         self.resource = DebugReport
-        self.role_key = 'dashboard'
         self.admin_methods = ['GET', 'POST']
 
         # set user log messages and make sure all parameters are present
@@ -54,7 +53,6 @@ class DebugReports(AsyncCollection):
 class DebugReport(Resource):
     def __init__(self, model, ident):
         super(DebugReport, self).__init__(model, ident)
-        self.role_key = 'dashboard'
         self.admin_methods = ['GET', 'PUT', 'POST']
         self.uri_fmt = '/debugreports/%s'
         self.content = DebugReportContent(model, ident)
@@ -70,7 +68,6 @@ class DebugReport(Resource):
 class DebugReportContent(Resource):
     def __init__(self, model, ident):
         super(DebugReportContent, self).__init__(model, ident)
-        self.role_key = 'dashboard'
         self.admin_methods = ['GET']
 
     def get(self):
