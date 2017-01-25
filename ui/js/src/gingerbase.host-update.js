@@ -1,7 +1,7 @@
 /*
  * Project Ginger Base
  *
- * Copyright IBM Corp, 2015-2016
+ * Copyright IBM Corp, 2015-2017
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -278,9 +278,36 @@ gingerbase.init_update = function() {
             frozenFields: [],
             fields: gridFields
         });
+
+        var header = "#list";
+        var list = "#repositories-grid";
+
+        // create and add the filter form to the header
+        var input = $("<input>").attr({"class":"filter form-control search",
+            "type":"text","placeholder": i18n["GGBREPO6022M"],
+            "id":"searchButton"});
+        $(input).prependTo(header);
+
+        // deal with input
+        $(input).change( function () {
+            var filter = $(this).val();
+
+            // something to search: do it
+            if (filter) {
+                $(list).children().find("li:not(:contains(" + filter + "))").slideUp();
+                $(list).children().find("li:contains(" + filter + ")").slideDown();
+
+            // nothing: clean
+            } else {
+                $(list).children().find("li").slideDown();
+            }
+        }).keyup( function () {
+            $(this).change();
+        });
     };
 
     var listRepositories = function(gridCallback) {
+        $("#searchButton").val("");
         repositoriesGrid.maskNode.removeClass('hidden');
         gingerbase.listRepositories(function(repositories) {
                 if ($.isFunction(gridCallback)) {
