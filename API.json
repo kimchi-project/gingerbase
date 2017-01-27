@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-03/schema#",
     "title": "Ginger Base API",
-    "description": "Json schema for Gigner Base API",
+    "description": "Json schema for Ginger Base API",
     "type": "object",
     "gingerbasetype": {
         "cpu_info": {
