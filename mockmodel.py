@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2015-2016
+# Copyright IBM Corp, 2015-2017
 #
 # Code derived from Project Kimchi
 #
@@ -35,7 +35,6 @@ from wok.plugins.gingerbase.model.debugreports import DebugReportsModel
 from wok.plugins.gingerbase.model.model import Model
 
 fake_user = {'root': 'letmein!'}
-mockmodel_defaults = {'domain': 'test', 'arch': 'i686'}
 
 
 class MockModel(Model):

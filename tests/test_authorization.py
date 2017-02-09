@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2014-2016
+# Copyright IBM Corp, 2014-2017
 #
 # Code derived from Project Kimchi
 #
@@ -19,37 +19,28 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
-import os
 import unittest
 from functools import partial
 
 from tests.utils import patch_auth, request, run_server
 
-from wok.plugins.gingerbase import mockmodel
-
-
 test_server = None
-model = None
-fake_iso = '/tmp/fake.iso'
 
 
 def setUpModule():
-    global test_server, model
+    global test_server
 
     patch_auth(sudo=False)
-    model = mockmodel.MockModel('/tmp/obj-store-test')
-    test_server = run_server(test_mode=True, model=model)
+    test_server = run_server(test_mode=True)
 
 
 def tearDownModule():
     test_server.stop()
-    os.unlink('/tmp/obj-store-test')
 
 
 class AuthorizationTests(unittest.TestCase):
     def setUp(self):
         self.request = partial(request)
-        model.reset()
 
     def test_nonroot_access(self):
         # Non-root users can access static host information

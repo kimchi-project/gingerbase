@@ -2,7 +2,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2013-2016
+# Copyright IBM Corp, 2013-2017
 #
 # Code derived from Project Kimchi
 #
@@ -21,7 +21,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
 import json
-import os
 import time
 import unittest
 from functools import partial
@@ -31,24 +30,18 @@ from tests.utils import run_server, wait_task
 
 from wok.rollbackcontext import RollbackContext
 
-from wok.plugins.gingerbase import mockmodel
-
-
 test_server = None
-model = None
 
 
 def setUpModule():
-    global test_server, model
+    global test_server
 
     patch_auth()
-    model = mockmodel.MockModel('/tmp/obj-store-test')
-    test_server = run_server(test_mode=True, model=model)
+    test_server = run_server(test_mode=True)
 
 
 def tearDownModule():
     test_server.stop()
-    os.unlink('/tmp/obj-store-test')
 
 
 class RestTests(unittest.TestCase):
@@ -68,7 +61,6 @@ class RestTests(unittest.TestCase):
 
     def setUp(self):
         self.request = partial(request)
-        model.reset()
 
     def _task_lookup(self, taskid):
         return json.loads(

@@ -2,7 +2,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2015-2016
+# Copyright IBM Corp, 2015-2017
 #
 # Code derived from Project Kimchi
 #
@@ -19,12 +19,12 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+
+import cherrypy
 import json
 import mock
-import os
 import platform
 import psutil
-import tempfile
 import time
 import unittest
 
@@ -34,27 +34,22 @@ from mock import patch
 from tests.utils import patch_auth, request
 from tests.utils import run_server, wait_task
 
-from wok.plugins.gingerbase.mockmodel import MockModel
 from wok.plugins.gingerbase.model.host import HostModel
-
 
 test_server = None
 model = None
-tmpfile = None
 
 
 def setUpModule():
     global test_server, model, tmpfile
 
     patch_auth()
-    tmpfile = tempfile.mktemp()
-    model = MockModel(tmpfile)
-    test_server = run_server(test_mode=True, model=model)
+    test_server = run_server(test_mode=True)
+    model = cherrypy.tree.apps['/plugins/gingerbase'].root.model
 
 
 def tearDownModule():
     test_server.stop()
-    os.unlink(tmpfile)
 
 
 class HostTests(unittest.TestCase):
