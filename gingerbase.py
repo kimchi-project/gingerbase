@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2015-2016
+# Copyright IBM Corp, 2015-2017
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,8 +17,10 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
+import cherrypy
 import json
 import os
+import tempfile
 
 from wok.plugins.gingerbase import config, mockmodel
 from wok.plugins.gingerbase.i18n import messages
@@ -37,10 +39,15 @@ class Gingerbase(WokRoot):
             if not os.path.isdir(directory):
                 os.makedirs(directory)
 
-        if hasattr(wok_options, "model"):
-            self.model = wok_options.model
-        elif wok_options.test:
-            self.model = mockmodel.MockModel()
+        if wok_options.test and (wok_options.test is True or
+                                 wok_options.test.lower() == 'true'):
+            self.objectstore_loc = tempfile.mktemp()
+            self.model = mockmodel.MockModel(self.objectstore_loc)
+
+            def remove_objectstore():
+                if os.path.exists(self.objectstore_loc):
+                    os.unlink(self.objectstore_loc)
+            cherrypy.engine.subscribe('exit', remove_objectstore)
         else:
             self.model = gingerBaseModel.Model()
 
