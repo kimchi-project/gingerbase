@@ -2,7 +2,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2013-2016
+# Copyright IBM Corp, 2013-2017
 #
 # Code derived from Project Kimchi
 #
@@ -21,7 +21,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
 import os
-import shutil
 import unittest
 
 import wok.objectstore
@@ -35,13 +34,8 @@ invalid_repository_urls = ['www.fedora.org',       # missing protocol
                            'http://www.fedora',    # invalid domain name
                            'file:///home/foobar']  # invalid path
 
-TMP_DIR = '/var/lib/gingerbase/tests/'
-
 
 def setUpModule():
-    if not os.path.exists(TMP_DIR):
-        os.makedirs(TMP_DIR)
-
     # iso_gen.construct_fake_iso(UBUNTU_ISO, True, '14.04', 'ubuntu')
 
     # Some FeatureTests functions depend on server to validate their result.
@@ -51,10 +45,6 @@ def setUpModule():
     # So clean Singleton instances to make sure to get the right result when
     # running the following tests.
     Singleton._instances = {}
-
-
-def tearDownModule():
-    shutil.rmtree(TMP_DIR)
 
 
 class ModelTests(unittest.TestCase):
