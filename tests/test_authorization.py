@@ -30,7 +30,7 @@ test_server = None
 def setUpModule():
     global test_server
 
-    patch_auth(sudo=False)
+    patch_auth()
     test_server = run_server(test_mode=True)
 
 
@@ -40,7 +40,7 @@ def tearDownModule():
 
 class AuthorizationTests(unittest.TestCase):
     def setUp(self):
-        self.request = partial(request)
+        self.request = partial(request, user='user')
 
     def test_nonroot_access(self):
         # Non-root users can access static host information
