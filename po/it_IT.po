@@ -1,6 +1,6 @@
 # English translations for gingerbase package.
 # i18n portable object for gingerbase.
-# Copyright IBM Corp, 2014-2016
+# Copyright IBM Corp, 2014-2017
 #
 # Code derived from Project Kimchi
 #
@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-30 10:38-0300\n"
+"POT-Creation-Date: 2017-03-03 13:48-0300\n"
 "PO-Revision-Date: 2013-07-11 17:32-0400\n"
 "Last-Translator: Crístian Viana <vianac@linux.vnet.ibm.com>\n"
 "Language-Team: English\n"
@@ -35,6 +35,10 @@ msgstr ""
 
 #, python-format
 msgid "Unknown parameter %(value)s"
+msgstr ""
+
+#, python-format
+msgid "Unable to reach %(url)s. Make sure it is accessible and try again."
 msgstr ""
 
 #, python-format
@@ -290,7 +294,7 @@ msgstr ""
 msgid "Unable to retrieve LVM information. Details: %(err)s"
 msgstr ""
 
-msgid "Error ocurred while fetching current smt settings."
+msgid "Error occurred while fetching current smt settings."
 msgstr ""
 
 msgid "Error occurred while enabling SMT in the zipl file."
@@ -323,10 +327,10 @@ msgid ""
 "information '%(error)s'."
 msgstr ""
 
-msgid "Error ocurred in fetching smt status."
+msgid "Error occurred in fetching smt status."
 msgstr ""
 
-msgid "Error ocurred in fetching persisted smt settings."
+msgid "Error occurred in fetching persisted smt settings."
 msgstr ""
 
 msgid "Zipl file does not exist."
@@ -565,6 +569,12 @@ msgstr ""
 msgid "Vendor: "
 msgstr ""
 
+msgid "Restart"
+msgstr "Riavvia"
+
+msgid "Shut down"
+msgstr "Arresta"
+
 msgid "Remove Repository"
 msgstr ""
 
@@ -627,6 +637,9 @@ msgstr ""
 msgid ""
 "Repositories will be removed permanently and can't be recovered. Do you want "
 "to continue?"
+msgstr ""
+
+msgid "Search"
 msgstr ""
 
 msgid "Software Updates"
@@ -816,7 +829,7 @@ msgstr ""
 msgid "Affected devices:"
 msgstr ""
 
-msgid "Do you want to enable SMT ?"
+msgid "Do you want to change SMT value ?"
 msgstr ""
 
 msgid ""
@@ -919,15 +932,6 @@ msgstr "Sì"
 msgid "No"
 msgstr "No"
 
-msgid "Restart"
-msgstr "Riavvia"
-
-msgid "Shut down"
-msgstr "Arresta"
-
-msgid "Connect"
-msgstr "Connetti"
-
 msgid "CPU"
 msgstr "CPU"
 
@@ -1002,6 +1006,9 @@ msgstr ""
 
 msgid "Arch"
 msgstr ""
+
+#~ msgid "Connect"
+#~ msgstr "Connetti"
 
 #~ msgid "Update Progress"
 #~ msgstr "Avanzamento aggiornamento"

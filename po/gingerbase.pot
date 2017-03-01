@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-30 10:38-0300\n"
+"POT-Creation-Date: 2017-03-03 13:48-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,10 @@ msgstr ""
 
 #, python-format
 msgid "Unknown parameter %(value)s"
+msgstr ""
+
+#, python-format
+msgid "Unable to reach %(url)s. Make sure it is accessible and try again."
 msgstr ""
 
 #, python-format
@@ -260,7 +264,7 @@ msgstr ""
 msgid "Unable to retrieve LVM information. Details: %(err)s"
 msgstr ""
 
-msgid "Error ocurred while fetching current smt settings."
+msgid "Error occurred while fetching current smt settings."
 msgstr ""
 
 msgid "Error occurred while enabling SMT in the zipl file."
@@ -293,10 +297,10 @@ msgid ""
 "information '%(error)s'."
 msgstr ""
 
-msgid "Error ocurred in fetching smt status."
+msgid "Error occurred in fetching smt status."
 msgstr ""
 
-msgid "Error ocurred in fetching persisted smt settings."
+msgid "Error occurred in fetching persisted smt settings."
 msgstr ""
 
 msgid "Zipl file does not exist."
@@ -526,6 +530,12 @@ msgstr ""
 msgid "Vendor: "
 msgstr ""
 
+msgid "Restart"
+msgstr ""
+
+msgid "Shut down"
+msgstr ""
+
 msgid "Remove Repository"
 msgstr ""
 
@@ -588,6 +598,9 @@ msgstr ""
 msgid ""
 "Repositories will be removed permanently and can't be recovered. Do you want "
 "to continue?"
+msgstr ""
+
+msgid "Search"
 msgstr ""
 
 msgid "Software Updates"
@@ -773,7 +786,7 @@ msgstr ""
 msgid "Affected devices:"
 msgstr ""
 
-msgid "Do you want to enable SMT ?"
+msgid "Do you want to change SMT value ?"
 msgstr ""
 
 msgid ""
@@ -871,15 +884,6 @@ msgid "Yes"
 msgstr ""
 
 msgid "No"
-msgstr ""
-
-msgid "Restart"
-msgstr ""
-
-msgid "Shut down"
-msgstr ""
-
-msgid "Connect"
 msgstr ""
 
 msgid "CPU"

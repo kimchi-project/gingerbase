@@ -1,6 +1,6 @@
 # English translations for gingerbase package.
 # i18n portable object for gingerbase.
-# Copyright IBM Corp, 2014-2016
+# Copyright IBM Corp, 2014-2017
 #
 # Code derived from Project Kimchi
 #
@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gingerbase 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-30 10:38-0300\n"
+"POT-Creation-Date: 2017-03-03 13:48-0300\n"
 "PO-Revision-Date: 2013-07-11 17:32-0400\n"
 "Last-Translator: Crístian Viana <vianac@linux.vnet.ibm.com>\n"
 "Language-Team: English\n"
@@ -35,6 +35,10 @@ msgstr ""
 
 #, python-format
 msgid "Unknown parameter %(value)s"
+msgstr "不明參數 %(value)s"
+
+#, python-format
+msgid "Unable to reach %(url)s. Make sure it is accessible and try again."
 msgstr ""
 
 #, python-format
@@ -51,48 +55,50 @@ msgstr "無法建立除錯報告 %(name)s。詳細資料：%(err)s。"
 #, python-format
 msgid ""
 "Can not find any sosreport with the given name %(name)s with %(retcode)s."
-msgstr ""
+msgstr "找不到具有給定名稱 %(name)s 的任何 sosreport，回覆碼：%(retcode)s。"
 
 #, python-format
 msgid "Unable to generate debug report %(name)s. Details: %(err)s"
 msgstr "無法產生除錯報告 %(name)s。詳細資料：%(err)s"
 
 msgid "You should give a name for the debug report file."
-msgstr ""
+msgstr "應該為除錯報告檔提供一個名稱。"
 
 msgid ""
 "Debug report name must be a string. Only letters, digits, underscore ('_') "
 "and hyphen ('-') are allowed."
 msgstr ""
+"除錯報告名稱必須是字串。僅容許使用字母、數字、底線 ('_') 及連字號 ('-')。"
 
 #, python-format
 msgid ""
 "The debug report with specified name '%(name)s' already exists. Please use "
 "another one."
-msgstr ""
+msgstr "具有指定名稱 '%(name)s' 的除錯報告已經存在。請使用另一個名稱。"
 
 #, python-format
 msgid "Unable to create dbginfo report with %(retcode)s. Details: %(err)s"
-msgstr ""
+msgstr "無法建立 dbginfo 報告，回覆碼：%(retcode)s。詳細資料：%(err)s"
 
 #, python-format
 msgid ""
 "Unable to compress the final debug report tar file with %(retcode)s. "
 "Details: %(error)s"
-msgstr ""
+msgstr "無法壓縮最終除錯報告 Tar 檔，回覆碼：%(retcode)s。詳細資料：%(error)s"
 
 #, python-format
 msgid "Unable to generate final debug report %(name)s. Details: %(err)s"
-msgstr ""
+msgstr "無法產生最終除錯報告 %(name)s。詳細資料：%(err)s"
 
 #, python-format
 msgid "Can not find any dbginforeport with the %(retcode)s. Details: %(err)s"
-msgstr ""
+msgstr "找不到任何 dbginforeport，回覆碼：%(retcode)s。詳細資料：%(err)s"
 
 msgid ""
 "Debug report name must be a non-empty string. Only letters, digits, "
 "underscore ('_') and hyphen ('-') are allowed."
 msgstr ""
+"除錯報告名稱必須是非空字串。僅容許使用字母、數字、底線 ('_') 及連字號 ('-')。"
 
 msgid "Unable to shutdown host machine as there are running virtual machines"
 msgstr "無法關閉主機，因為有一些虛擬機器正在執行中"
@@ -101,12 +107,12 @@ msgid "Unable to reboot host machine as there are running virtual machines"
 msgstr "無法將主機重新開機，因為有一些虛擬機器正在執行中"
 
 msgid "There may be virtual machines running on the host"
-msgstr ""
+msgstr "該主機上可能有虛擬機器在執行中"
 
 msgid ""
 "When specifying CPU topology, each element must be an integer greater than "
 "zero."
-msgstr ""
+msgstr "指定 CPU 拓蹼時，每一個元素都必須是大於 0 的整數。"
 
 msgid "No packages marked for update"
 msgstr "沒有套件標示為要進行更新"
@@ -120,14 +126,14 @@ msgid "Error while getting packages marked to be updated. Details: %(err)s"
 msgstr "取得標示為要進行更新的套件時發生錯誤。詳細資料：%(err)s"
 
 msgid "There is no compatible package manager for this system."
-msgstr "沒有此系統的相容套件管理程式。"
+msgstr "沒有適用於此系統的相容套件管理程式。"
 
 #, python-format
 msgid "Error while getting package information. Details: %(err)s"
-msgstr ""
+msgstr "取得套件資訊時發生錯誤。詳細資料：%(err)s"
 
 msgid "YUM Repository ID must be one word only string."
-msgstr "YUM 儲存庫 ID 必須是僅限一個單字的字串。"
+msgstr "YUM 儲存庫 ID 必須是僅含一個單字的字串。"
 
 msgid "Repository URL must be an http://, ftp:// or file:// URL."
 msgstr "儲存庫 URL 必須是 http://、ftp:// 或 file:// URL。"
@@ -135,7 +141,7 @@ msgstr "儲存庫 URL 必須是 http://、ftp:// 或 file:// URL。"
 msgid ""
 "Repository configuration is a dictionary with specific values according to "
 "repository type."
-msgstr "儲存庫配置是字典，其中包含於儲存庫類型對應的特定值。"
+msgstr "儲存庫配置是一個字典，包含視儲存庫類型而定的特定值。"
 
 msgid "Distribution to DEB repository must be a string"
 msgstr "DEB 儲存庫的發行套件必須是字串"
@@ -147,7 +153,7 @@ msgid "Components to DEB repository must be a string"
 msgstr "DEB 儲存庫的元件必須是字串"
 
 msgid "Mirror list to repository must be a string"
-msgstr ""
+msgstr "儲存庫的鏡映清單必須是字串"
 
 msgid "YUM Repository name must be string."
 msgstr "YUM 儲存庫名稱必須是字串。"
@@ -156,7 +162,7 @@ msgid "GPG check must be a boolean value."
 msgstr "GPG 檢查必須是布林值。"
 
 msgid "GPG key must be a URL pointing to the ASCII-armored file."
-msgstr "GPG 金鑰必須是指向 ASCII 裝甲檔案的 URL。"
+msgstr "GPG 金鑰必須是指向 ASCII 編碼檔案的 URL。"
 
 #, python-format
 msgid "Could not update repository %(repo_id)s."
@@ -169,7 +175,7 @@ msgstr "儲存庫 %(repo_id)s 不存在。"
 msgid ""
 "Specify repository base URL,  mirror list or metalink in order to create or "
 "update a YUM repository."
-msgstr ""
+msgstr "指定儲存庫基本 URL、鏡映清單或 meta 鏈結，以建立或更新 Yum 儲存庫。"
 
 msgid "Repository management tool was not recognized for your system."
 msgstr "未能辨識系統的儲存庫管理工具。"
@@ -202,7 +208,7 @@ msgid "Could not disable repository %(repo_id)s."
 msgstr "無法停用儲存庫 %(repo_id)s。"
 
 msgid "YUM Repository ID already exists"
-msgstr "YUM 儲存庫 ID 已存在"
+msgstr "YUM 儲存庫 ID 已經存在"
 
 msgid "YUM Repository name must be a string"
 msgstr "YUM 儲存庫名稱必須是字串"
@@ -226,158 +232,158 @@ msgstr "無法移除儲存庫。詳細資料：'%(err)s'"
 #, python-format
 msgid ""
 "Configuration items: '%(items)s' are not supported by repository manager"
-msgstr ""
+msgstr "儲存庫管理程式不支援配置項目：'%(items)s'"
 
 msgid "Repository metalink must be an http://, ftp:// or file:// URL."
-msgstr ""
+msgstr "儲存庫 meta 鏈結必須是 http://、ftp:// 或 file:// URL。"
 
 msgid "Cannot specify mirrorlist and metalink at the same time."
-msgstr ""
+msgstr "無法同時指定鏡映清單及 meta 鏈結。"
 
 msgid "The number of vCPUs is too large for this system."
-msgstr ""
+msgstr "這個系統的 vCPU 數目太大。"
 
 msgid "Invalid vCPU/topology combination."
-msgstr ""
+msgstr "vCPU/拓蹼組合無效。"
 
 msgid "This host (or current configuration) does not allow CPU topology."
-msgstr ""
+msgstr "此主機（或現行配置）不容許使用 CPU 拓蹼。"
 
 msgid ""
 "This host (or current configuration) does not allow to fetch lscpu details."
-msgstr ""
+msgstr "此主機（或現行配置）不容許提取 lscpu 詳細資料。"
 
 msgid ""
 "This host (or current configuration) does not provide Socket(s) information."
-msgstr ""
+msgstr "此主機（或現行配置）不提供 Socket 資訊。"
 
 msgid ""
 "This host (or current configuration) does not provide Core(s) per socket "
 "information."
-msgstr ""
+msgstr "此主機（或現行配置）不提供「每個 Socket 的核心數目」資訊。"
 
 msgid ""
 "This host (or current configuration) does not provide Thread(s) per core "
 "information."
-msgstr ""
+msgstr "此主機（或現行配置）不提供「每個核心的執行緒數目」資訊。"
 
 #, python-format
 msgid "Error while accessing dev mapper device, %(err)s"
-msgstr ""
+msgstr "存取 dev mapper 裝置時發生錯誤，%(err)s"
 
 msgid "Block device not found."
-msgstr ""
+msgstr "找不到區塊裝置。"
 
 #, python-format
 msgid "Block device %(device)s not found."
-msgstr ""
+msgstr "找不到區塊裝置 %(device)s。"
 
 #, python-format
 msgid "Unable to retrieve LVM information. Details: %(err)s"
-msgstr ""
+msgstr "無法擷取 LVM 資訊。詳細資料：%(err)s"
 
-msgid "Error ocurred while fetching current smt settings."
-msgstr ""
+msgid "Error occurred while fetching current smt settings."
+msgstr "提取現行 SMT 設定時發生錯誤。"
 
 msgid "Error occurred while enabling SMT in the zipl file."
-msgstr ""
+msgstr "在 zipl 檔中啟用 SMT 時發生錯誤。"
 
 #, python-format
 msgid "Execution of command failed with '%(error)s'. "
-msgstr ""
+msgstr "執行指令失敗，發生錯誤：'%(error)s'。"
 
 msgid "Failed due to invalid SMT value."
-msgstr ""
+msgstr "由於 SMT 值無效而失敗。"
 
 msgid "Error occurred while disabling SMT or SMT is already disabled."
-msgstr ""
+msgstr "停用 SMT 時發生錯誤，或者已停用 SMT。"
 
 msgid "Error occurred while checking for SMT support or SMT is not supported."
-msgstr ""
+msgstr "檢查 SMT 支援時發生錯誤，或者不支援 SMT。"
 
 #, python-format
 msgid "SMT %(name)s is supported only for s390x architecture."
-msgstr ""
+msgstr "只有 s390x 架構才支援 SMT %(name)s。"
 
 #, python-format
 msgid "Error occurred in execution of zipl command '%(error)s'."
-msgstr ""
+msgstr "執行 zipl 指令時發生錯誤：'%(error)s'。"
 
 #, python-format
 msgid ""
 "Error occurred in execution of hyptop command while fetching the processor "
 "information '%(error)s'."
-msgstr ""
+msgstr "在提取處理器資訊期間，執行 hyptop 指令時發生錯誤：'%(error)s'。"
 
-msgid "Error ocurred in fetching smt status."
-msgstr ""
+msgid "Error occurred in fetching smt status."
+msgstr "提取 SMT 狀態時發生錯誤。"
 
-msgid "Error ocurred in fetching persisted smt settings."
-msgstr ""
+msgid "Error occurred in fetching persisted smt settings."
+msgstr "提取持續保存的 SMT 設定時發生錯誤。"
 
 msgid "Zipl file does not exist."
-msgstr ""
+msgstr "Zipl 檔不存在。"
 
 #, python-format
 msgid "SMT is not supported on '%(name)s' architecture."
-msgstr ""
+msgstr "'%(name)s' 架構不支援 SMT。"
 
 #, python-format
 msgid "Create host debug report '%(name)s'"
-msgstr ""
+msgstr "建立主機除錯報告 '%(name)s'"
 
 #, python-format
 msgid "Update host debug report '%(ident)s'"
-msgstr ""
+msgstr "更新主機除錯報告 '%(ident)s'"
 
 #, python-format
 msgid "Remove host debug report '%(ident)s'"
-msgstr ""
+msgstr "移除主機除錯報告 '%(ident)s'"
 
 msgid "Reboot host"
-msgstr ""
+msgstr "重新啟動主機"
 
 msgid "Shutdown host"
-msgstr ""
+msgstr "關閉主機"
 
 msgid "Update host software"
-msgstr ""
+msgstr "更新主機軟體"
 
 #, python-format
 msgid "Update package '%(ident)s'"
-msgstr ""
+msgstr "更新套件 '%(ident)s'"
 
 #, python-format
 msgid "Add host software repository '%(repo_id)s'"
-msgstr ""
+msgstr "新增主機軟體儲存庫 '%(repo_id)s'"
 
 #, python-format
 msgid "Update host software repository '%(ident)s'"
-msgstr ""
+msgstr "更新主機軟體儲存庫 '%(ident)s'"
 
 #, python-format
 msgid "Remove host software repository '%(ident)s'"
-msgstr ""
+msgstr "移除主機軟體儲存庫 '%(ident)s'"
 
 #, python-format
 msgid "Enable host software repository '%(ident)s'"
-msgstr ""
+msgstr "啟用主機軟體儲存庫 '%(ident)s'"
 
 #, python-format
 msgid "Disable host software repository '%(ident)s'"
-msgstr ""
+msgstr "停用主機軟體儲存庫 '%(ident)s'"
 
 msgid "Enabled SMT."
-msgstr ""
+msgstr "已啟用 SMT。"
 
 msgid "Disabled SMT."
-msgstr ""
+msgstr "已停用 SMT。"
 
 msgid "The username or password you entered is incorrect. Please try again."
 msgstr "您輸入的使用者名稱或密碼不正確。請重試。"
 
 msgid "This field is required."
-msgstr "此欄位是必要的。"
+msgstr "這是必要欄位。"
 
 msgid "Log in"
 msgstr "登入"
@@ -401,44 +407,44 @@ msgid "Network"
 msgstr "網路"
 
 msgid "Dashboard"
-msgstr ""
+msgstr "儀表板"
 
 msgid "Updates"
-msgstr ""
+msgstr "更新項目"
 
 msgid "Failed to get application configuration"
 msgstr "無法取得應用程式配置"
 
 msgid "This is not a valid Linux path"
-msgstr "這是無效的 Linux 路徑"
+msgstr "這不是有效的 Linux 路徑"
 
 msgid "This is not a valid URL."
-msgstr "這是無效的 URL。"
+msgstr "這不是有效的 URL。"
 
 msgid "No such data available."
-msgstr "沒有此類可用資料。"
+msgstr "沒有此類資料可用。"
 
 msgid ""
 "Can not contact the host system. Verify the host system is up and that you "
 "have network connectivity to it. HTTP request response %1. "
 msgstr ""
-"無法連接至主機系統。請驗證主機系統是否已啟動，以及您是否具有與它的連線。HTTP "
-"要求回應為 %1。"
+"無法聯絡主機系統。請驗證主機系統已啟動，並且您具有與該主機系統的網路連線。"
+"HTTP 要求回應為 %1。"
 
 msgid "Unable to read file."
-msgstr ""
+msgstr "無法讀取檔案。"
 
 msgid "Error while uploading file."
-msgstr ""
+msgstr "上傳檔案時發生錯誤。"
 
 msgid "Delete Confirmation"
-msgstr "刪除確認"
+msgstr "確認刪除"
 
 msgid "OK"
 msgstr "確定"
 
 msgid "Cancel"
-msgstr "取消 "
+msgstr "取消"
 
 msgid "Confirm"
 msgstr "確認"
@@ -453,31 +459,31 @@ msgid "Save"
 msgstr "儲存"
 
 msgid "Creating..."
-msgstr ""
+msgstr "正在建立..."
 
 msgid "Cloning..."
-msgstr ""
+msgstr "正在複製..."
 
 msgid "Loading..."
-msgstr "正在載入..."
+msgstr "載入中..."
 
 msgid "An error occurred while retrieving system information."
-msgstr ""
+msgstr "擷取系統資訊時發生錯誤。"
 
 msgid "Retry"
 msgstr "重試"
 
 msgid "Detailed message:"
-msgstr "詳細的訊息："
+msgstr "詳細訊息："
 
 msgid "Unable to shut down system as there are some virtual machines running!"
-msgstr "無法關閉系統，因為有幾個虛擬機器正在執行中！"
+msgstr "無法關閉系統，因為有部分虛擬機器正在執行中！"
 
 msgid "System is shutdown or rebooted. You will be disconnected now."
-msgstr ""
+msgstr "系統已關閉或重新啟動。現在，您將斷開連線。"
 
 msgid "System is shutting down/rebooting. Please wait."
-msgstr ""
+msgstr "系統正在關閉/正在重新啟動。請稍後。"
 
 msgid "Max:"
 msgstr "上限："
@@ -506,51 +512,57 @@ msgid ""
 msgstr "關閉或重新啟動主機將導致未儲存的工作遺失。要繼續關閉/重新啟動嗎？"
 
 msgid "The system is going down"
-msgstr ""
+msgstr "系統正在關閉"
 
 msgid "Online: "
-msgstr ""
+msgstr "線上："
 
 msgid "Offline: "
-msgstr ""
+msgstr "離線："
 
 msgid "Shared: "
-msgstr ""
+msgstr "共用："
 
 msgid "Dedicated: "
-msgstr ""
+msgstr "專用："
 
 msgid "Book(s): "
-msgstr ""
+msgstr "書籍："
 
 msgid "Socket(s): "
 msgstr ""
 
 msgid "Core(s) per Socket: "
-msgstr ""
+msgstr "每個 Socket 的核心數目："
 
 msgid "Thread(s) per Core: "
-msgstr ""
+msgstr "每個核心的執行緒數目："
 
 msgid "B/s"
-msgstr ""
+msgstr "B/秒"
 
 msgid "Name: "
-msgstr ""
+msgstr "名稱："
 
 msgid "ID: "
-msgstr ""
+msgstr "ID："
 
 msgid "Vendor: "
-msgstr ""
+msgstr "供應商："
+
+msgid "Restart"
+msgstr "重新啟動"
+
+msgid "Shut down"
+msgstr "關閉"
 
 msgid "Remove Repository"
-msgstr ""
+msgstr "移除儲存庫"
 
 msgid ""
 "Repository %1 will be removed permanently and can't be recovered. Do you "
 "want to continue?"
-msgstr ""
+msgstr "儲存庫 %1 將永久予以移除，無法回復。要繼續嗎？"
 
 msgid "Repositories"
 msgstr "儲存庫"
@@ -595,17 +607,20 @@ msgid "Disable"
 msgstr "停用"
 
 msgid "Dist"
-msgstr ""
+msgstr "發行套件"
 
 msgid "Comp"
-msgstr ""
+msgstr "元件"
 
 msgid "Remove Repositories"
-msgstr ""
+msgstr "移除儲存庫"
 
 msgid ""
 "Repositories will be removed permanently and can't be recovered. Do you want "
 "to continue?"
+msgstr "儲存庫將永久予以移除，無法回復。要繼續嗎？"
+
+msgid "Search"
 msgstr ""
 
 msgid "Software Updates"
@@ -630,39 +645,39 @@ msgid "Updating..."
 msgstr "正在更新..."
 
 msgid "Failed to retrieve packages update information."
-msgstr ""
+msgstr "無法擷取套件更新資訊。"
 
 msgid "Failed to update package(s)."
 msgstr "無法更新套件。"
 
 msgid "Finished"
-msgstr ""
+msgstr "已完成"
 
 msgid "Failed"
-msgstr ""
+msgstr "失敗"
 
 msgid "Running"
-msgstr ""
+msgstr "執行中"
 
 msgid "Success"
-msgstr ""
+msgstr "成功"
 
 msgid "There are some dependencies not selected. Do you want to proceed?"
-msgstr ""
+msgstr "未選取部分相依關係。您要繼續嗎？"
 
 msgid "UPDATE PACKAGES FINSHED"
-msgstr ""
+msgstr "更新套件已完成"
 
 msgid ""
 "Debug report %1 will be removed permanently and can't be recovered. Do you "
 "want to continue?"
-msgstr ""
+msgstr "除錯報告 %1 將永久予以移除，無法回復。要繼續嗎？"
 
 msgid "Debug Reports"
 msgstr "除錯報告"
 
 msgid "Debug Report name"
-msgstr ""
+msgstr "除錯報告名稱"
 
 msgid "Generated Time"
 msgstr "產生時間"
@@ -680,70 +695,73 @@ msgid "Download"
 msgstr "下載"
 
 msgid "Report name should contain only letters, digits and/or hyphen ('-')."
-msgstr ""
+msgstr "報告名稱只應該包含字母、數字及/或連字號 ('-')。"
 
 msgid "Pending..."
-msgstr "正在載入..."
+msgstr "擱置中..."
 
 msgid "Report name is the same as the original one."
-msgstr ""
+msgstr "報告名稱與原始名稱相同。"
 
 msgid ""
 "This will remove all selected debug reports permanently and they can't be "
 "recovered. Do you want to continue?"
-msgstr ""
+msgstr "這將永久地移除所有選定的除錯報告，並且無法回復這些報告。要繼續嗎？"
 
 msgid "Remove Debug Report"
-msgstr ""
+msgstr "移除除錯報告"
 
 msgid "Remove Debug Reports"
-msgstr ""
+msgstr "移除除錯報告"
 
 msgid ""
 "This will delete the virtual machine and its virtual disks. This operation "
 "cannot be undone. Would you like to continue?"
-msgstr "此動作將會刪除虛擬機器及其虛擬磁碟。此作業無法復原。要繼續嗎？"
+msgstr "這將刪除虛擬機器及其虛擬磁碟。這項作業將無法復原。您要繼續嗎？"
 
 msgid "Power off Confirmation"
-msgstr "刪除確認"
+msgstr "確認關閉電源"
 
 msgid ""
 "This action may produce undesirable results, for example unflushed disk "
 "cache in the guest. Would you like to continue?"
 msgstr ""
+"此動作可能會產生不想要的結果，例如取消清除客體中的磁碟快取。您要繼續嗎？"
 
 msgid "Reset Confirmation"
-msgstr "刪除確認"
+msgstr "確認重設"
 
 msgid ""
 "There is a risk of data loss caused by reset without the guest OS shutdown. "
 "Would you like to continue?"
 msgstr ""
+"如果在不關閉客體作業系統的情況下進行重設，則可能會導致資料流失。您要繼續嗎？"
 
 msgid "Shut Down Confirmation"
-msgstr "刪除確認"
+msgstr "確認關閉"
 
 msgid "Note the guest OS may ignore this request. Would you like to continue?"
-msgstr "此動作將永久地刪除範本。要繼續嗎？"
+msgstr "請注意，客體作業系統可能會忽略此要求。您要繼續嗎？"
 
 msgid "Virtual Machine delete Confirmation"
-msgstr ""
+msgstr "虛擬機器刪除確認"
 
 msgid ""
 "This virtual machine is not persistent. Power Off will delete it. Continue?"
-msgstr ""
+msgstr "此虛擬機器不是持續性的。「關閉電源」會將其刪除。要繼續嗎？"
 
 msgid ""
 "When the target guest has SCSI or iSCSI volumes, they will be cloned on "
 "default storage pool. The same will happen when the target pool does not "
 "have enough space to clone the volumes. Do you want to continue?"
 msgstr ""
+"當目標客體具有 SCSI 或 iSCSI 磁區時，將在預設儲存區上複製這些磁區。當目標儲存"
+"區沒有足夠的空間來複製磁區時，也會發生相同的事件。要繼續嗎？"
 
 msgid ""
 "This CDROM will be detached permanently and you can re-attach it. Continue "
 "to detach it?"
-msgstr ""
-"將會永久地分離此 CDROM，但是您可以將其重新連接。要繼續分離此 CDROM 嗎？"
+msgstr "此 CDROM 將永久予以分離，並且您可以重新連接它。要繼續分離它嗎？"
 
 msgid "Attach"
 msgstr "連接"
@@ -769,58 +787,60 @@ msgstr "已順利分離！"
 msgid ""
 "This disk will be detached permanently and you can re-attach it. Continue to "
 "detach it?"
-msgstr ""
+msgstr "此磁碟將永久予以分離，並且您可以重新連接它。要繼續分離它嗎？"
 
 msgid "interface:"
-msgstr ""
+msgstr "介面："
 
 msgid "address:"
-msgstr ""
+msgstr "位址："
 
 msgid "link_type:"
-msgstr ""
+msgstr "鏈結類型："
 
 msgid "block:"
-msgstr ""
+msgstr "區塊："
 
 msgid "drive_type:"
-msgstr ""
+msgstr "磁碟機類型："
 
 msgid "model:"
-msgstr ""
+msgstr "型號："
 
 msgid "Affected devices:"
-msgstr ""
+msgstr "受影響的裝置："
 
-msgid "Do you want to enable SMT ?"
-msgstr ""
+msgid "Do you want to change SMT value ?"
+msgstr "您要變更 SMT 值嗎？"
 
 msgid ""
 "Successful in applying the SMT settings. In order to make SMT settings "
 "effective system reboot required. Click 'Reboot Now' to reboot the system "
 "now otherwise click 'Reboot Later' to reboot the system later."
 msgstr ""
+"成功套用 SMT 設定。若要讓 SMT 設定生效，需要重新啟動系統。按一下「立即重新啟"
+"動」可立即重新啟動系統，否則按一下「稍後重新啟動」可稍後再重新啟動系統。"
 
 msgid "Reboot Now"
-msgstr ""
+msgstr "立即重新啟動"
 
 msgid "Reboot Later"
-msgstr ""
+msgstr "稍後重新啟動"
 
 msgid "Enabled SMT"
-msgstr ""
+msgstr "已啟用 SMT"
 
 msgid "Do you want to disable SMT ?"
-msgstr ""
+msgstr "您要停用 SMT 嗎？"
 
 msgid "Disabled SMT"
-msgstr ""
+msgstr "已停用 SMT"
 
 msgid "CDROM path needs to be a valid local/remote path and cannot be blank."
-msgstr ""
+msgstr "CDROM 路徑需要是有效的本端/遠端路徑，並且不能空白。"
 
 msgid "Disk pool or volume cannot be blank."
-msgstr "儲存區名稱不能空白。"
+msgstr "磁碟儲存區或磁區不能空白。"
 
 msgid "Generate a New Debug Report"
 msgstr "產生新的除錯報告"
@@ -832,19 +852,19 @@ msgid ""
 "The name used to identify the report. If omitted, a name will be chosen "
 "based on current time. Name can contain: letters, digits and hyphen (\"-\")."
 msgstr ""
+"用於識別報告的名稱。如果省略，則將根據現行時間來選擇一個名稱。名稱可以包含："
+"字母、數字及連字號 (\"-\")。"
 
 msgid "Rename a Debug Report"
-msgstr "產生新的除錯報告"
+msgstr "重新命名除錯報告"
 
 msgid ""
 "The name used to identify the report. Name can contain: letters, digits and "
 "hyphen (\"-\")."
-msgstr ""
-"用來識別報告的名稱。如果省略，則會根據現行時間選擇名稱。名稱可以包含：字母、"
-"數字和連字號 (\"-\")。"
+msgstr "用於識別報告的名稱。名稱可以包含：字母、數字及連字號 (\"-\")。"
 
 msgid "Submit"
-msgstr ""
+msgstr "提交"
 
 msgid "Add a Repository"
 msgstr "新增儲存庫"
@@ -853,7 +873,7 @@ msgid "Identifier"
 msgstr "ID"
 
 msgid "Single word, unique identifier for the repository."
-msgstr "單字，儲存庫的唯一 ID。"
+msgstr "儲存庫的唯一單字 ID。"
 
 msgid "Textual name for the repository."
 msgstr "儲存庫的文字名稱。"
@@ -865,10 +885,10 @@ msgid "Required Field"
 msgstr "必要欄位"
 
 msgid "URL to the repository. Supported protocols are http, ftp, and file."
-msgstr "儲存庫的 URL。受支援的通訊協定包括 http、ftp 和 file。"
+msgstr "儲存庫的 URL。支援的通訊協定為 HTTP、FTP 及檔案。"
 
 msgid "Repository is a mirror"
-msgstr "儲存庫是鏡映。"
+msgstr "儲存庫是鏡映"
 
 msgid "Distribution"
 msgstr "發行套件"
@@ -894,15 +914,6 @@ msgstr "是"
 msgid "No"
 msgstr "否"
 
-msgid "Restart"
-msgstr "重新啟動"
-
-msgid "Shut down"
-msgstr "關閉"
-
-msgid "Connect"
-msgstr "連接"
-
 msgid "CPU"
 msgstr "CPU"
 
@@ -919,64 +930,67 @@ msgid "Basic Information"
 msgstr "基本資訊"
 
 msgid "SMT"
-msgstr ""
+msgstr "SMT"
 
 msgid "OS Distro"
-msgstr "OS Distro"
+msgstr "作業系統 Distro"
 
 msgid "OS Version"
-msgstr "OS 版本"
+msgstr "作業系統版本"
 
 msgid "OS Code Name"
-msgstr "OS 程式碼名稱"
+msgstr "作業系統程式碼名稱"
 
 msgid "Processor"
 msgstr "處理器"
 
 msgid "CPU(s)"
-msgstr ""
+msgstr "CPU"
 
 msgid "Core(s)"
-msgstr ""
+msgstr "核心"
 
 msgid "LPAR Details"
-msgstr ""
+msgstr "LPAR 詳細資料"
 
 msgid "Hypervisor Details"
-msgstr ""
+msgstr "Hypervisor 詳細資料"
 
 msgid "Simultaneous Multi-Threading"
-msgstr ""
+msgstr "同時多執行緒作業"
 
 msgid "SMT Status"
-msgstr ""
+msgstr "SMT 狀態"
 
 msgid "SMT Value"
-msgstr ""
+msgstr "SMT 值"
 
 msgid "SMT 1"
-msgstr ""
+msgstr "SMT 1"
 
 msgid "SMT 2"
-msgstr ""
+msgstr "SMT 2"
 
 msgid "changes will be applied only after rebooting the system"
-msgstr ""
+msgstr "變更將只在重新啟動系統之後才予以套用"
 
 msgid "Apply"
-msgstr ""
+msgstr "套用"
 
 msgid "Update"
-msgstr ""
+msgstr "更新"
 
 msgid "Update Status"
-msgstr ""
+msgstr "更新狀態"
 
 msgid "Status"
-msgstr ""
+msgstr "狀態"
 
 msgid "Arch"
-msgstr ""
+msgstr "架構"
+
+#~ msgid "Connect"
+#~ msgstr "連接"
 
 #~ msgid "Update Progress"
 #~ msgstr "更新進度"
