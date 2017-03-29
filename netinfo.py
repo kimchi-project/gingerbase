@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2016
+# Copyright IBM Corp, 2016-2017
 #
 # Code derived from Project Ginger and Kimchi
 #
@@ -141,7 +141,8 @@ def is_vlan(iface):
         bool: True if iface is a vlan, False otherwise.
 
     """
-    return encode_value(iface) in map(encode_value, vlans())
+    return encode_value(iface) in map(encode_value, vlans()) or \
+        'vlan_raw_device' in _parse_interfaces_file(iface).keys()
 
 
 def bridges():
@@ -295,7 +296,52 @@ def ports(bridge):
     if bridge in ovs_bridges():
         return ovs_bridge_ports(bridge)
 
-    return os.listdir(BRIDGE_PORTS % bridge)
+    ports = []
+    if os.path.exists(BRIDGE_PORTS % bridge):
+        ports = os.listdir(BRIDGE_PORTS % bridge)
+
+    if len(ports) == 0:
+        bridge_data = _parse_interfaces_file(bridge)
+        return bridge_data.get('bridge_ports', [])
+    else:
+        return ports
+
+
+def _parse_interfaces_file(iface):
+    ifaces = []
+
+    try:
+        content = open('/etc/network/interfaces').readlines()
+        for line in content:
+            if line.startswith('iface'):
+                ifaces.append({'iface': line.split()[1],
+                               'index': content.index(line)})
+    except IOError:
+        wok_log.debug("Unable to get bridge information from "
+                      "/etc/network/interfaces")
+        return {}
+
+    index = next_index = None
+    for data in ifaces:
+        if data['iface'] == iface:
+            index = data['index']
+            next_elem = ifaces.index(data) + 1
+            if next_elem > len(ifaces) - 1:
+                next_index = len(content)
+            else:
+                next_index = ifaces[ifaces.index(data)+1]['index']
+            break
+
+    if index is None or next_index is None:
+        return {}
+
+    result = {}
+    iface_data = content[index+1:next_index]
+    for item in iface_data:
+        data = item.split()
+        result[data[0]] = data[1:]
+
+    return result
 
 
 def is_brport(nic):
@@ -413,7 +459,13 @@ def get_vlan_device(vlan):
                 if "Device:" in line:
                     dummy, dev = line.split()
                     break
-    return dev
+
+    if dev is None:
+        dev_info = _parse_interfaces_file(vlan).get('vlan_raw_device', None)
+        if dev_info:
+            return dev_info[0]
+    else:
+        return dev
 
 
 def get_bridge_port_device(bridge):
