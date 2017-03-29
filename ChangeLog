@@ -2,6 +2,10 @@ CHANGELOG
 =========
 
 #### [2.3.0] ####
+ * [2b95edf] Bug fix: Add Ubuntu support for bridged VLAN network                           (Aline Manera)
+ * [564d843] Updated ChangeLog for 2.3.0                                                    (Daniel Henrique Barboza)
+
+#### [2.3.0-rc1] ####
  * [35a5b11] Updated PO files                                                               (Rajat Gupta)
  * [4b90d6c] Fix patch_auth() call according to Wok changes                                 (Aline Manera)
  * [676b5ff] Remove unused temporary directory                                              (Lucio Correia)
