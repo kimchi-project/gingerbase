@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2015-2016
+# Copyright IBM Corp, 2015-2017
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,7 @@ import os
 import threading
 from cherrypy.lib.reprconf import Parser
 
-from wok.config import CACHEEXPIRES, PluginConfig, PluginPaths
+from wok.config import PluginConfig, PluginPaths
 
 gingerBaseLock = threading.Lock()
 
@@ -71,26 +71,7 @@ class GingerBaseConfig(PluginConfig):
                 'tools.staticdir.dir': os.path.join(gingerBasePaths.ui_dir,
                                                     'pages/help'),
                 'tools.nocache.on': True
-            },
-            '/images': {
-                'tools.staticdir.on': True,
-                'tools.staticdir.dir': os.path.join(gingerBasePaths.ui_dir,
-                                                    'images'),
-                'tools.wokauth.on': False,
-                'tools.nocache.on': False
             }
         }
-
-        for dirname in ('css', 'js', 'images'):
-            custom_config['/' + dirname] = {
-                'tools.staticdir.on': True,
-                'tools.staticdir.dir': os.path.join(gingerBasePaths.ui_dir,
-                                                    dirname),
-                'tools.wokauth.on': False,
-                'tools.nocache.on': False}
-            if dirname != 'images':
-                custom_config['/' + dirname].update({
-                    'tools.expires.on': True,
-                    'tools.expires.secs': CACHEEXPIRES})
 
         self.update(custom_config)

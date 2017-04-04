@@ -1,7 +1,7 @@
 #
 # Project Ginger Base
 #
-# Copyright IBM Corp, 2014-2016
+# Copyright IBM Corp, 2014-2017
 #
 # Code derived from Project Kimchi
 #
@@ -123,6 +123,7 @@ class ConfigTests(unittest.TestCase):
                 'tools.wokauth.on': False,
                 'tools.nocache.on': False,
                 'tools.staticdir.dir': '%s/ui/images' % pluginPrefix,
+                'tools.staticdir.content_types': {'svg': 'image/svg+xml'},
                 'tools.staticdir.on': True
             },
             '/ui/config/tab-ext.xml': {
