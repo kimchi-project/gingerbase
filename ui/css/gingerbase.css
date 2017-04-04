@@ -1,7 +1,7 @@
 /*
  * Ginger Base
  *
- * Copyright IBM Corp, 2015-2016
+ * Copyright IBM Corp, 2015-2017
  *
  * Code derived from Project Kimchi
  *
@@ -799,7 +799,7 @@
 }
 
 .host-dashboard h3 {
-  font-family: "Open Sans", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
   font-size: 21pt;
   font-weight: 400;
   margin: 0 0 13px 0;
@@ -1222,7 +1222,7 @@
 
 .chart-legend-container span.legend-label, .chart-legend-container span.legend-string {
   font-size: 18px;
-  font-family: "Open Sans", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
 .chart-legend-container span.legend-label {
@@ -1243,5 +1243,5 @@
   vertical-align: top;
   font-weight: 700;
   font-size: 27px;
-  font-family: "Open Sans", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
 }
