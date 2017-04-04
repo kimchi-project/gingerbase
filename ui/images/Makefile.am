@@ -1,7 +1,7 @@
 #
 # Ginger Base
 #
-# Copyright IBM Corp, 2013-2016
+# Copyright IBM Corp, 2013-2017
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,4 +17,4 @@
 
 imagedir = $(datadir)/wok/plugins/gingerbase/ui/images
 
-dist_image_DATA = *.png *.ico *.svg
+dist_image_DATA = *.ico *.svg
