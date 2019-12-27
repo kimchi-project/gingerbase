@@ -16,25 +16,27 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
 import fileinput
 import os
 import platform
 import re
 import shutil
 
-from wok.exception import OperationFailed, InvalidParameter, InvalidOperation
-from wok.utils import run_command, wok_log
+from wok.exception import InvalidOperation
+from wok.exception import InvalidParameter
+from wok.exception import OperationFailed
 from wok.plugins.gingerbase.lscpu import LsCpu
+from wok.utils import run_command
+from wok.utils import wok_log
 
 ARCH = platform.machine()
 
 ZIPL = '/etc/zipl.conf'
-PARAMETERS = "parameters="
-NOSMT = "nosmt"
-SMT_TWO = "smt=2"
-SMT_ONE = "smt=1"
-SMT = "smt"
+PARAMETERS = 'parameters='
+NOSMT = 'nosmt'
+SMT_TWO = 'smt=2'
+SMT_ONE = 'smt=1'
+SMT = 'smt'
 
 
 class SmtModel(object):
@@ -47,7 +49,7 @@ class SmtModel(object):
         if ARCH.startswith('s390x'):
             return self.get_smt_status_s390x()
         else:
-            raise OperationFailed("GINSMT0013E", {'name': ARCH})
+            raise OperationFailed('GINSMT0013E', {'name': ARCH})
 
     def get_smt_status_s390x(self):
         """
@@ -67,11 +69,11 @@ class SmtModel(object):
                     self.get_persistent_settings_s390x()
                 return info
             else:
-                raise OperationFailed("GINSMT0006E")
+                raise OperationFailed('GINSMT0006E')
         except OperationFailed:
             raise
         except Exception:
-            raise InvalidOperation("GINSMT0010E")
+            raise InvalidOperation('GINSMT0010E')
 
     def get_current_settings_s390x(self):
         """
@@ -84,18 +86,18 @@ class SmtModel(object):
         threads_per_core = LsCpu().get_threads_per_core()
         output, error, retcode = run_command(command)
         if retcode != 0:
-            raise OperationFailed("GINSMT003E", {'error': error})
+            raise OperationFailed('GINSMT003E', {'error': error})
         elif (SMT_TWO in output or SMT not in output):
-            status = "enabled"
+            status = 'enabled'
             value = threads_per_core
         elif SMT_ONE in output and threads_per_core < 2:
-            status = "enabled"
+            status = 'enabled'
             value = 1
         elif NOSMT in output and threads_per_core < 2:
-            status = "disabled"
+            status = 'disabled'
             value = NOSMT
         else:
-            raise InvalidOperation("GINSMT0001E")
+            raise InvalidOperation('GINSMT0001E')
         current_smt_settings = {'status': status,
                                 'smt': value}
         return current_smt_settings
@@ -111,22 +113,22 @@ class SmtModel(object):
             command = ['cat', '/etc/zipl.conf']
             output, error, retcode = run_command(command)
             if retcode != 0:
-                raise OperationFailed("GINSMT003E", {'error': error})
+                raise OperationFailed('GINSMT003E', {'error': error})
             elif SMT_TWO in output or SMT not in output:
-                status = "enabled"
+                status = 'enabled'
                 value = 2
             elif SMT_ONE in output:
-                status = "enabled"
-                value = SMT_ONE.split("=")[1]
+                status = 'enabled'
+                value = SMT_ONE.split('=')[1]
             elif NOSMT in output:
-                status = "disabled"
+                status = 'disabled'
                 value = NOSMT
             else:
-                raise OperationFailed("GINSMT0011E")
+                raise OperationFailed('GINSMT0011E')
             persisted_smt_settings = {'status': status,
                                       'smt': value}
             return persisted_smt_settings
-        raise OperationFailed("GINSMT0012E")
+        raise OperationFailed('GINSMT0012E')
 
     def write_zipl_file(self, name, smt_val):
         """
@@ -134,26 +136,26 @@ class SmtModel(object):
         s390x architecture.
         """
         try:
-            smt_input = "smt" + "=" + smt_val
+            smt_input = 'smt' + '=' + smt_val
             var = ' ' + smt_input + '"'
             for line in fileinput.FileInput(ZIPL, inplace=1):
-                match = re.search(r'smt\S\d*', line)
+                match = re.search(r'smt\\S\\d*', line)
                 if PARAMETERS in line:
                     if NOSMT in line:
-                        regex = "\s*nosmt"
-                        line = re.sub(regex, "", line)
-                        line = line.replace(line, line[:-2] + var + "\n")
+                        regex = '\\s*nosmt'
+                        line = re.sub(regex, '', line)
+                        line = line.replace(line, line[:-2] + var + '\n')
                     if match:
                         if smt_input not in line:
-                            regex = '\s*smt\S\d*'
-                            line = re.sub(regex, "", line)
-                            line = line.replace(line, line[:-2] + var + "\n")
+                            regex = '\\s*smt\\S\\d*'
+                            line = re.sub(regex, '', line)
+                            line = line.replace(line, line[:-2] + var + '\n')
                     else:
-                        if "parameters=" in line and smt_input not in line:
-                            line = line.replace(line, line[:-2] + var + "\n")
-                print line,
+                        if 'parameters=' in line and smt_input not in line:
+                            line = line.replace(line, line[:-2] + var + '\n')
+                print(line)
         except Exception:
-            raise OperationFailed("GINSMT0002E")
+            raise OperationFailed('GINSMT0002E')
 
     def enable(self, name, smt_val):
         """
@@ -162,7 +164,7 @@ class SmtModel(object):
         if ARCH.startswith('s390x'):
             self.enable_smt_s390x(name, smt_val)
         else:
-            raise InvalidOperation("GINSMT0007E", {'name': 'enable'})
+            raise InvalidOperation('GINSMT0007E', {'name': 'enable'})
 
     def disable(self, name):
         """
@@ -171,7 +173,7 @@ class SmtModel(object):
         if ARCH.startswith('s390x'):
             self.disable_smt_s390x(name)
         else:
-            raise InvalidOperation("GINSMT0007E", {'name': 'disable'})
+            raise InvalidOperation('GINSMT0007E', {'name': 'disable'})
 
     def enable_smt_s390x(self, name, smt_val):
         """
@@ -180,15 +182,15 @@ class SmtModel(object):
         value = smt_val.isdigit()
         if value:
             if os.path.isfile(str(ZIPL)):
-                backup_file = ZIPL + "_bak"
+                backup_file = ZIPL + '_bak'
                 shutil.copy(ZIPL, backup_file)
                 self.write_zipl_file(name, smt_val)
                 self.load_smt_s390x(backup_file)
-                wok_log.info("Successfully enabled SMT settings.")
+                wok_log.info('Successfully enabled SMT settings.')
             else:
-                raise OperationFailed("GINSMT0012E")
+                raise OperationFailed('GINSMT0012E')
         else:
-            raise InvalidParameter("GINSMT0004E")
+            raise InvalidParameter('GINSMT0004E')
 
     def disable_smt_s390x(self, name):
         """
@@ -196,23 +198,23 @@ class SmtModel(object):
         """
         try:
             if os.path.isfile(str(ZIPL)):
-                backup_file = ZIPL + "_bak"
+                backup_file = ZIPL + '_bak'
                 shutil.copy(ZIPL, backup_file)
                 var = ' ' + NOSMT + '"'
                 for line in fileinput.FileInput(ZIPL, inplace=1):
-                    if "parameters=" in line and NOSMT not in line:
-                        regex = '\s*smt\S\d*'
-                        line = re.sub(regex, "", line)
-                        line = line.replace(line, line[:-2] + var + "\n")
-                    print line,
+                    if 'parameters=' in line and NOSMT not in line:
+                        regex = '\\s*smt\\S\\d*'
+                        line = re.sub(regex, '', line)
+                        line = line.replace(line, line[:-2] + var + '\n')
+                    print(line)
                 self.load_smt_s390x(backup_file)
-                wok_log.info("Successfully disabled SMT settings.")
+                wok_log.info('Successfully disabled SMT settings.')
             else:
-                raise OperationFailed("GINSMT0012E")
+                raise OperationFailed('GINSMT0012E')
         except OperationFailed:
             raise
         except Exception:
-            raise InvalidOperation("GINSMT0005E")
+            raise InvalidOperation('GINSMT0005E')
 
     def recover_ziplfile(self, ziplfile, backupfile):
         """
@@ -232,8 +234,8 @@ class SmtModel(object):
         output, error, retcode = run_command(command)
         if retcode != 0:
             self.recover_ziplfile(ZIPL, backup)
-            raise OperationFailed("GINSMT0008E", {'error': error})
-        wok_log.info("Successfully applied SMT settings.")
+            raise OperationFailed('GINSMT0008E', {'error': error})
+        wok_log.info('Successfully applied SMT settings.')
 
     def check_smt_support(self):
         """
@@ -248,8 +250,8 @@ class SmtModel(object):
             command = ['cat', '/proc/sysinfo']
             output, error, retcode = run_command(command)
             if retcode != 0:
-                raise OperationFailed("GINSMT0003E", {'error': error})
-            regex = "(LPAR Name:)\s+(\w+)"
+                raise OperationFailed('GINSMT0003E', {'error': error})
+            regex = '(LPAR Name:)\\s+(\\w+)'
             match = re.search(regex, output)
             lpar_name = match.group(2)
             command = \
@@ -257,11 +259,11 @@ class SmtModel(object):
                  % lpar_name]
             output, error, retcode = run_command(command)
             if retcode != 0:
-                raise OperationFailed("GINSMT0009E", {'error': error})
+                raise OperationFailed('GINSMT0009E', {'error': error})
             output = output.split('\n')
-            regex = "\w+\s*(IFL)\s*(\d*[.]\d*\s*)*\S+\s*\S*"
-            cpregex = "\w+\s*(CP)\s*(\d*[.]\d*\s*)*\S+\s*\S*"
-            unregex = "\w+\s*(UN)\s*(\d*[.]\d*\s*)*\S+\s*\S*"
+            regex = '\\w+\\s*(IFL)\\s*(\\d*[.]\\d*\\s*)*\\S+\\s*\\S*'
+            cpregex = '\\w+\\s*(CP)\\s*(\\d*[.]\\d*\\s*)*\\S+\\s*\\S*'
+            unregex = '\\w+\\s*(UN)\\s*(\\d*[.]\\d*\\s*)*\\S+\\s*\\S*'
             for each in output:
                 if re.match(cpregex, each):
                     cp_count += 1
@@ -274,4 +276,4 @@ class SmtModel(object):
             else:
                 return False
         except Exception:
-            raise OperationFailed("GINSMT0006E")
+            raise OperationFailed('GINSMT0006E')

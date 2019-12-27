@@ -20,14 +20,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
 """Network utilities module."""
-
-import ethtool
 import glob
 import os
-
 from distutils.spawn import find_executable
+
+import ethtool
 from wok.stringutils import encode_value
-from wok.utils import run_command, wok_log
+from wok.utils import run_command
+from wok.utils import wok_log
 
 NET_PATH = '/sys/class/net'
 NIC_PATH = '/sys/class/net/*/device'
@@ -125,10 +125,10 @@ def vlans():
         List[str]: a list with the vlans found.
 
     """
-    return list(set([b.split('/')[-1]
-                     for b in glob.glob(NET_PATH + '/*')]) &
-                set([b.split('/')[-1]
-                     for b in glob.glob(PROC_NET_VLAN + '*')]))
+    return list(
+        set([b.split('/')[-1] for b in glob.glob(NET_PATH + '/*')]) &
+        set([b.split('/')[-1] for b in glob.glob(PROC_NET_VLAN + '*')])
+    )
 
 
 def is_vlan(iface):
@@ -196,7 +196,7 @@ def ovs_bridges():
     if not is_openvswitch_running():
         return []
 
-    ovs_cmd = find_executable("ovs-vsctl")
+    ovs_cmd = find_executable('ovs-vsctl')
 
     # openvswitch not installed: there is no OVS bridge configured
     if ovs_cmd is None:
@@ -245,7 +245,7 @@ def ovs_bridge_ports(ovsbr):
     if not is_openvswitch_running():
         return []
 
-    ovs_cmd = find_executable("ovs-vsctl")
+    ovs_cmd = find_executable('ovs-vsctl')
 
     # openvswitch not installed: there is no OVS bridge configured
     if ovs_cmd is None:
@@ -265,7 +265,7 @@ def all_interfaces():
         List[str]: a list with all interfaces of the host.
 
     """
-    return [d.rsplit("/", 1)[-1] for d in glob.glob(NET_PATH + '/*')]
+    return [d.rsplit('/', 1)[-1] for d in glob.glob(NET_PATH + '/*')]
 
 
 def slaves(bonding):
@@ -317,8 +317,8 @@ def _parse_interfaces_file(iface):
                 ifaces.append({'iface': line.split()[1],
                                'index': content.index(line)})
     except IOError:
-        wok_log.debug("Unable to get bridge information from "
-                      "/etc/network/interfaces")
+        wok_log.debug('Unable to get bridge information from '
+                      '/etc/network/interfaces')
         return {}
 
     index = next_index = None
@@ -329,14 +329,14 @@ def _parse_interfaces_file(iface):
             if next_elem > len(ifaces) - 1:
                 next_index = len(content)
             else:
-                next_index = ifaces[ifaces.index(data)+1]['index']
+                next_index = ifaces[ifaces.index(data) + 1]['index']
             break
 
     if index is None or next_index is None:
         return {}
 
     result = {}
-    iface_data = content[index+1:next_index]
+    iface_data = content[index + 1:next_index]
     for item in iface_data:
         data = item.split()
         result[data[0]] = data[1:]
@@ -393,10 +393,10 @@ def operstate(dev):
                 return dev_file.readline().strip()
         # when IOError is raised, interface is down
         except IOError:
-            return "down"
+            return 'down'
 
     op_status = operstate_status(dev)
-    return "up" if op_status == "up" else "down"
+    return 'up' if op_status == 'up' else 'down'
 
 
 def link_detected(dev):
@@ -415,11 +415,11 @@ def link_detected(dev):
             carrier = dev_file.readline().strip()
     # when IOError is raised, interface is down
     except IOError:
-        return "n/a"
+        return 'n/a'
 
     # if value is 1, interface up with cable connected
     # 0 corresponds to interface up with cable disconnected
-    return "yes" if carrier == '1' else "no"
+    return 'yes' if carrier == '1' else 'no'
 
 
 def macaddr(dev):
@@ -438,7 +438,7 @@ def macaddr(dev):
             hwaddr = dev_file.readline().strip()
             return hwaddr
     except IOError:
-        return "n/a"
+        return 'n/a'
 
 
 def get_vlan_device(vlan):
@@ -456,7 +456,7 @@ def get_vlan_device(vlan):
     if os.path.exists(PROC_NET_VLAN + vlan):
         with open(PROC_NET_VLAN + vlan) as vlan_file:
             for line in vlan_file:
-                if "Device:" in line:
+                if 'Device:' in line:
                     dummy, dev = line.split()
                     break
 
@@ -583,7 +583,7 @@ def get_mlx5_nic_bus_id(mlx5_iface):
     """
     try:
         link_path = '/sys/class/net/%s/device' % mlx5_iface
-        bus_id = os.readlink(link_path).split("/")[-1]
+        bus_id = os.readlink(link_path).split('/')[-1]
     except OSError:
         bus_id = 'unknown'
 
@@ -668,13 +668,13 @@ def get_interface_type(iface):
     """
     try:
         if is_nic(iface):
-            return "nic"
+            return 'nic'
         if is_bonding(iface):
-            return "bonding"
+            return 'bonding'
         if is_bridge(iface):
-            return "bridge"
+            return 'bridge'
         if is_vlan(iface):
-            return "vlan"
+            return 'vlan'
         return 'unknown'
     except IOError:
         return 'unknown'
@@ -715,8 +715,7 @@ def get_interface_info(iface):
 
     kernel_module = get_interface_kernel_module(iface)
     iface_type = get_interface_type(iface)
-    nic_type = 'N/A' if iface_type is not 'nic' \
-        else get_nic_type(iface, kernel_module)
+    nic_type = 'N/A' if iface_type != 'nic' else get_nic_type(iface, kernel_module)
 
     return {'device': iface,
             'name': iface,

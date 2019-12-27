@@ -19,15 +19,15 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
 import os
 import unittest
 
 import wok.objectstore
 from wok.basemodel import Singleton
-from wok.exception import InvalidParameter, NotFoundError
-from wok.rollbackcontext import RollbackContext
+from wok.exception import InvalidParameter
+from wok.exception import NotFoundError
 from wok.plugins.gingerbase.model import model
+from wok.rollbackcontext import RollbackContext
 
 invalid_repository_urls = ['www.fedora.org',       # missing protocol
                            '://www.fedora.org',    # missing protocol
@@ -93,7 +93,7 @@ class ModelTests(unittest.TestCase):
             wrong_baseurl['config'] = {'dist': 'tasty'}
             wrong_config = {'baseurl': deb_repos[0]['baseurl'],
                             'config': {
-                                'unsupported_item': "a_unsupported_item"}}
+                                'unsupported_item': 'a_unsupported_item'}}
             deb_invalid_repos.append(wrong_baseurl)
             deb_invalid_repos.append(wrong_config)
 

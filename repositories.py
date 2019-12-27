@@ -18,23 +18,24 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
 import copy
 import os
 import time
-import urlparse
-from ConfigParser import ConfigParser
+import urllib.parse
+from configparser import SafeConfigParser
 
 from wok.basemodel import Singleton
-from wok.exception import InvalidOperation, InvalidParameter
-from wok.exception import OperationFailed, NotFoundError, MissingParameter
-
+from wok.exception import InvalidOperation
+from wok.exception import InvalidParameter
+from wok.exception import MissingParameter
+from wok.exception import NotFoundError
+from wok.exception import OperationFailed
 from wok.plugins.gingerbase.config import gingerBaseLock
 from wok.plugins.gingerbase.utils import validate_repo_url
-from wok.plugins.gingerbase.yumparser import get_yum_repositories
-from wok.plugins.gingerbase.yumparser import write_repo_to_file
 from wok.plugins.gingerbase.yumparser import get_display_name
 from wok.plugins.gingerbase.yumparser import get_expanded_url
+from wok.plugins.gingerbase.yumparser import get_yum_repositories
+from wok.plugins.gingerbase.yumparser import write_repo_to_file
 
 
 class Repositories(object):
@@ -43,6 +44,7 @@ class Repositories(object):
     """
     Class to represent and operate with repositories information.
     """
+
     def __init__(self):
         try:
             __import__('dnf')
@@ -66,8 +68,8 @@ class Repositories(object):
         extra_keys = list(
             set(config.keys()).difference(set(self._pkg_mnger.CONFIG_ENTRY)))
         if len(extra_keys) > 0:
-            raise InvalidParameter("GGBREPOS0028E",
-                                   {'items': ",".join(extra_keys)})
+            raise InvalidParameter('GGBREPOS0028E',
+                                   {'items': ','.join(extra_keys)})
 
         return self._pkg_mnger.addRepo(params)
 
@@ -121,7 +123,7 @@ class YumRepo(object):
     modules in runtime.
     """
     TYPE = 'yum'
-    DEFAULT_CONF_DIR = "/etc/yum.repos.d"
+    DEFAULT_CONF_DIR = '/etc/yum.repos.d'
     CONFIG_ENTRY = ('repo_name', 'mirrorlist', 'metalink')
 
     def __init__(self):
@@ -131,7 +133,7 @@ class YumRepo(object):
         try:
             gingerBaseLock.acquire()
             repos = get_yum_repositories()
-        except Exception, e:
+        except Exception as e:
             gingerBaseLock.release()
             raise OperationFailed(errcode, {'err': str(e)})
         finally:
@@ -154,7 +156,7 @@ class YumRepo(object):
         repos = self._get_repos('GGBREPOS0025E')
 
         if repo_id not in repos.keys():
-            raise NotFoundError("GGBREPOS0012E", {'repo_id': repo_id})
+            raise NotFoundError('GGBREPOS0012E', {'repo_id': repo_id})
 
         entry = repos.get(repo_id)
 
@@ -183,7 +185,7 @@ class YumRepo(object):
         mirrorlist = config.get('mirrorlist', '')
         metalink = config.get('metalink', '')
         if not baseurl and not mirrorlist and not metalink:
-            raise MissingParameter("GGBREPOS0013E")
+            raise MissingParameter('GGBREPOS0013E')
 
         if baseurl:
             validate_repo_url(get_expanded_url(baseurl))
@@ -199,11 +201,11 @@ class YumRepo(object):
 
         repo_id = params.get('repo_id', None)
         if repo_id is None:
-            repo_id = "gingerbase_repo_%s" % str(int(time.time() * 1000))
+            repo_id = 'gingerbase_repo_%s' % str(int(time.time() * 1000))
 
         repos = self._get_repos('GGBREPOS0026E')
         if repo_id in repos.keys():
-            raise InvalidOperation("GGBREPOS0022E", {'repo_id': repo_id})
+            raise InvalidOperation('GGBREPOS0022E', {'repo_id': repo_id})
 
         repo_name = config.get('repo_name', repo_id)
         repo = {'baseurl': baseurl, 'mirrorlist': mirrorlist,
@@ -211,10 +213,10 @@ class YumRepo(object):
                 'gpgkey': [], 'enabled': 1, 'metalink': metalink}
 
         # write a repo file in the system with repo{} information.
-        parser = ConfigParser()
+        parser = SafeConfigParser()
         parser.add_section(repo_id)
 
-        for key, value in repo.iteritems():
+        for key, value in repo.items():
             if value:
                 parser.set(repo_id, key, value)
 
@@ -222,8 +224,8 @@ class YumRepo(object):
         try:
             with open(repofile, 'w') as fd:
                 parser.write(fd)
-        except:
-            raise OperationFailed("GGBREPOS0018E",
+        except Exception:
+            raise OperationFailed('GGBREPOS0018E',
                                   {'repo_file': repofile})
 
         return repo_id
@@ -231,14 +233,14 @@ class YumRepo(object):
     def toggleRepo(self, repo_id, enable):
         repos = self._get_repos('GGBREPOS0011E')
         if repo_id not in repos.keys():
-            raise NotFoundError("GGBREPOS0012E", {'repo_id': repo_id})
+            raise NotFoundError('GGBREPOS0012E', {'repo_id': repo_id})
 
         entry = repos.get(repo_id)
         if enable and entry.enabled:
-            raise InvalidOperation("GGBREPOS0015E", {'repo_id': repo_id})
+            raise InvalidOperation('GGBREPOS0015E', {'repo_id': repo_id})
 
         if not enable and not entry.enabled:
-            raise InvalidOperation("GGBREPOS0016E", {'repo_id': repo_id})
+            raise InvalidOperation('GGBREPOS0016E', {'repo_id': repo_id})
 
         gingerBaseLock.acquire()
         try:
@@ -248,11 +250,11 @@ class YumRepo(object):
                 entry.disable()
 
             write_repo_to_file(entry)
-        except:
+        except Exception:
             if enable:
-                raise OperationFailed("GGBREPOS0020E", {'repo_id': repo_id})
+                raise OperationFailed('GGBREPOS0020E', {'repo_id': repo_id})
 
-            raise OperationFailed("GGBREPOS0021E", {'repo_id': repo_id})
+            raise OperationFailed('GGBREPOS0021E', {'repo_id': repo_id})
         finally:
             gingerBaseLock.release()
 
@@ -264,7 +266,7 @@ class YumRepo(object):
         """
         repos = self._get_repos('GGBREPOS0011E')
         if repo_id not in repos.keys():
-            raise NotFoundError("GGBREPOS0012E", {'repo_id': repo_id})
+            raise NotFoundError('GGBREPOS0012E', {'repo_id': repo_id})
 
         entry = repos.get(repo_id)
 
@@ -283,7 +285,7 @@ class YumRepo(object):
             metalink = None
 
         if baseurl is None and mirrorlist is None and metalink is None:
-            raise MissingParameter("GGBREPOS0013E")
+            raise MissingParameter('GGBREPOS0013E')
 
         if baseurl is not None:
             validate_repo_url(get_expanded_url(baseurl))
@@ -315,10 +317,10 @@ class YumRepo(object):
         """
         repos = self._get_repos('GGBREPOS0027E')
         if repo_id not in repos.keys():
-            raise NotFoundError("GGBREPOS0012E", {'repo_id': repo_id})
+            raise NotFoundError('GGBREPOS0012E', {'repo_id': repo_id})
 
         entry = repos.get(repo_id)
-        parser = ConfigParser()
+        parser = SafeConfigParser()
         with open(entry.repofile) as fd:
             parser.readfp(fd)
 
@@ -327,7 +329,7 @@ class YumRepo(object):
             return
 
         parser.remove_section(repo_id)
-        with open(entry.repofile, "w") as fd:
+        with open(entry.repofile, 'w') as fd:
             parser.write(fd)
 
 
@@ -338,7 +340,7 @@ class AptRepo(object):
     modules in runtime.
     """
     TYPE = 'deb'
-    GINGERBASE_LIST = "gingerbase-source.list"
+    GINGERBASE_LIST = 'gingerbase-source.list'
     CONFIG_ENTRY = ('dist', 'comps')
 
     def __init__(self):
@@ -355,21 +357,21 @@ class AptRepo(object):
                                      self.GINGERBASE_LIST)
         if not os.path.exists(self.filename):
             with open(self.filename, 'w') as fd:
-                fd.write("# This file is managed by Ginger Base and it "
-                         "must not be modified manually\n")
+                fd.write('# This file is managed by Ginger Base and it '
+                         'must not be modified manually\n')
 
     def _get_repos(self):
         try:
             repos = self._sourceslist()
-        except Exception, e:
+        except Exception as e:
             raise OperationFailed('GGBREPOS0025E', {'err': e.message})
 
         return repos
 
     def _get_repo_id(self, repo):
-        data = urlparse.urlparse(repo.uri)
+        data = urllib.parse.urlparse(repo.uri)
         name = data.hostname or data.path
-        return '%s-%s-%s' % (name, repo.dist, "-".join(repo.comps))
+        return '%s-%s-%s' % (name, repo.dist, '-'.join(repo.comps))
 
     def _get_source_entry(self, repo_id):
         gingerBaseLock.acquire()
@@ -425,7 +427,7 @@ class AptRepo(object):
         """
         r = self._get_source_entry(repo_id)
         if r is None:
-            raise NotFoundError("GGBREPOS0012E", {'repo_id': repo_id})
+            raise NotFoundError('GGBREPOS0012E', {'repo_id': repo_id})
 
         info = {'enabled': not r.disabled,
                 'baseurl': r.uri,
@@ -441,10 +443,10 @@ class AptRepo(object):
         # (in addition to baseurl, verified on controller through API.json)
         config = params.get('config', None)
         if config is None:
-            raise MissingParameter("GGBREPOS0019E")
+            raise MissingParameter('GGBREPOS0019E')
 
         if 'dist' not in config.keys():
-            raise MissingParameter("GGBREPOS0019E")
+            raise MissingParameter('GGBREPOS0019E')
 
         uri = params['baseurl']
         dist = config['dist']
@@ -459,7 +461,7 @@ class AptRepo(object):
                                      file=self.filename)
             repos.save()
         except Exception as e:
-            raise OperationFailed("GGBREPOS0026E", {'err': e.message})
+            raise OperationFailed('GGBREPOS0026E', {'err': e.message})
         finally:
             gingerBaseLock.release()
         return self._get_repo_id(source_entry)
@@ -470,13 +472,13 @@ class AptRepo(object):
         """
         r = self._get_source_entry(repo_id)
         if r is None:
-            raise NotFoundError("GGBREPOS0012E", {'repo_id': repo_id})
+            raise NotFoundError('GGBREPOS0012E', {'repo_id': repo_id})
 
         if enable and not r.disabled:
-            raise InvalidOperation("GGBREPOS0015E", {'repo_id': repo_id})
+            raise InvalidOperation('GGBREPOS0015E', {'repo_id': repo_id})
 
         if not enable and r.disabled:
-            raise InvalidOperation("GGBREPOS0016E", {'repo_id': repo_id})
+            raise InvalidOperation('GGBREPOS0016E', {'repo_id': repo_id})
 
         if enable:
             line = 'deb'
@@ -489,11 +491,11 @@ class AptRepo(object):
             repos.remove(r)
             repos.add(line, r.uri, r.dist, r.comps, file=self.filename)
             repos.save()
-        except:
+        except Exception:
             if enable:
-                raise OperationFailed("GGBREPOS0020E", {'repo_id': repo_id})
+                raise OperationFailed('GGBREPOS0020E', {'repo_id': repo_id})
 
-            raise OperationFailed("GGBREPOS0021E", {'repo_id': repo_id})
+            raise OperationFailed('GGBREPOS0021E', {'repo_id': repo_id})
         finally:
             gingerBaseLock.release()
 
@@ -518,7 +520,7 @@ class AptRepo(object):
         self.removeRepo(repo_id)
         try:
             return self.addRepo(updated_info)
-        except:
+        except Exception:
             self.addRepo(old_info)
             raise
 
@@ -528,14 +530,14 @@ class AptRepo(object):
         """
         r = self._get_source_entry(repo_id)
         if r is None:
-            raise NotFoundError("GGBREPOS0012E", {'repo_id': repo_id})
+            raise NotFoundError('GGBREPOS0012E', {'repo_id': repo_id})
 
         gingerBaseLock.acquire()
         try:
             repos = self._get_repos()
             repos.remove(r)
             repos.save()
-        except:
-            raise OperationFailed("GGBREPOS0017E", {'repo_id': repo_id})
+        except Exception:
+            raise OperationFailed('GGBREPOS0017E', {'repo_id': repo_id})
         finally:
             gingerBaseLock.release()

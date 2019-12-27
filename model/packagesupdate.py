@@ -18,20 +18,18 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
 from wok.asynctask import AsyncTask
 from wok.exception import OperationFailed
-from wok.utils import wok_log
 from wok.model.tasks import TaskModel
-
 from wok.plugins.gingerbase.swupdate import SoftwareUpdate
+from wok.utils import wok_log
 
 
 class PackagesUpdateModel(object):
     def __init__(self, **kargs):
         try:
             self.host_swupdate = SoftwareUpdate()
-        except:
+        except Exception:
             self.host_swupdate = None
 
     def get_list(self):
@@ -48,7 +46,7 @@ class PackageUpdateModel(object):
         self.pkgs2update = []
         try:
             self.host_swupdate = SoftwareUpdate()
-        except:
+        except Exception:
             self.host_swupdate = None
 
     def lookup(self, name):
@@ -98,7 +96,7 @@ class PackageDepsModel(object):
     def __init__(self, **kargs):
         try:
             self.host_swupdate = SoftwareUpdate()
-        except:
+        except Exception:
             self.host_swupdate = None
 
     def get_list(self, pkg):
@@ -113,7 +111,7 @@ class SwUpdateProgressModel(object):
     def lookup(self, *name):
         try:
             swupdate = SoftwareUpdate()
-        except:
+        except Exception:
             raise OperationFailed('GGBPKGUPD0004E')
 
         taskid = AsyncTask('/plugins/gingerbase/host/swupdateprogress',

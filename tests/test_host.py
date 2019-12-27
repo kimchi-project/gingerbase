@@ -19,22 +19,22 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
-import cherrypy
 import json
-import mock
 import platform
-import psutil
 import time
 import unittest
-
 from functools import partial
+
+import cherrypy
+import mock
+import psutil
 from mock import patch
-
-from tests.utils import patch_auth, request
-from tests.utils import run_server, wait_task
-
 from wok.plugins.gingerbase.model.host import HostModel
+
+from tests.utils import patch_auth
+from tests.utils import request
+from tests.utils import run_server
+from tests.utils import wait_task
 
 test_server = None
 model = None
@@ -77,7 +77,7 @@ class HostTests(unittest.TestCase):
         distro, version, codename = platform.linux_distribution()
         self.assertEquals(distro, info['os_distro'])
         self.assertEquals(version, info['os_version'])
-        self.assertEquals(unicode(codename, "utf-8"), info['os_codename'])
+        self.assertEquals(codename, info['os_codename'])
         self.assertEqual(platform.node(), info['host'])
         self.assertEqual(platform.machine(), info['architecture'])
 
@@ -180,7 +180,7 @@ class HostTests(unittest.TestCase):
         task = json.loads(resp.read())
         self.assertEquals(202, resp.status)
 
-        for i in xrange(1, 6):
+        for i in range(1, 6):
             resp = self.request('/tasks/' + task['id'], None, 'GET')
             task = json.loads(resp.read())
             self.assertEquals(200, resp.status)

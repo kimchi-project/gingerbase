@@ -18,26 +18,25 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
 import os
 import tempfile
 import unittest
-
-from wok.rollbackcontext import RollbackContext
 
 from wok.plugins.gingerbase.model import model
 from wok.plugins.gingerbase.yumparser import delete_repo_from_file
 from wok.plugins.gingerbase.yumparser import get_repo_files
 from wok.plugins.gingerbase.yumparser import get_yum_packages_list_update
 from wok.plugins.gingerbase.yumparser import get_yum_repositories
-from wok.plugins.gingerbase.yumparser import write_repo_to_file, YumRepoObject
+from wok.plugins.gingerbase.yumparser import write_repo_to_file
+from wok.plugins.gingerbase.yumparser import YumRepoObject
+from wok.rollbackcontext import RollbackContext
 
 
 TEMP_REPO_FILE = ''
 
 
 def _is_yum_distro():
-    inst = model.Model("/tmp/objectstore")
+    inst = model.Model('/tmp/objectstore')
     repo_type = inst.capabilities_lookup()['repo_mngt_tool']
     return repo_type == 'yum'
 

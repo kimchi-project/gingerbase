@@ -18,23 +18,20 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
+import glob
 import os
 import platform
-import psutil
 import re
 import time
-from cherrypy.process.plugins import BackgroundTask
 from collections import defaultdict
-import glob
 
+import psutil
+from cherrypy.process.plugins import BackgroundTask
 from wok.asynctask import AsyncTask
 from wok.basemodel import Singleton
 from wok.exception import InvalidOperation
 from wok.exception import OperationFailed
-from wok.utils import run_command, wok_log
 from wok.model.tasks import TaskModel
-
 from wok.plugins.gingerbase.config import config
 from wok.plugins.gingerbase.i18n import messages
 from wok.plugins.gingerbase.lscpu import LsCpu
@@ -42,6 +39,8 @@ from wok.plugins.gingerbase.model.debugreports import DebugReportsModel
 from wok.plugins.gingerbase.model.smt import SmtModel
 from wok.plugins.gingerbase.repositories import Repositories
 from wok.plugins.gingerbase.swupdate import SoftwareUpdate
+from wok.utils import run_command
+from wok.utils import wok_log
 
 HOST_STATS_INTERVAL = 1
 DOM_STATE_MAP = {0: 'nostate',
@@ -93,10 +92,10 @@ class HostModel(object):
                         # everything), skipping the function when find all
                         # information.
                         if len(res.keys()) == 3:
-                            return "%(cpu)s (%(revision)s) @ %(clock)s GHz\
-                                    " % res
+                            return '%(cpu)s (%(revision)s) @ %(clock)s GHz\
+                                    ' % res
 
-        return ""
+        return ''
 
     def _get_x86_cpu_model(self):
         """
@@ -105,13 +104,13 @@ class HostModel(object):
         try:
             with open(PROC_CPUINFO) as f:
                 for line in f.xreadlines():
-                    if "model name" in line:
+                    if 'model name' in line:
                         return line.split(':')[1].strip()
                         break
         except Exception as e:
-            wok_log.error("Failed to retrive cpu_model for "
-                          "%s. Error: %s", ARCH, e.__str__())
-        return ""
+            wok_log.error('Failed to retrive cpu_model for '
+                          '%s. Error: %s', ARCH, e.__str__())
+        return ''
 
     def _get_s390x_host_info(self):
         """
@@ -123,17 +122,17 @@ class HostModel(object):
         host_info['cpus'] = self._get_cpus()
         host_info['cpus']['dedicated'] = 0
         host_info['cpus']['shared'] = 0
-        host_info['cpu_model'] = ""
+        host_info['cpu_model'] = ''
         host_info['virtualization'] = {}
         s390x_sysinfo = self._get_s390x_sysinfo()
         if 'manufacturer' in s390x_sysinfo.keys():
             host_info['cpu_model'] = s390x_sysinfo['manufacturer']
         if 'type' in s390x_sysinfo.keys():
             host_info['cpu_model'] = \
-                host_info['cpu_model'] + "/" + s390x_sysinfo['type']
+                host_info['cpu_model'] + '/' + s390x_sysinfo['type']
         if 'model' in s390x_sysinfo.keys():
             host_info['cpu_model'] = \
-                host_info['cpu_model'] + "/" + s390x_sysinfo['model']
+                host_info['cpu_model'] + '/' + s390x_sysinfo['model']
         if CPUS_DEDICATED in s390x_sysinfo.keys():
             host_info['cpus']['dedicated'] = s390x_sysinfo[CPUS_DEDICATED]
         if CPUS_SHARED in s390x_sysinfo.keys():
@@ -173,12 +172,12 @@ class HostModel(object):
         try:
             with open(PROC_SYSINFO) as f:
                 for line in f.xreadlines():
-                    if ":" in line and (len(line.split(':')) == 2):
+                    if ':' in line and (len(line.split(':')) == 2):
                         info = line.split(':')
                         if info[0] == 'Model' and (len(info[1].split()) == 2):
                             s390x_sysinfo['model'] = \
                                 info[1].split()[0].strip() +\
-                                " "+info[1].split()[1].strip()
+                                ' ' + info[1].split()[1].strip()
                         elif info[0] == 'Manufacturer':
                             s390x_sysinfo['manufacturer'] = info[1].strip()
                         elif info[0] == 'Type':
@@ -193,8 +192,8 @@ class HostModel(object):
                         elif info[0] == 'LPAR CPUs Shared':
                             s390x_sysinfo[CPUS_SHARED] = int(info[1].strip())
         except Exception as e:
-            wok_log.error("Failed to retrieve information from %s file. "
-                          "Error: %s", PROC_SYSINFO, e.__str__())
+            wok_log.error('Failed to retrieve information from %s file. '
+                          'Error: %s', PROC_SYSINFO, e.__str__())
 
         return s390x_sysinfo
 
@@ -284,8 +283,8 @@ class HostModel(object):
             if total_cpus > online_cpus:
                 offline_cpus = total_cpus - online_cpus
         else:
-            online_cpus = "unknown"
-            offline_cpus = "unknown"
+            online_cpus = 'unknown'
+            offline_cpus = 'unknown'
 
         cpus['online'] = online_cpus
         cpus['offline'] = offline_cpus
@@ -305,7 +304,7 @@ class HostModel(object):
             supported_dists=_sup_distros)
         common_info['os_distro'] = distro
         common_info['os_version'] = version
-        common_info['os_codename'] = unicode(codename, "utf-8")
+        common_info['os_codename'] = codename
         common_info['architecture'] = ARCH
         common_info['host'] = platform.node()
         common_info['memory'] = self._get_memory()
@@ -338,7 +337,7 @@ class HostModel(object):
     def swupdate(self, *name):
         try:
             swupdate = SoftwareUpdate()
-        except:
+        except Exception:
             raise OperationFailed('GGBPKGUPD0004E')
 
         pkgs = swupdate.getNumOfUpdates()
@@ -355,7 +354,7 @@ class HostModel(object):
         # Check for running vms before shutdown
         running_vms = self.get_vmlist_bystate('running')
         if len(running_vms) > 0:
-            raise OperationFailed("GGBHOST0001E")
+            raise OperationFailed('GGBHOST0001E')
 
         wok_log.info('Host is going to shutdown.')
         os.system('shutdown -h now')
@@ -364,7 +363,7 @@ class HostModel(object):
         # Check for running vms before reboot
         running_vms = self.get_vmlist_bystate('running')
         if len(running_vms) > 0:
-            raise OperationFailed("GGBHOST0002E")
+            raise OperationFailed('GGBHOST0002E')
 
         wok_log.info('Host is going to reboot.')
         os.system('reboot')
@@ -372,8 +371,8 @@ class HostModel(object):
     def get_vmlist_bystate(self, state='running'):
         try:
             libvirt_mod = __import__('libvirt')
-        except Exception, e:
-            wok_log.info("Unable to import libvirt module. Details:",
+        except Exception as e:
+            wok_log.info('Unable to import libvirt module. Details:',
                          e.message)
             # Ignore any error and assume there is no vm running in the host
             return []
@@ -388,10 +387,10 @@ class HostModel(object):
             return [dom.name().decode('utf-8')
                     for dom in conn.listAllDomains(0)
                     if (DOM_STATE_MAP[dom.info()[0]] == state)]
-        except Exception, e:
-            wok_log.info("Unable to get virtual machines information. "
-                         "Details:", e.message)
-            raise OperationFailed("GGBHOST0003E")
+        except Exception as e:
+            wok_log.info('Unable to get virtual machines information. '
+                         'Details:', e.message)
+            raise OperationFailed('GGBHOST0003E')
 
 
 class HostStatsModel(object):
@@ -426,7 +425,7 @@ class HostStatsModel(object):
         # FIXME when we upgrade psutil, we can get uptime by psutil.uptime
         # we get uptime by float(open("/proc/uptime").readline().split()[0])
         # and calculate the first io_rate after the OS started.
-        with open("/proc/uptime") as time_f:
+        with open('/proc/uptime') as time_f:
             seconds = (timestamp - preTimeStamp if preTimeStamp else
                        float(time_f.readline().split()[0]))
 
@@ -438,7 +437,7 @@ class HostStatsModel(object):
         self._get_host_memory_stats()
 
         # store only 60 stats (1 min)
-        for key, value in self.host_stats.iteritems():
+        for key, value in self.host_stats.items():
             if isinstance(value, list):
                 if len(value) == 60:
                     self.host_stats[key] = value[10:]
@@ -499,7 +498,7 @@ class HostStatsModel(object):
         recv_bytes = 0
         sent_bytes = 0
         for key in set(self.nics() +
-                       self.wlans()) & set(net_ios.iterkeys()):
+                       self.wlans()) & set(net_ios.keys()):
             recv_bytes = recv_bytes + net_ios[key].bytes_recv
             sent_bytes = sent_bytes + net_ios[key].bytes_sent
 
@@ -543,9 +542,9 @@ class CapabilitiesModel(object):
     __metaclass__ = Singleton
 
     def __init__(self, **kargs):
-        wok_log.info("*** Ginger Base: Running capabilities tests ***")
+        wok_log.info('*** Ginger Base: Running capabilities tests ***')
         self.report_tool = self.has_report_tool()
-        wok_log.info("System Report Tool ...: %s" % str(self.report_tool))
+        wok_log.info('System Report Tool ...: %s' % str(self.report_tool))
 
         try:
             SoftwareUpdate()
@@ -553,7 +552,7 @@ class CapabilitiesModel(object):
             self.update_tool = False
         else:
             self.update_tool = True
-        wok_log.info("System Update Tool ...: %s" % str(self.update_tool))
+        wok_log.info('System Update Tool ...: %s' % str(self.update_tool))
 
         try:
             repo = Repositories()
@@ -561,8 +560,8 @@ class CapabilitiesModel(object):
             self.repo_mngt_tool = None
         else:
             self.repo_mngt_tool = repo._pkg_mnger.TYPE
-        wok_log.info("Repo Management Tool .: %s" % str(self.repo_mngt_tool))
-        wok_log.info("*** Ginger Base: Capabilities tests completed ***")
+        wok_log.info('Repo Management Tool .: %s' % str(self.repo_mngt_tool))
+        wok_log.info('*** Ginger Base: Capabilities tests completed ***')
 
     def has_report_tool(self):
         return bool(DebugReportsModel.get_system_report_tool())
@@ -586,7 +585,7 @@ class RepositoriesModel(object):
     def __init__(self, **kargs):
         try:
             self.host_repositories = Repositories()
-        except:
+        except Exception:
             self.host_repositories = None
 
     def get_list(self):
@@ -606,7 +605,7 @@ class RepositoryModel(object):
     def __init__(self, **kargs):
         try:
             self._repositories = Repositories()
-        except:
+        except Exception:
             self._repositories = None
 
     def lookup(self, repo_id):

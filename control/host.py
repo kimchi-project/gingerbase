@@ -18,34 +18,33 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
-from wok.control.base import Collection, Resource
+from wok.control.base import Collection
+from wok.control.base import Resource
 from wok.control.utils import UrlSubNode
-
-from wok.plugins.gingerbase.control.smt import Smt
 from wok.plugins.gingerbase.control.cpuinfo import CPUInfo
 from wok.plugins.gingerbase.control.packagesupdate import PackagesUpdate
 from wok.plugins.gingerbase.control.packagesupdate import SwUpdateProgress
+from wok.plugins.gingerbase.control.smt import Smt
 
 
 HOST_ACTIVITY = {
     'POST': {
-        'reboot': "GGBHOST0001L",
-        'shutdown': "GGBHOST0002L",
-        'swupdate': "GGBPKGUPD0001L",
+        'reboot': 'GGBHOST0001L',
+        'shutdown': 'GGBHOST0002L',
+        'swupdate': 'GGBPKGUPD0001L',
     },
 }
 
 REPOSITORIES_ACTIVITY = {
-    'POST': {'default': "GGBREPOS0001L"},
+    'POST': {'default': 'GGBREPOS0001L'},
 }
 
 REPOSITORY_ACTIVITY = {
-    'PUT': {'default': "GGBREPOS0002L"},
-    'DELETE': {'default': "GGBREPOS0003L"},
+    'PUT': {'default': 'GGBREPOS0002L'},
+    'DELETE': {'default': 'GGBREPOS0003L'},
     'POST': {
-        'enable': "GGBREPOS0004L",
-        'disable': "GGBREPOS0005L",
+        'enable': 'GGBREPOS0004L',
+        'disable': 'GGBREPOS0005L',
     },
 }
 
@@ -113,7 +112,7 @@ class Repository(Resource):
     def __init__(self, model, id):
         super(Repository, self).__init__(model, id)
         self.admin_methods = ['GET', 'PUT', 'POST', 'DELETE']
-        self.uri_fmt = "/host/repositories/%s"
+        self.uri_fmt = '/host/repositories/%s'
         self.enable = self.generate_action_handler('enable')
         self.disable = self.generate_action_handler('disable')
         self.log_map = REPOSITORY_ACTIVITY

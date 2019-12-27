@@ -19,16 +19,17 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
 import json
 import time
 import unittest
 from functools import partial
 
-from tests.utils import patch_auth, request
-from tests.utils import run_server, wait_task
-
 from wok.rollbackcontext import RollbackContext
+
+from tests.utils import patch_auth
+from tests.utils import request
+from tests.utils import run_server
+from tests.utils import wait_task
 
 test_server = None
 
@@ -51,8 +52,8 @@ class RestTests(unittest.TestCase):
 
     def _except_op(self, cb, opaque):
         time.sleep(1)
-        raise Exception("Oops, this is an exception handle test."
-                        " You can ignore it safely")
+        raise Exception('Oops, this is an exception handle test.'
+                        ' You can ignore it safely')
         cb('success', True)
 
     def _intermid_op(self, cb, opaque):
@@ -92,7 +93,7 @@ class RestTests(unittest.TestCase):
                 '/plugins/gingerbase/debugreports/test_rest_report1'
             )
             debugreport = json.loads(resp.read())
-            self.assertEquals("test_rest_report1", debugreport['name'])
+            self.assertEquals('test_rest_report1', debugreport['name'])
             self.assertEquals(200, resp.status)
             req = json.dumps({'name': 'test_rest_report2'})
             resp = request(
@@ -115,7 +116,7 @@ class RestTests(unittest.TestCase):
                 '/plugins/gingerbase/debugreports/test_rest_report1'
             )
             debugreport = json.loads(resp.read())
-            self.assertEquals("test_rest_report1", debugreport['name'])
+            self.assertEquals('test_rest_report1', debugreport['name'])
             self.assertEquals(200, resp.status)
             resp = request(
                 '/plugins/gingerbase/debugreports/test_rest_report1/content'

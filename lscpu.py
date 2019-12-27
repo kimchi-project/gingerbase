@@ -29,7 +29,8 @@ class LsCpu(object):
     """
     Get CPU information about a CPU hyper threading/architecture on x86
     """
-    def log_error(e):
+
+    def log_error(self, e):
         """
             param e: error details to be logged
         """
@@ -101,18 +102,19 @@ class LsCpu(object):
             # L2d cache:             1024K
             # L2i cache:             1024K
 
+            out = out.decode('utf_8')
             if not rc and (not out.isspace()):
                 lscpuout = out.split('\n')
                 if lscpuout and len(lscpuout) > 0:
                     for line in lscpuout:
-                        if ":" in line and (len(line.split(':')) == 2):
+                        if ':' in line and (len(line.split(':')) == 2):
                             self.lsCpuInfo[line.split(':')[0].strip()] = \
                                 line.split(':')[1].strip()
                         else:
                             continue
-        except Exception, e:
+        except Exception as e:
             self.log_error(e)
-            raise NotFoundError("GGBCPUINF0004E")
+            raise NotFoundError('GGBCPUINF0004E')
 
     def get_sockets(self):
         """
@@ -120,16 +122,16 @@ class LsCpu(object):
             return: Socket(s) (information about the CPU architecture)
         """
         try:
-            sockets = "Socket(s)"
+            sockets = 'Socket(s)'
             if ARCH.startswith('s390x'):
-                sockets = "Socket(s) per book"
+                sockets = 'Socket(s) per book'
             if len(self.lsCpuInfo) > 0 and sockets in self.lsCpuInfo.keys():
                 return int(self.lsCpuInfo[sockets])
             else:
-                raise NotFoundError("GGBCPUINF0005E")
-        except IndexError, e:
+                raise NotFoundError('GGBCPUINF0005E')
+        except IndexError as e:
             self.log_error(e)
-            raise NotFoundError("GGBCPUINF0005E")
+            raise NotFoundError('GGBCPUINF0005E')
 
     def get_cores_per_socket(self):
         """
@@ -137,15 +139,15 @@ class LsCpu(object):
             return: Core(s) per socket (information about the CPU architecture)
         """
         try:
-            cores_per_socket = "Core(s) per socket"
+            cores_per_socket = 'Core(s) per socket'
             if len(self.lsCpuInfo) > 0 and cores_per_socket \
                     in self.lsCpuInfo.keys():
                 return int(self.lsCpuInfo[cores_per_socket])
             else:
-                raise NotFoundError("GGBCPUINF0006E")
-        except IndexError, e:
+                raise NotFoundError('GGBCPUINF0006E')
+        except IndexError as e:
             self.log_error(e)
-            raise NotFoundError("GGBCPUINF0006E")
+            raise NotFoundError('GGBCPUINF0006E')
 
     def get_threads_per_core(self):
         """
@@ -153,15 +155,15 @@ class LsCpu(object):
             return: Thread(s) per core (information about the CPU architecture)
         """
         try:
-            threads_per_core = "Thread(s) per core"
+            threads_per_core = 'Thread(s) per core'
             if len(self.lsCpuInfo) > 0 and threads_per_core \
                     in self.lsCpuInfo.keys():
                 return int(self.lsCpuInfo[threads_per_core])
             else:
-                raise NotFoundError("GGBCPUINF0007E")
-        except IndexError, e:
+                raise NotFoundError('GGBCPUINF0007E')
+        except IndexError as e:
             self.log_error(e)
-            raise NotFoundError("GGBCPUINF0007E")
+            raise NotFoundError('GGBCPUINF0007E')
 
     def get_total_cpus(self):
         """
@@ -172,8 +174,8 @@ class LsCpu(object):
         if len(self.lsCpuInfo) > 0 and total_cpus in self.lsCpuInfo.keys():
             return int(self.lsCpuInfo[total_cpus])
         else:
-            self.log_error("Failed to fetch total cpus count in lscpu output")
-            raise NotFoundError("GGBCPUINF0008E")
+            self.log_error('Failed to fetch total cpus count in lscpu output')
+            raise NotFoundError('GGBCPUINF0008E')
 
     def get_hypervisor(self):
         """

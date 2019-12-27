@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
 import binascii
 import glob
 import os
@@ -28,10 +27,10 @@ import re
 from wok.exception import OperationFailed
 from wok.utils import run_command
 
-FC_PATHS = "/dev/disk/by-path/*fc*"
-PATTERN_CCW = "ccw-(?P<hba_id>[\d.]+)-zfcp-(?P<wwpn>[\w]+):(?P<fcp_lun>[\w]+)$"
-PATTERN_PCI = "pci-(?P<hba_id>[\d.:]+)(-vport-(?P<vport>[\w]+))?-fc-" \
-              "(?P<wwpn>[\w]+)-lun-(?P<fcp_lun>[\d]+)$"
+FC_PATHS = '/dev/disk/by-path/*fc*'
+PATTERN_CCW = 'ccw-(?P<hba_id>[\\d.]+)-zfcp-(?P<wwpn>[\\w]+):(?P<fcp_lun>[\\w]+)$'
+PATTERN_PCI = 'pci-(?P<hba_id>[\\d.:]+)(-vport-(?P<vport>[\\w]+))?-fc-' \
+              '(?P<wwpn>[\\w]+)-lun-(?P<fcp_lun>[\\d]+)$'
 
 
 class StorageDevsModel(object):
@@ -104,7 +103,7 @@ def get_final_list():
                 else:
                     final_list.append(final_dict)
     except Exception as e:
-        raise OperationFailed("GINSD00005E", {'err': e.message})
+        raise OperationFailed('GINSD00005E', {'err': e.message})
 
     return final_list
 
@@ -114,7 +113,7 @@ def get_dasd_devs():
     Get the list of unformatted DASD devices
     """
     devs = []
-    if platform.machine() == "s390x":
+    if platform.machine() == 's390x':
         dasd_pim_dict = _get_dasd_pim()
         dasd_devices = _get_lsdasd_devs()
         for device in dasd_devices:
@@ -123,7 +122,7 @@ def get_dasd_devs():
             uf_dev['name'] = device['name']
             uf_dev['mpath_count'] = 'N/A'
             dasdsize = device['size']
-            if dasdsize == "Unknown":
+            if dasdsize == 'Unknown':
                 uf_dev['size'] = None
             else:
                 uf_dev['size'] = int(dasdsize[:-2])
@@ -145,7 +144,7 @@ def _get_dasd_pim():
     command = ['lscss', '-d']
     out, err, rc = run_command(command)
     if rc:
-        raise OperationFailed("GINDASD0012E", {'err': err})
+        raise OperationFailed('GINDASD0012E', {'err': err})
     if out:
         try:
             output_lines = out.splitlines()
@@ -153,12 +152,12 @@ def _get_dasd_pim():
                 clms = line.split()
                 pim = clms[-5]
                 bus_id = clms[0]
-                chipid = clms[-2]+" "+clms[-1]
+                chipid = clms[-2] + ' ' + clms[-1]
                 binaryval_pam = _hex_to_binary(pim)
                 enabled_chipids = _get_paths(binaryval_pam, chipid)
                 pim_dict[bus_id] = len(enabled_chipids)
         except Exception as err:
-            raise OperationFailed("GINDASD0013E", {'err': err.message})
+            raise OperationFailed('GINDASD0013E', {'err': err.message})
     return pim_dict
 
 
@@ -170,7 +169,7 @@ def _get_lsdasd_devs():
     command = ['lsdasd', '-l']
     dasdout, err, rc = run_command(command)
     if rc:
-        raise OperationFailed("GINDASD0001E", {'err': err})
+        raise OperationFailed('GINDASD0001E', {'err': err})
     return _parse_lsdasd_output(dasdout)
 
 
@@ -210,16 +209,16 @@ def _parse_lsdasd_output(output):
     :return: list containing DASD devices information
     """
     try:
-        split_out = output.split("\n\n")
+        split_out = output.split('\n\n')
         out_list = []
-        len_dasd = len(split_out)-1
+        len_dasd = len(split_out) - 1
         for i in split_out[:len_dasd]:
             fs_dict = {}
             p = re.compile(r'^\s+(\w+)\:\s+(.+)$')
             parsed_out = i.splitlines()
             if parsed_out and '/' in parsed_out[0] and \
                len(parsed_out[0].split('/')) == 3:
-                first_spl = i.splitlines()[0].split("/")
+                first_spl = i.splitlines()[0].split('/')
                 fs_dict['bus-id'] = first_spl[0]
                 fs_dict['name'] = first_spl[1]
                 fs_dict['device'] = first_spl[2]
@@ -234,8 +233,8 @@ def _parse_lsdasd_output(output):
                 if 'size' in fs_dict and fs_dict['size'] == '\t':
                     fs_dict['size'] = 'Unknown'
                 out_list.append(fs_dict)
-    except:
-        raise OperationFailed("GINDASD0003E")
+    except Exception:
+        raise OperationFailed('GINDASD0003E')
 
     return out_list
 
@@ -256,7 +255,7 @@ def get_lsblk_keypair_out(transport=True):
 
     out, err, rc = run_command(cmd)
     if rc != 0:
-        raise OperationFailed("GINSD00002E", {'err': err})
+        raise OperationFailed('GINSD00002E', {'err': err})
     return out
 
 
@@ -281,16 +280,16 @@ def parse_lsblk_out(lsblk_out):
                 continue
 
             if len(disk_attrs) == 4:
-                disk_info['transport'] = disk_attrs[3].split("=")[1][1:-1]
+                disk_info['transport'] = disk_attrs[3].split('=')[1][1:-1]
             else:
-                disk_info['transport'] = "unknown"
+                disk_info['transport'] = 'unknown'
 
-            disk_info['size'] = int(disk_attrs[2].split("=")[1][1:-1])
+            disk_info['size'] = int(disk_attrs[2].split('=')[1][1:-1])
             disk_info['size'] = disk_info['size'] / (1024 * 1024)
-            return_dict[disk_attrs[0].split("=")[1][1:-1]] = disk_info
+            return_dict[disk_attrs[0].split('=')[1][1:-1]] = disk_info
 
     except Exception as e:
-        raise OperationFailed("GINSD00004E", {'err': e.message})
+        raise OperationFailed('GINSD00004E', {'err': e.message})
 
     return return_dict
 
@@ -303,7 +302,7 @@ def get_disks_by_id_out():
     cmd = ['ls', '-l', '/dev/disk/by-id']
     out, err, rc = run_command(cmd)
     if rc != 0:
-        raise OperationFailed("GINSD00001E", {'err': err})
+        raise OperationFailed('GINSD00001E', {'err': err})
     return out
 
 
@@ -326,7 +325,7 @@ def parse_ll_out(ll_out):
             disk_id = ls_columns[-3]
 
             if disk_id.startswith(
-                    'ccw-') and not re.search('ccw-.+\w{4}\.\w{2}$', disk_id):
+                    'ccw-') and not re.search('ccw-.+\\w{4}\\.\\w{2}$', disk_id):
                 continue
 
             if disk_id.startswith('wwn-'):
@@ -336,7 +335,7 @@ def parse_ll_out(ll_out):
                 continue
 
             disk_name = ls_columns[-1]
-            name = disk_name.split("/")[-1]
+            name = disk_name.split('/')[-1]
 
             disk_id_split = disk_id.split('-')
             skip_list = ['ccw', 'usb', 'ata']
@@ -352,7 +351,7 @@ def parse_ll_out(ll_out):
             else:
                 return_id_dict[disk_id] = [name]
     except Exception as e:
-        raise OperationFailed("GINSD00003E", {'err': e.message})
+        raise OperationFailed('GINSD00003E', {'err': e.message})
 
     return return_dict, return_id_dict
 
@@ -380,11 +379,11 @@ def get_fc_path_elements():
         try:
             pattern = re.compile(PATTERN_PCI)
             blk_info_dict = pattern.search(path).groupdict()
-        except:
+        except Exception:
             try:
                 pattern = re.compile(PATTERN_CCW)
                 blk_info_dict = pattern.search(path).groupdict()
-            except:
+            except Exception:
                 # no pattern match, probably a partition (...-partN), ignore it
                 continue
 

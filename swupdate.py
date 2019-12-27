@@ -18,25 +18,27 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
 import fcntl
 import os
 import signal
 import subprocess
 import threading
 import time
-from configobj import ConfigObj, ConfigObjError
-from psutil import pid_exists, process_iter
 
+from configobj import ConfigObj
+from configobj import ConfigObjError
+from psutil import pid_exists
+from psutil import process_iter
 from wok.basemodel import Singleton
-from wok.exception import NotFoundError, OperationFailed
-from wok.utils import run_command, wok_log
-
+from wok.exception import NotFoundError
+from wok.exception import OperationFailed
+from wok.plugins.gingerbase import portageparser
 from wok.plugins.gingerbase.yumparser import get_dnf_package_deps
 from wok.plugins.gingerbase.yumparser import get_yum_package_deps
 from wok.plugins.gingerbase.yumparser import get_yum_package_info
 from wok.plugins.gingerbase.yumparser import get_yum_packages_list_update
-from wok.plugins.gingerbase import portageparser
+from wok.utils import run_command
+from wok.utils import wok_log
 
 swupdateLock = threading.RLock()
 
@@ -47,6 +49,7 @@ class SoftwareUpdate(object):
     """
     Class to represent and operate with OS software update.
     """
+
     def __init__(self):
         # Get the distro of host machine and creates an object related to
         # correct package management system
@@ -55,19 +58,19 @@ class SoftwareUpdate(object):
                             ('apt', AptUpdate), ('portage', PortageUpdate)]:
             try:
                 __import__(module)
-                wok_log.info("Logging %s features." % cls.__name__)
+                wok_log.info('Logging %s features.' % cls.__name__)
                 self._pkg_mnger = cls()
                 break
             except ImportError:
                 continue
-        zypper_help = ["zypper", "--help"]
+        zypper_help = ['zypper', '--help']
         (stdout, stderr, returncode) = run_command(zypper_help)
         if returncode == 0:
-            wok_log.info("Loading ZypperUpdate features.")
+            wok_log.info('Loading ZypperUpdate features.')
             self._pkg_mnger = ZypperUpdate()
         if self._pkg_mnger is None:
-            raise Exception("There is no compatible package "
-                            "manager for this system.")
+            raise Exception('There is no compatible package '
+                            'manager for this system.')
 
     def getUpdates(self):
         """
@@ -77,7 +80,7 @@ class SoftwareUpdate(object):
         try:
             pkgs = [pkg for pkg in self._pkg_mnger.getPackagesList()]
             return pkgs
-        except:
+        except Exception:
             raise
         finally:
             swupdateLock.release()
@@ -92,7 +95,7 @@ class SoftwareUpdate(object):
             if not package:
                 raise NotFoundError('GGBPKGUPD0002E', {'name': name})
             return package
-        except:
+        except Exception:
             raise
         finally:
             swupdateLock.release()
@@ -105,7 +108,7 @@ class SoftwareUpdate(object):
         swupdateLock.acquire()
         try:
             return self._pkg_mnger.getPackageDeps(name)
-        except:
+        except Exception:
             raise
         finally:
             swupdateLock.release()
@@ -117,7 +120,7 @@ class SoftwareUpdate(object):
         swupdateLock.acquire()
         try:
             return len(self.getUpdates())
-        except:
+        except Exception:
             raise
         finally:
             swupdateLock.release()
@@ -244,9 +247,10 @@ class YumUpdate(GenericUpdate):
     It's loaded only on those systems listed at YUM_DISTROS and loads necessary
     modules in runtime.
     """
+
     def __init__(self):
         self.update_cmd = dict.fromkeys(['all', 'specific'],
-                                        ["yum", "-y", "update"])
+                                        ['yum', '-y', 'update'])
         self.logfile = self._get_output_log()
 
     def _get_output_log(self):
@@ -272,7 +276,7 @@ class YumUpdate(GenericUpdate):
         self.wait_pkg_manager_available()
         try:
             return get_yum_packages_list_update()
-        except Exception, e:
+        except Exception as e:
             raise OperationFailed('GGBPKGUPD0003E', {'err': str(e)})
 
     def getPackageInfo(self, pkg_name):
@@ -289,13 +293,13 @@ class YumUpdate(GenericUpdate):
         self.wait_pkg_manager_available()
         try:
             return get_yum_package_info(pkg_name)
-        except Exception, e:
+        except Exception as e:
             raise NotFoundError('GGBPKGUPD0003E', {'err': str(e)})
 
     def getPackageDeps(self, pkg_name):
         try:
             return get_yum_package_deps(pkg_name)
-        except Exception, e:
+        except Exception as e:
             raise NotFoundError('GGBPKGUPD0003E', {'err': str(e)})
 
     def isRunning(self):
@@ -312,9 +316,7 @@ class YumUpdate(GenericUpdate):
             return False
 
         # the pidfile exists and it lives in process table
-        if pid_exists(pid):
-            return True
-        return False
+        return pid_exists(pid)
 
 
 class DnfUpdate(YumUpdate):
@@ -323,17 +325,18 @@ class DnfUpdate(YumUpdate):
     It's loaded only on those systems listed at DNF_DISTROS and loads necessary
     modules in runtime.
     """
+
     def __init__(self):
         self._pkgs = {}
         self.update_cmd = dict.fromkeys(['all', 'specific'],
-                                        ["dnf", "-y", "update"])
+                                        ['dnf', '-y', 'update'])
         self.logfile = '/var/log/dnf.log'
 
     def getPackageDeps(self, pkg_name):
         self.wait_pkg_manager_available()
         try:
             return get_dnf_package_deps(pkg_name)
-        except Exception, e:
+        except Exception as e:
             raise NotFoundError('GGBPKGUPD0003E', {'err': str(e)})
 
     def isRunning(self):
@@ -341,17 +344,15 @@ class DnfUpdate(YumUpdate):
         Return True whether the YUM package manager is already running or
         False otherwise.
         """
-        pid = None
         try:
             for dnf_proc in process_iter():
                 if 'dnf' in dnf_proc.name():
                     pid = dnf_proc.pid
-                    break
-        except:
+                    return pid_exists(pid)
+        except Exception:
             return False
 
-        # the pidfile exists and it lives in process table
-        return pid_exists(pid)
+        return False
 
 
 class AptUpdate(GenericUpdate):
@@ -360,6 +361,7 @@ class AptUpdate(GenericUpdate):
     It's loaded only on those systems listed at APT_DISTROS and loads necessary
     modules in runtime.
     """
+
     def __init__(self):
         self.update_cmd = {'all': ['apt-get', 'upgrade', '-y'],
                            'specific': ['apt-get', '-y', '--only-upgrade',
@@ -378,7 +380,7 @@ class AptUpdate(GenericUpdate):
             self._apt_cache.upgrade()
             pkgs = self._apt_cache.get_changes()
             self._apt_cache.close()
-        except Exception, e:
+        except Exception as e:
             raise OperationFailed('GGBPKGUPD0003E', {'err': e.message})
 
         return [{'package_name': pkg.shortname,
@@ -405,7 +407,7 @@ class AptUpdate(GenericUpdate):
             self._apt_cache.upgrade()
             pkgs = self._apt_cache.get_changes()
             self._apt_cache.close()
-        except Exception, e:
+        except Exception as e:
             raise OperationFailed('GGBPKGUPD0006E', {'err': e.message})
 
         pkg = next((x for x in pkgs if x.shortname == pkg_name), None)
@@ -427,7 +429,7 @@ class AptUpdate(GenericUpdate):
             self._apt_cache.upgrade()
             pkgs = self._apt_cache.get_changes()
             self._apt_cache.close()
-        except Exception, e:
+        except Exception as e:
             raise OperationFailed('GGBPKGUPD0006E', {'err': e.message})
 
         pkg = next((x for x in pkgs if x.shortname == pkg_name), None)
@@ -460,11 +462,12 @@ class ZypperUpdate(GenericUpdate):
     It's loaded only on those systems listed at ZYPPER_DISTROS and loads
     necessary modules in runtime.
     """
+
     def __init__(self):
         self.update_cmd = dict.fromkeys(['all', 'specific'],
-                                        ["zypper", "--non-interactive",
-                                         "update",
-                                         "--auto-agree-with-licenses"])
+                                        ['zypper', '--non-interactive',
+                                         'update',
+                                         '--auto-agree-with-licenses'])
         self.logfile = '/var/log/zypp/history'
 
     def getPackagesList(self):
@@ -474,7 +477,7 @@ class ZypperUpdate(GenericUpdate):
         self.wait_pkg_manager_available()
 
         packages = []
-        cmd = ["zypper", "list-updates"]
+        cmd = ['zypper', 'list-updates']
         (stdout, stderr, returncode) = run_command(cmd)
 
         if len(stderr) > 0:
@@ -502,7 +505,7 @@ class ZypperUpdate(GenericUpdate):
         """
         self.wait_pkg_manager_available()
 
-        cmd = ["zypper", "info", pkg_name]
+        cmd = ['zypper', 'info', pkg_name]
         (stdout, stderr, returncode) = run_command(cmd)
 
         if len(stderr) > 0:
@@ -531,7 +534,7 @@ class ZypperUpdate(GenericUpdate):
     def getPackageDeps(self, pkg_name):
         self.wait_pkg_manager_available()
 
-        cmd = ["zypper", "--non-interactive", "update", "--dry-run", pkg_name]
+        cmd = ['zypper', '--non-interactive', 'update', '--dry-run', pkg_name]
         (stdout, stderr, returncode) = run_command(cmd)
 
         if len(stderr) > 0:
@@ -547,7 +550,7 @@ class ZypperUpdate(GenericUpdate):
         # get the list of dependencies
         out = stdout.split('\n')
         for line in out:
-            if line.startswith("The following"):
+            if line.startswith('The following'):
                 deps_index = out.index(line) + 1
                 break
 
@@ -569,10 +572,7 @@ class ZypperUpdate(GenericUpdate):
             return False
 
         # the pidfile exists and it lives in process table
-        if pid_exists(pid):
-            return True
-
-        return False
+        return pid_exists(pid)
 
 
 class PortageUpdate(GenericUpdate):
@@ -581,6 +581,7 @@ class PortageUpdate(GenericUpdate):
     It's loaded only on those systems listed at PORTAGE_DISTROS and loads
     necessary modules in runtime.
     """
+
     def __init__(self):
         # on purpose empty, not smart to do that over a webui in gentoo
         self.update_cmd = dict()
@@ -595,7 +596,7 @@ class PortageUpdate(GenericUpdate):
         Return the logfile path
         """
         # TODO: find potential custom location in make.conf?
-        return "/var/log/emerge.log"
+        return '/var/log/emerge.log'
 
     def getPackagesList(self):
         """
@@ -604,7 +605,7 @@ class PortageUpdate(GenericUpdate):
         self.wait_pkg_manager_available()
         try:
             return portageparser.packages_list_update()
-        except Exception, e:
+        except Exception as e:
             raise OperationFailed('GGBPKGUPD0003E', {'err': str(e)})
 
     def getPackageInfo(self, pkg_name):
@@ -621,13 +622,13 @@ class PortageUpdate(GenericUpdate):
         self.wait_pkg_manager_available()
         try:
             return portageparser.package_info(pkg_name)
-        except Exception, e:
+        except Exception as e:
             raise NotFoundError('GGBPKGUPD0003E', {'err': str(e)})
 
     def getPackageDeps(self, pkg_name):
         try:
             return portageparser.package_deps(pkg_name)
-        except Exception, e:
+        except Exception as e:
             raise NotFoundError('GGBPKGUPD0003E', {'err': str(e)})
 
     def isRunning(self):
@@ -635,14 +636,13 @@ class PortageUpdate(GenericUpdate):
         Return True whether the package manager is already running or
         False otherwise.
         """
-        pid = None
         try:
             for dnf_proc in process_iter():
                 if 'emerge' in dnf_proc.name():
                     pid = dnf_proc.pid
-                    break
-        except:
+                    return pid_exists(pid)
+        except Exception:
             return False
 
         # the pidfile exists and it lives in process table
-        return pid_exists(pid)
+        return False

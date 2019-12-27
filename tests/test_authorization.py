@@ -18,11 +18,12 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
 import unittest
 from functools import partial
 
-from tests.utils import patch_auth, request, run_server
+from tests.utils import patch_auth
+from tests.utils import request
+from tests.utils import run_server
 
 test_server = None
 

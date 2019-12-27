@@ -18,11 +18,12 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
 import glob
-
+from functools import reduce
 from os import listdir
-from os.path import isfile, splitext, basename
+from os.path import basename
+from os.path import isfile
+from os.path import splitext
 
 from wok.utils import run_command
 
@@ -91,12 +92,12 @@ def get_repo_files():
         return isfile(f) and (f_extension == '.repo')
 
     YUM_REPO_DIR = '/etc/yum.repos.d'
-    return [YUM_REPO_DIR+'/'+f for f in listdir(YUM_REPO_DIR)
-            if _is_repository_file(YUM_REPO_DIR+'/'+f)]
+    return [YUM_REPO_DIR + '/' + f for f in listdir(YUM_REPO_DIR)
+            if _is_repository_file(YUM_REPO_DIR + '/' + f)]
 
 
 def _ignore_line_repo_file(line):
-    return line.startswith("#") or '=' not in line
+    return line.startswith('#') or '=' not in line
 
 
 def _get_repos_from_file(repo_file):
@@ -106,7 +107,7 @@ def _get_repos_from_file(repo_file):
     with open(repo_file) as f:
         for line in f.readlines():
             line = line.strip()
-            if line.startswith("["):
+            if line.startswith('['):
                 if current_repo is not None:
                     repos_from_file[current_repo_id] = current_repo
                 current_repo_id = line.strip('[]')
@@ -139,7 +140,7 @@ def _retrieve_repo_line_index(data, repo):
     repo_entry = '[' + repo.repo_id + ']\n'
     try:
         repo_index = data.index(repo_entry)
-    except:
+    except Exception:
         return None
     return repo_index
 
@@ -165,7 +166,7 @@ def _update_repo_file_data(data, repo, repo_index):
         attr_str = repo.get_attribute_str(attr)
         if attr_str is None:
             continue
-        data.insert(repo_index+1, attr_str + '\n')
+        data.insert(repo_index + 1, attr_str + '\n')
 
     return data
 
@@ -186,7 +187,7 @@ def write_repo_to_file(repo):
 
 def _get_last_line_repo(data, repo_index):
     stop_delete_index = None
-    for i in range(repo_index+1, len(data)):
+    for i in range(repo_index + 1, len(data)):
         line = data[i].strip()
         if line.startswith('['):
             stop_delete_index = i - 1
@@ -351,7 +352,7 @@ def get_yum_package_deps(pkg_name):
 
     # Get the end of the output and parse it
     out = out.split('\n')
-    out = out[out.index('Dependencies Resolved')+1:]
+    out = out[out.index('Dependencies Resolved') + 1:]
     # Remove the useless part of the output
     out = out[5:out.index('Transaction Summary')]
 
@@ -392,7 +393,7 @@ def get_dnf_package_deps(pkg_name):
 
     # Get the end of the output and parse it
     out = out.split('\n')
-    out = out[out.index('Dependencies resolved.')+1:]
+    out = out[out.index('Dependencies resolved.') + 1:]
     # Remove the useless part of the output
     out = out[3:out.index('Transaction Summary')]
 

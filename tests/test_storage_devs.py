@@ -18,9 +18,9 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-import mock
 import unittest
 
+import mock
 from wok.plugins.gingerbase.model.storage_devs import _byte_to_binary
 from wok.plugins.gingerbase.model.storage_devs import _get_paths
 from wok.plugins.gingerbase.model.storage_devs import _hex_to_binary
@@ -228,6 +228,7 @@ class GetPathsUnitTests(unittest.TestCase):
     """
     unit tests for _get_paths() method
     """
+
     def test_get_paths_success(self):
         """
         unit test to test for a valid scenario valid chipids

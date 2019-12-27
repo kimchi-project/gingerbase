@@ -18,21 +18,19 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
-import lxml.etree as ET
 import os
 import random
 import time
 
+import lxml.etree as ET
 from wok.asynctask import AsyncTask
 from wok.objectstore import ObjectStore
-from wok.utils import wok_log
-
 from wok.plugins.gingerbase import config
 from wok.plugins.gingerbase import swupdate
 from wok.plugins.gingerbase.model import cpuinfo
 from wok.plugins.gingerbase.model.debugreports import DebugReportsModel
 from wok.plugins.gingerbase.model.model import Model
+from wok.utils import wok_log
 
 fake_user = {'root': 'letmein!'}
 
@@ -97,13 +95,13 @@ class MockModel(Model):
                 fd.write('I am logged')
                 length = length - 1
         os.rename(tmpf, realf)
-        cb("OK", True)
+        cb('OK', True)
 
     def _mock_host_shutdown(self, *name):
-        wok_log.info("The host system will be shutted down")
+        wok_log.info('The host system will be shutted down')
 
     def _mock_host_reboot(self, *name):
-        wok_log.info("The host system will be rebooted")
+        wok_log.info('The host system will be rebooted')
 
     def _mock_packagesupdate_get_list(self):
         return self._mock_swupdate.pkgs.values()
@@ -140,7 +138,7 @@ class MockModel(Model):
         # seconds since the Epoch (January 1st, 1970), in UTC.
         repo_id = params.get('repo_id', None)
         if repo_id is None:
-            repo_id = "gingerbase_repo_%s" % str(int(time.time() * 1000))
+            repo_id = 'gingerbase_repo_%s' % str(int(time.time() * 1000))
             params.update({'repo_id': repo_id})
 
         config = params.get('config', {})
@@ -203,20 +201,20 @@ class MockSoftwareUpdate(object):
         msgs = []
         pkgs = params if params is not None else self.pkgs.keys()
         for pkg in pkgs:
-            msgs.append("Updating package %s" % pkg)
+            msgs.append('Updating package %s' % pkg)
             cb('\n'.join(msgs))
             del self.pkgs[pkg]
             self._num2update -= 1
             time.sleep(1)
 
         time.sleep(2)
-        msgs.append("All packages updated")
+        msgs.append('All packages updated')
         cb('\n'.join(msgs), True)
 
     def doSlowUpdate(self, cb, params):
         class MockUpdate(object):
             def __init__(self):
-                self.logfile = ""
+                self.logfile = ''
                 self.revcounter = 5
 
             def isRunning(self):
@@ -232,11 +230,11 @@ class MockSoftwareUpdate(object):
 
 class MockRepositories(object):
     def __init__(self):
-        self.repos = {"gingerbase_repo_1392167832":
-                      {"repo_id": "gingerbase_repo_1392167832",
-                       "enabled": True,
-                       "baseurl": "http://www.fedora.org",
-                       "config": {"repo_name": "gingerbase_repo_1392167832",
-                                  "gpgkey": [],
-                                  "gpgcheck": True,
-                                  "mirrorlist": ""}}}
+        self.repos = {'gingerbase_repo_1392167832':
+                      {'repo_id': 'gingerbase_repo_1392167832',
+                       'enabled': True,
+                       'baseurl': 'http://www.fedora.org',
+                       'config': {'repo_name': 'gingerbase_repo_1392167832',
+                                  'gpgkey': [],
+                                  'gpgcheck': True,
+                                  'mirrorlist': ''}}}

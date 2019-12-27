@@ -18,12 +18,12 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
 import platform
 
-from wok.exception import InvalidParameter, InvalidOperation
-from wok.utils import run_command
+from wok.exception import InvalidOperation
+from wok.exception import InvalidParameter
 from wok.plugins.gingerbase.lscpu import LsCpu
+from wok.utils import run_command
 
 
 ARCH = 'power' if platform.machine().startswith('ppc') else 'x86'
@@ -62,10 +62,10 @@ class CPUInfoModel(object):
             out, error, rc = run_command(['ppc64_cpu', '--threads-per-core'])
             if not rc:
                 self.threads_per_core = int(out.split()[-1])
-            self.sockets = self.cores_present/self.threads_per_core
+            self.sockets = self.cores_present / self.threads_per_core
             if self.sockets == 0:
                 self.sockets = 1
-            self.cores_per_socket = self.cores_present/self.sockets
+            self.cores_per_socket = self.cores_present / self.sockets
         else:
             # Intel or AMD
             self.guest_threads_enabled = True
@@ -83,7 +83,7 @@ class CPUInfoModel(object):
             'cores_present': self.cores_present,
             'cores_available': self.cores_available,
             'threads_per_core': self.threads_per_core,
-            }
+        }
 
     def check_topology(self, vcpus, topology):
         """
@@ -96,10 +96,10 @@ class CPUInfoModel(object):
         threads = topology['threads']
 
         if not self.guest_threads_enabled:
-            raise InvalidOperation("GGBCPUINF0003E")
+            raise InvalidOperation('GGBCPUINF0003E')
         if vcpus != sockets * cores * threads:
-            raise InvalidParameter("GGBCPUINF0002E")
+            raise InvalidParameter('GGBCPUINF0002E')
         if vcpus > self.cores_available * self.threads_per_core:
-            raise InvalidParameter("GGBCPUINF0001E")
+            raise InvalidParameter('GGBCPUINF0001E')
         if threads > self.threads_per_core:
-            raise InvalidParameter("GGBCPUINF0002E")
+            raise InvalidParameter('GGBCPUINF0002E')

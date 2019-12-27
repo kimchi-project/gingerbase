@@ -19,13 +19,13 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 #
-
 import base64
 import contextlib
 import os
-import urllib2
-from httplib import HTTPConnection, HTTPException, HTTPSConnection
-from urlparse import urlparse
+import urllib.parse
+from http.client import HTTPConnection
+from http.client import HTTPException
+from http.client import HTTPSConnection
 
 from wok.exception import InvalidParameter
 
@@ -38,7 +38,7 @@ def check_url_path(path, redirected=0):
         return False
     try:
         code = ''
-        parse_result = urlparse(path)
+        parse_result = urllib.parse.urlparse(path)
         headers = {}
         server_name = parse_result.hostname
         if (parse_result.scheme in ['https', 'ftp']) and \
@@ -51,7 +51,7 @@ def check_url_path(path, redirected=0):
         urlpath = parse_result.path
         if not urlpath:
             # Just a server, as with a repo.
-            with contextlib.closing(urllib2.urlopen(path)) as res:
+            with contextlib.closing(urllib.request.urlopen(path)) as res:
                 code = res.getcode()
         else:
             # socket.gaierror could be raised,
@@ -70,10 +70,10 @@ def check_url_path(path, redirected=0):
         elif code == 301 or code == 302:
             for header in response.getheaders():
                 if header[0] == 'location':
-                    return check_url_path(header[1], redirected+1)
+                    return check_url_path(header[1], redirected + 1)
         else:
             return False
-    except (urllib2.URLError, HTTPException, IOError, ValueError):
+    except (urllib.request.URLError, HTTPException, IOError, ValueError):
         return False
     return True
 
@@ -82,13 +82,13 @@ def validate_repo_url(url):
     url_parts = url.split('://')  # [0] = prefix, [1] = rest of URL
 
     if url_parts[0] == '':
-        raise InvalidParameter("GGBREPOS0002E")
+        raise InvalidParameter('GGBREPOS0002E')
 
     if url_parts[0] in ['http', 'https', 'ftp']:
         if not check_url_path(url):
-            raise InvalidParameter("GGBUTILS0001E", {'url': url})
+            raise InvalidParameter('GGBUTILS0001E', {'url': url})
     elif url_parts[0] == 'file':
         if not os.path.exists(url_parts[1]):
-            raise InvalidParameter("GGBUTILS0001E", {'url': url})
+            raise InvalidParameter('GGBUTILS0001E', {'url': url})
     else:
-        raise InvalidParameter("GGBREPOS0002E")
+        raise InvalidParameter('GGBREPOS0002E')

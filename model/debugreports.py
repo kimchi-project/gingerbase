@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-
 import glob
 import logging
 import os
@@ -26,15 +25,15 @@ import shutil
 import subprocess
 import time
 
-
 from wok.asynctask import AsyncTask
-from wok.exception import InvalidParameter, NotFoundError, OperationFailed
+from wok.exception import InvalidParameter
+from wok.exception import NotFoundError
+from wok.exception import OperationFailed
 from wok.exception import WokException
-from wok.utils import wok_log
-from wok.utils import run_command
 from wok.model.tasks import TaskModel
-
 from wok.plugins.gingerbase import config
+from wok.utils import run_command
+from wok.utils import wok_log
 
 
 class DebugReportsModel(object):
@@ -45,11 +44,11 @@ class DebugReportsModel(object):
     def create(self, params):
         ident = params.get('name').strip()
         # Generate a name with time and millisec precision, if necessary
-        if ident is None or ident == "":
+        if ident is None or ident == '':
             ident = 'report-' + str(int(time.time() * 1000))
         else:
             if ident in self.get_list():
-                raise InvalidParameter("GGBDR0008E", {"name": ident})
+                raise InvalidParameter('GGBDR0008E', {'name': ident})
         taskid = self._gen_debugreport_file(ident)
         return self.task.lookup(taskid)
 
@@ -69,7 +68,7 @@ class DebugReportsModel(object):
             return AsyncTask('/plugins/gingerbase/debugreports/%s' % name,
                              gen_cmd, name).id
 
-        raise OperationFailed("GGBDR0002E")
+        raise OperationFailed('GGBDR0002E')
 
     @staticmethod
     def debugreport_generate(cb, name):
@@ -92,13 +91,13 @@ class DebugReportsModel(object):
             command = ['/usr/sbin/dbginfo.sh', '-d', path_debugreport]
             output, error, retcode = run_command(command)
             if retcode != 0:
-                raise OperationFailed("GGBDR0009E",
+                raise OperationFailed('GGBDR0009E',
                                       {'retcode': retcode, 'err': error})
             # Checking for dbginforeport file.
             if output.splitlines():
                 dbginfo_report = glob.glob(dbgreport_regex)
             if len(dbginfo_report) == 0:
-                raise OperationFailed("GGBDR0012E",
+                raise OperationFailed('GGBDR0012E',
                                       {'retcode': retcode, 'err': error})
             dbginfo_reportfile = dbginfo_report[-1]
             final_tar_report_name = name + report_file_extension
@@ -114,7 +113,7 @@ class DebugReportsModel(object):
                        sosreport_tar]
             output, error, retcode = run_command(command)
             if retcode != 0:
-                raise OperationFailed("GGBDR0010E",
+                raise OperationFailed('GGBDR0010E',
                                       {'retcode': retcode,
                                        'error': error})
             path = config.get_debugreports_path()
@@ -148,12 +147,12 @@ class DebugReportsModel(object):
             log_error(e)
             raise
 
-        except Exception, e:
+        except Exception as e:
             # No need to call cb to update the task status here.
             # The task object will catch the exception raised here
             # and update the task status there
             log_error(e)
-            raise OperationFailed("GGBDR0011E", {'name': name, 'err': e})
+            raise OperationFailed('GGBDR0011E', {'name': name, 'err': e})
 
     @staticmethod
     def sosreport_generate(cb, name):
@@ -184,12 +183,12 @@ class DebugReportsModel(object):
             log_error(e)
             raise
 
-        except Exception, e:
+        except Exception as e:
             # No need to call cb to update the task status here.
             # The task object will catch the exception raised here
             # and update the task status there
             log_error(e)
-            raise OperationFailed("GGBDR0005E", {'name': name, 'err': e})
+            raise OperationFailed('GGBDR0005E', {'name': name, 'err': e})
 
     @staticmethod
     def get_system_report_tool():
@@ -209,7 +208,7 @@ class DebugReportsModel(object):
                                           stderr=subprocess.PIPE)
                 if retcode == 0:
                     return helper_tool['fn']
-            except Exception, e:
+            except Exception as e:
                 wok_log.info('Exception running command: %s', e)
 
         return None
@@ -226,12 +225,12 @@ class DebugReportModel(object):
         try:
             file_target = glob.glob(file_pattern)[0]
         except IndexError:
-            raise NotFoundError("GGBDR0001E", {'name': name})
+            raise NotFoundError('GGBDR0001E', {'name': name})
 
         ctime = os.stat(file_target).st_mtime
-        ctime = time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime(ctime))
+        ctime = time.strftime('%Y-%m-%d-%H:%M:%S', time.localtime(ctime))
         file_target = os.path.split(file_target)[-1]
-        file_target = os.path.join("plugins/gingerbase/data/debugreports",
+        file_target = os.path.join('plugins/gingerbase/data/debugreports',
                                    file_target)
         return {'uri': file_target,
                 'ctime': ctime}
@@ -242,7 +241,7 @@ class DebugReportModel(object):
         try:
             file_source = glob.glob(file_pattern)[0]
         except IndexError:
-            raise NotFoundError("GGBDR0001E", {'name': name})
+            raise NotFoundError('GGBDR0001E', {'name': name})
 
         f_name = os.path.basename(file_source).replace(name, params['name'], 1)
         file_target = os.path.join(path, f_name)
@@ -259,7 +258,7 @@ class DebugReportModel(object):
         try:
             file_target = glob.glob(file_pattern)[0]
         except IndexError:
-            raise NotFoundError("GGBDR0001E", {'name': name})
+            raise NotFoundError('GGBDR0001E', {'name': name})
 
         os.remove(file_target)
 
@@ -292,12 +291,12 @@ def sosreport_collection(name):
     path_sosreport = '/var/tmp/'
     sosreport_file = None
     if '_' in name:
-        raise InvalidParameter("GGBDR0013E", {'name': name})
+        raise InvalidParameter('GGBDR0013E', {'name': name})
     command = ['sosreport', '--batch', '--name=%s' % name,
                '--tmp-dir=%s' % path_sosreport]
     output, error, retcode = run_command(command)
     if retcode != 0:
-        raise OperationFailed("GGBDR0003E", {'name': name,
+        raise OperationFailed('GGBDR0003E', {'name': name,
                                              'err': error})
     # Checking for sosreport file generation.
     if output.splitlines():
@@ -305,6 +304,6 @@ def sosreport_collection(name):
             + name + '-' + '*.tar.xz'
         sosreport_file = glob.glob(sosreport_pattern)
     if len(sosreport_file) == 0:
-        raise OperationFailed("GGBDR0004E", {'name': name,
+        raise OperationFailed('GGBDR0004E', {'name': name,
                                              'err': retcode})
     return sosreport_file[0]
