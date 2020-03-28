@@ -75,7 +75,7 @@ class HostModel(object):
         """
         res = {}
         with open(PROC_CPUINFO) as f:
-            for line in f.xreadlines():
+            for line in f:
                 # Parse CPU, CPU's revision and CPU's clock information
                 for key in ['cpu', 'revision', 'clock']:
                     if key in line:
@@ -103,7 +103,7 @@ class HostModel(object):
         """
         try:
             with open(PROC_CPUINFO) as f:
-                for line in f.xreadlines():
+                for line in f:
                     if 'model name' in line:
                         return line.split(':')[1].strip()
                         break
@@ -171,7 +171,7 @@ class HostModel(object):
         s390x_sysinfo = {}
         try:
             with open(PROC_SYSINFO) as f:
-                for line in f.xreadlines():
+                for line in f:
                     if ':' in line and (len(line.split(':')) == 2):
                         info = line.split(':')
                         if info[0] == 'Model' and (len(info[1].split()) == 2):
