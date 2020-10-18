@@ -60,7 +60,7 @@ I18N_FILES = ./i18n.py \
 # # Git tree calculated by:
 # # $ git hash-object -t tree /dev/null
 check-local:
-	contrib/check_i18n.py $(I18N_FILES)
+	PYTHONPATH=. contrib/check_i18n.py $(I18N_FILES)
 	@if [ -d '.git' ]; then                                        \
 		find . -path './.git' -prune -o                        \
 			-name '*.py' -o -name '*.py.in'  |             \
@@ -78,8 +78,6 @@ check-local:
 		$(GIT) diff --check ;                                     \
 		$(GIT) diff-tree --check                                  \
 			'4b825dc642cb6eb9a060e54bf8d69288fbee4904' HEAD ; \
-		echo "IBM copyright year verification ..." ;              \
-		/bin/bash ../../../../check-IBM-license-header.sh ;       \
 	fi;
 	@if [ -f $(RPMLINT) ]; then \
 		./check_spec_errors.sh; \
