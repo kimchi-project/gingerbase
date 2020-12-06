@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+import distro
 import glob
 import os
 import platform
@@ -297,12 +298,8 @@ class HostModel(object):
                  'architecture', 'host', memory
         """
         common_info = {}
-        # Include IBM PowerKVM name to supported distro names
-        _sup_distros = platform._supported_dists + ('ibm_powerkvm',)
-        # 'fedora' '17' 'Beefy Miracle'
-        distro, version, codename = platform.linux_distribution(
-            supported_dists=_sup_distros)
-        common_info['os_distro'] = distro
+        os_distro, version, codename = distro.linux_distribution(full_distribution_name=False)
+        common_info['os_distro'] = os_distro
         common_info['os_version'] = version
         common_info['os_codename'] = codename
         common_info['architecture'] = ARCH
